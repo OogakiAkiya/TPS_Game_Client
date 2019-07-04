@@ -1,0 +1,32 @@
+﻿<Properties StartupConfiguration="{70B263AF-5707-DA2D-B24B-B59941E3F798}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/src/TCP_ClientController.cs">
+    <Files>
+      <File FileName="Assets/src/ClientController.cs" Line="12" Column="27" />
+      <File FileName="Assets/src/Client.cs" Line="17" Column="20" />
+      <File FileName="Assets/src/UDP_ClientController.cs" Line="11" Column="22" />
+      <File FileName="Assets/src/TCP_ClientController.cs" Line="109" Column="1" />
+      <File FileName="Assets/src/Constance.cs" Line="3" Column="35" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="GameClient" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="src" expanded="True">
+                <Node name="OpenSocket" expanded="True" />
+                <Node name="TCP_ClientController.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="f1dce5a4-c542-4af6-9769-977edfda2652" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
