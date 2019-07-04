@@ -4,7 +4,7 @@
       <File FileName="Assets/src/ClientController.cs" Line="12" Column="27" />
       <File FileName="Assets/src/Client.cs" Line="17" Column="20" />
       <File FileName="Assets/src/UDP_ClientController.cs" Line="11" Column="22" />
-      <File FileName="Assets/src/TCP_ClientController.cs" Line="109" Column="1" />
+      <File FileName="Assets/src/TCP_ClientController.cs" Line="71" Column="59" />
       <File FileName="Assets/src/Constance.cs" Line="3" Column="35" />
     </Files>
     <Pads>

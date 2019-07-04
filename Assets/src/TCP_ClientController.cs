@@ -47,51 +47,26 @@ public class TCP_ClientController : MonoBehaviour
         socket.Update();
         while (socket.RecvDataSize() > 0)
         {
-
+            socket.GetRecvData();
         }
 
     }
 
     private void InputUpdata()
     {
-        if (Input.GetKeyUp(KeyCode.W))
-        {
-            TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.W_UP);
-        }
-        if (Input.GetKeyUp(KeyCode.S))
-        {
-            TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.S_UP);
+        //UP
+        if (Input.GetKeyUp(KeyCode.W)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.W_UP);
+        if (Input.GetKeyUp(KeyCode.S)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.S_UP);
+        if (Input.GetKeyUp(KeyCode.A)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.A_UP);
+        if (Input.GetKeyUp(KeyCode.D)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.D_UP);
 
-        }
-        if (Input.GetKeyUp(KeyCode.A))
-        {
-            TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.A_UP);
-        }
-        if (Input.GetKeyUp(KeyCode.D))
-        {
-            TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.D_UP);
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.W_DOWN);
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.S_DOWN);
-
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.A_DOWN);
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.D_DOWN);
-        }
-
+        //Down
+        if (Input.GetKeyDown(KeyCode.W)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.W_DOWN);
+        if (Input.GetKeyDown(KeyCode.S)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.S_DOWN);
+        if (Input.GetKeyDown(KeyCode.A)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.A_DOWN);
+        if (Input.GetKeyDown(KeyCode.D)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.D_DOWN);
 
     }
-
 
     void TestSend(byte _id, byte _code = 0x0001, byte _keyCode = 0x0001)
     {
