@@ -1,11 +1,10 @@
 ﻿<Properties StartupConfiguration="{70B263AF-5707-DA2D-B24B-B59941E3F798}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/src/TCP_ClientController.cs">
     <Files>
-      <File FileName="Assets/src/ClientController.cs" Line="12" Column="27" />
-      <File FileName="Assets/src/Client.cs" Line="17" Column="20" />
-      <File FileName="Assets/src/UDP_ClientController.cs" Line="11" Column="22" />
-      <File FileName="Assets/src/TCP_ClientController.cs" Line="71" Column="59" />
-      <File FileName="Assets/src/Constance.cs" Line="3" Column="35" />
+      <File FileName="Assets/src/ClientController.cs" Line="13" Column="27" />
+      <File FileName="Assets/src/Client.cs" />
+      <File FileName="Assets/src/UDP_ClientController.cs" Line="1" Column="1" />
+      <File FileName="Assets/src/TCP_ClientController.cs" Line="47" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -24,7 +23,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="f1dce5a4-c542-4af6-9769-977edfda2652" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="3db2b272-8b44-430a-9bee-641dceb36420" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

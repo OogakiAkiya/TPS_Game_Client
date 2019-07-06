@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class TCP_ClientController : MonoBehaviour
 {
-
-    //Key
-    enum Key : byte
+    enum Key : short
     {
-        W_UP = 0x0001,
-        S_UP = 0x0002,
-        A_UP = 0x0003,
-        D_UP = 0x0004,
-        W_DOWN = 0x0005,
-        S_DOWN = 0x0006,
-        A_DOWN = 0x0007,
-        D_DOWN = 0x0008
+        W = 0x001,
+        S = 0x002,
+        A = 0x004,
+        D = 0x008,
+        G = 0x010,
+        R = 0x020,
+        SHIFT = 0x040,
+        LEFT_BUTTON = 0x080,
+        RIGHT_BUTTON = 0x100
     }
+
 
     //ipアドレスとポート番号設定
     public string ipOrHost = "127.0.0.1";
@@ -42,7 +42,10 @@ public class TCP_ClientController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        InputUpdata();
+        if (Input.anyKey)
+        {
+            InputUpdata();
+        }
 
         socket.Update();
         while (socket.RecvDataSize() > 0)
@@ -54,18 +57,23 @@ public class TCP_ClientController : MonoBehaviour
 
     private void InputUpdata()
     {
-        //UP
-        if (Input.GetKeyUp(KeyCode.W)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.W_UP);
-        if (Input.GetKeyUp(KeyCode.S)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.S_UP);
-        if (Input.GetKeyUp(KeyCode.A)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.A_UP);
-        if (Input.GetKeyUp(KeyCode.D)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.D_UP);
+        Key sendKey=0;
+        
+        sendKey|=InputTemple(KeyCode.W, Key.W);
+        sendKey |= InputTemple(KeyCode.S, Key.S);
+        sendKey |= InputTemple(KeyCode.A, Key.A);
+        sendKey |= InputTemple(KeyCode.D, Key.D);
 
-        //Down
-        if (Input.GetKeyDown(KeyCode.W)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.W_DOWN);
-        if (Input.GetKeyDown(KeyCode.S)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.S_DOWN);
-        if (Input.GetKeyDown(KeyCode.A)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.A_DOWN);
-        if (Input.GetKeyDown(KeyCode.D)) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, Key.D_DOWN);
+        if(sendKey!=0) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, sendKey);
+    }
 
+    private Key InputTemple(KeyCode _key,Key _keyCode)
+    {
+        if (Input.GetKeyUp(_key) || Input.GetKeyDown(_key))
+        {
+            return _keyCode;
+        }
+        return 0;
     }
 
     void TestSend(byte _id, byte _code = 0x0001, byte _keyCode = 0x0001)
@@ -85,7 +93,7 @@ public class TCP_ClientController : MonoBehaviour
     {
         System.Text.Encoding enc = System.Text.Encoding.UTF8;
         byte[] userName = enc.GetBytes(System.String.Format("{0, -" + HeaderConstant.USERID_LENGTH + "}", userID));              //12byteに設定する
-        byte[] sendData = new byte[sizeof(byte) * 3 + userName.Length];
+        byte[] sendData = new byte[sizeof(byte) * 2 + userName.Length+sizeof(Key)];
         sendData[0] = _id;
         userName.CopyTo(sendData, sizeof(byte));
         sendData[sizeof(byte) + userName.Length] = _code;

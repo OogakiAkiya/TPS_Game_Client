@@ -11,11 +11,15 @@ public class UDP_ClientController : MonoBehaviour
     UDP_Server socket = new UDP_Server();
     public int recvPort = 12343;
     public int sendPort = 12344;
+    public ClientController clientController;
+    public GameObject player;
 
     // Start is called before the first frame update
     void Start()
     {
-        //udp
+        clientController = this.GetComponent<ClientController>();
+        player = GameObject.FindGameObjectWithTag("Player");
+
         socket.Init(recvPort, sendPort);
 
         //temp
@@ -48,7 +52,7 @@ public class UDP_ClientController : MonoBehaviour
         byte[] b_userId = new byte[HeaderConstant.USERID_LENGTH];
         System.Array.Copy(data, sizeof(byte), b_userId, 0, b_userId.Length);
         string userId = System.Text.Encoding.UTF8.GetString(b_userId);
-        var objects = GameObject.FindGameObjectsWithTag("users");
+        //var objects = GameObject.FindGameObjectsWithTag("users");
 
 
 
@@ -58,15 +62,15 @@ public class UDP_ClientController : MonoBehaviour
         {
             bool addUserFlg = true;
             //player用
-            if (userId.Trim() == GameObject.FindGameObjectWithTag("Player").name)
+            if (userId.Trim() == player.name)
             {
-                UpdateUserPosition(GameObject.FindGameObjectWithTag("Player"),data);
+                UpdateUserPosition(player,data);
                 addUserFlg = false;
             }
 
 
             //座標の代入
-            foreach (var obj in objects)
+            foreach (var obj in clientController.objects)
             {
                 if (obj.name.Equals(userId.Trim()))
                 {
