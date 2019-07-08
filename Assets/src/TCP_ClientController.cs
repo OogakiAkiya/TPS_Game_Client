@@ -10,9 +10,9 @@ public class TCP_ClientController : MonoBehaviour
         S = 0x002,
         A = 0x004,
         D = 0x008,
-        G = 0x010,
-        R = 0x020,
-        SHIFT = 0x040,
+        SHIFT = 0x010,
+        G = 0x020,
+        R = 0x040,
         LEFT_BUTTON = 0x080,
         RIGHT_BUTTON = 0x100
     }
@@ -42,10 +42,8 @@ public class TCP_ClientController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.anyKey)
-        {
-            InputUpdata();
-        }
+        InputUpdata();
+        
 
         socket.Update();
         while (socket.RecvDataSize() > 0)
@@ -63,8 +61,9 @@ public class TCP_ClientController : MonoBehaviour
         sendKey |= InputTemple(KeyCode.S, Key.S);
         sendKey |= InputTemple(KeyCode.A, Key.A);
         sendKey |= InputTemple(KeyCode.D, Key.D);
+        sendKey |= InputTemple(KeyCode.LeftShift, Key.SHIFT);
 
-        if(sendKey!=0) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, sendKey);
+        if (sendKey!=0) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, sendKey);
     }
 
     private Key InputTemple(KeyCode _key,Key _keyCode)

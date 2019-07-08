@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 class ClientState
 {
     public UdpClient socket = null;
-    public IPEndPoint endPoint;
+    public IPEndPoint endPoint=null;
     private List<KeyValuePair<IPEndPoint, byte[]>> recvDataList = new List<KeyValuePair<IPEndPoint, byte[]>>();
     private System.Object lockObject = new System.Object();
 
