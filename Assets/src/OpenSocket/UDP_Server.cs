@@ -57,7 +57,7 @@ class UDP_Server
 {
     public ServerState server { get; private set; } = new ServerState();
     private ServerState sender = new ServerState();
-
+    uint sequence = 0;
     int port = 0;
     int sendPort = 12343;
 
@@ -89,7 +89,12 @@ class UDP_Server
     //本来ならsendPortはportに変わる
     public void Send(KeyValuePair<IPEndPoint, byte[]> _data)
     {
-        sender.socket.SendAsync(_data.Value, _data.Value.Length, _data.Key.Address.ToString(), sendPort);
+        List<byte> sendData=new List<byte>();
+        sendData.AddRange(BitConverter.GetBytes(sequence));
+        sendData.AddRange(_data.Value);
+        sender.socket.SendAsync(sendData.ToArray(), sendData.ToArray().Length, _data.Key.Address.ToString(), sendPort);
+        CountUPSequence();
+
     }
 
     //本来ならsendPortはportに変わる
@@ -99,11 +104,24 @@ class UDP_Server
         {
             foreach (byte[] data in _data)
             {
-                sender.socket.SendAsync(data, data.Length, IP, sendPort);
+                List<byte> sendData = new List<byte>();
+                sendData.AddRange(BitConverter.GetBytes(sequence));
+                sendData.AddRange(data);
+
+                sender.socket.SendAsync(sendData.ToArray(), sendData.ToArray().Length, IP, sendPort);
             }
         }
+        CountUPSequence();
     }
 
+    private void CountUPSequence()
+    {
+        sequence++;
+        if (sequence > 4200000000)
+        {
+            sequence = 0;
+        }
+    }
 
     private void ReceiveCallback(IAsyncResult ar)
     {
