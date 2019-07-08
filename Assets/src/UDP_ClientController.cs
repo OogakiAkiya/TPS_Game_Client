@@ -109,5 +109,13 @@ public class UDP_ClientController : MonoBehaviour
         vect.z = BitConverter.ToSingle(_data, sizeof(byte) * 2 + 12 + 2 * sizeof(float));
         _obj.transform.position = vect;
 
+        vect = Vector3.zero;
+        vect.x = BitConverter.ToSingle(_data, sizeof(byte) * 2 + 12 + 3 * sizeof(float));
+        vect.y = BitConverter.ToSingle(_data, sizeof(byte) * 2 + 12 + 4 * sizeof(float));
+        vect.z = BitConverter.ToSingle(_data, sizeof(byte) * 2 + 12 + 5 * sizeof(float));
+        _obj.transform.rotation = Quaternion.Euler(vect);
+
+        _obj.GetComponent<Client>().animationState=(int)_data[sizeof(byte) * 2 + 12 + 6 * sizeof(float)];
+
     }
 }
