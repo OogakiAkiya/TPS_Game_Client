@@ -56,6 +56,5 @@ public class Client : MonoBehaviour
             if (animationState == (int)AnimationKey.Run) animator.CrossFadeInFixedTime("Run", 0.0f);
         }
 
-
     }
 }

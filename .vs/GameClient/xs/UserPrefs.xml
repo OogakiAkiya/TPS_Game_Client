@@ -2,12 +2,9 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/src/UDP_ClientController.cs">
     <Files>
       <File FileName="Assets/src/ClientController.cs" Line="9" Column="1" />
-      <File FileName="Assets/src/Client.cs" Line="55" Column="75" />
-      <File FileName="Assets/src/UDP_ClientController.cs" Line="60" Column="75" />
-      <File FileName="Assets/src/TCP_ClientController.cs" Line="65" Column="1" />
-      <File FileName="Assets/src/OpenSocket/UDP_Client.cs" Line="64" Column="1" />
-      <File FileName="Assets/src/OpenSocket/TCP_Server.cs" Line="64" Column="47" />
-      <File FileName="Assets/src/OpenSocket/UDP_Server.cs" Line="97" Column="1" />
+      <File FileName="Assets/src/Client.cs" Line="58" Column="1" />
+      <File FileName="Assets/src/TCP_ClientController.cs" Line="1" Column="1" />
+      <File FileName="Assets/src/UDP_ClientController.cs" Line="145" Column="104" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -26,7 +23,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="7e5829db-0672-4383-b2e7-8e06f01c0b08" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="7ee09f51-646d-431a-aa41-60e3c0dccc7f" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

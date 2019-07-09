@@ -11,8 +11,10 @@ public class UDP_ClientController : MonoBehaviour
     UDP_Server socket = new UDP_Server();
     public int recvPort = 12343;
     public int sendPort = 12344;
+    public string serverIP = "127.0.0.1";
     public ClientController clientController;
     public GameObject player;
+    ClientState sender = new ClientState();
 
     public uint nowSequence=0;
     // Start is called before the first frame update
@@ -24,16 +26,33 @@ public class UDP_ClientController : MonoBehaviour
         socket.Init(recvPort, sendPort);
 
         //temp
+        sender.socket = new UdpClient();
+        List<byte> sendData=new List<byte>();
+        System.Text.Encoding enc = System.Text.Encoding.UTF8;
+        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + HeaderConstant.USERID_LENGTH + "}", player.name));              //12byteに設定する
+        byte[] rotationData = new byte[sizeof(float) * 3];
+        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.x), 0, rotationData, 0 * sizeof(float), sizeof(float));
+        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.y), 0, rotationData, 1 * sizeof(float), sizeof(float));
+        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.z), 0, rotationData, 2 * sizeof(float), sizeof(float));
+        sendData.AddRange(userName);
+        sendData.Add(HeaderConstant.ID_INIT);
+        sendData.AddRange(rotationData);
+        sender.socket.Send(sendData.ToArray(), sendData.ToArray().Length, serverIP, sendPort);
+
+
+        /*
         ClientState client = new ClientState();
         client.socket = new UdpClient();
         byte[] data = new byte[3];
         data[0] = 0x0001;
         data[1] = 0x0002;
         data[2] = 0x0003;
-        int sendData = client.socket.Send(data, data.Length, "127.0.0.1", sendPort);
+        int sendData = client.socket.Send(data, data.Length, serverIP, sendPort);
         Console.WriteLine("send={0}", sendData);
 
         client.socket.Close();
+        */
+
 
     }
 
@@ -44,6 +63,19 @@ public class UDP_ClientController : MonoBehaviour
         {
             RecvRoutine();
         }
+
+        List<byte> sendData = new List<byte>();
+        System.Text.Encoding enc = System.Text.Encoding.UTF8;
+        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + HeaderConstant.USERID_LENGTH + "}", player.name));              //12byteに設定する
+        byte[] rotationData = new byte[sizeof(float) * 3];
+        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.x), 0, rotationData, 0 * sizeof(float), sizeof(float));
+        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.y), 0, rotationData, 1 * sizeof(float), sizeof(float));
+        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.z), 0, rotationData, 2 * sizeof(float), sizeof(float));
+        sendData.AddRange(userName);
+        sendData.Add(HeaderConstant.ID_GAME);
+        sendData.AddRange(rotationData);
+        sender.socket.Send(sendData.ToArray(), sendData.ToArray().Length, serverIP, sendPort);
+
     }
 
     private void RecvRoutine()
@@ -118,7 +150,7 @@ public class UDP_ClientController : MonoBehaviour
         vect.x = BitConverter.ToSingle(_data, sizeof(uint) + sizeof(byte) * 2 + 12 + 3 * sizeof(float));
         vect.y = BitConverter.ToSingle(_data, sizeof(uint) + sizeof(byte) * 2 + 12 + 4 * sizeof(float));
         vect.z = BitConverter.ToSingle(_data, sizeof(uint) + sizeof(byte) * 2 + 12 + 5 * sizeof(float));
-        _obj.transform.rotation = Quaternion.Euler(vect);
+        //_obj.transform.rotation = Quaternion.Euler(vect);
 
         _obj.GetComponent<Client>().animationState=(int)_data[sizeof(uint) + sizeof(byte) * 2 + 12 + 6 * sizeof(float)];
 

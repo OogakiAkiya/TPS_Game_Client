@@ -198,7 +198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400144, guid: 34a3ddc70efea4d07897832397d7f513, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.98
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400144, guid: 34a3ddc70efea4d07897832397d7f513, type: 3}
       propertyPath: m_LocalPosition.y
@@ -214,7 +214,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400144, guid: 34a3ddc70efea4d07897832397d7f513, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 400144, guid: 34a3ddc70efea4d07897832397d7f513, type: 3}
       propertyPath: m_LocalRotation.z
@@ -222,7 +222,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400144, guid: 34a3ddc70efea4d07897832397d7f513, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 400144, guid: 34a3ddc70efea4d07897832397d7f513, type: 3}
       propertyPath: m_RootOrder
@@ -234,7 +234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400144, guid: 34a3ddc70efea4d07897832397d7f513, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 400144, guid: 34a3ddc70efea4d07897832397d7f513, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -246,6 +246,10 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 1a911f3b14d9241b5b278a91019bcbad, type: 2}
     - target: {fileID: 100004, guid: 34a3ddc70efea4d07897832397d7f513, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 13700000, guid: 34a3ddc70efea4d07897832397d7f513, type: 3}
+      propertyPath: m_CastShadows
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -521,8 +525,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recvPort: 12343
   sendPort: 12344
+  serverIP: 127.0.0.1
   clientController: {fileID: 0}
   player: {fileID: 0}
+  nowSequence: 0
 --- !u!1001 &1653463096
 PrefabInstance:
   m_ObjectHideFlags: 0
