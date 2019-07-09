@@ -60,15 +60,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\src\Client.cs" />
-    <Compile Include="Assets\src\ClientController.cs" />
     <Compile Include="Assets\src\Constant.cs" />
-    <Compile Include="Assets\src\OpenSocket\TCP_Client.cs" />
-    <Compile Include="Assets\src\OpenSocket\TCP_Server.cs" />
-    <Compile Include="Assets\src\OpenSocket\UDP_Client.cs" />
-    <Compile Include="Assets\src\OpenSocket\UDP_Server.cs" />
-    <Compile Include="Assets\src\TCP_ClientController.cs" />
-    <Compile Include="Assets\src\UDP_ClientController.cs" />
+    <Compile Include="Assets\src\Game\Client.cs" />
+    <Compile Include="Assets\src\Game\ClientController.cs" />
+    <Compile Include="Assets\src\Game\TCP_ClientController.cs" />
+    <Compile Include="Assets\src\Game\UDP_ClientController.cs" />
+    <Compile Include="Assets\src\Library\OpenSocket\TCP_Client.cs" />
+    <Compile Include="Assets\src\Library\OpenSocket\TCP_Server.cs" />
+    <Compile Include="Assets\src\Library\OpenSocket\UDP_Client.cs" />
+    <Compile Include="Assets\src\Library\OpenSocket\UDP_Server.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>/Users/oogakiakiya/Desktop/GameClient/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
