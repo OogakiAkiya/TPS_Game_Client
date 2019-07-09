@@ -20,13 +20,37 @@ public class PlayerController : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
         */
-        
+
+        //視点移動
         float x = Input.GetAxis("Mouse X");
         float y = Input.GetAxis("Mouse Y");
         if (System.Math.Abs(mouse.y+y) > 30)y = 0;
         mouse += new Vector2(x, y);
-
-
         this.transform.rotation = Quaternion.Euler(new Vector3(-mouse.y, mouse.x,0));
     }
+
+    //キー入力を返す
+    public Key InputUpdate()
+    {
+        Key sendKey = 0;
+
+        sendKey |= InputTemple(KeyCode.W, Key.W);
+        sendKey |= InputTemple(KeyCode.S, Key.S);
+        sendKey |= InputTemple(KeyCode.A, Key.A);
+        sendKey |= InputTemple(KeyCode.D, Key.D);
+        sendKey |= InputTemple(KeyCode.LeftShift, Key.SHIFT);
+
+        return sendKey;
+
+    }
+
+    private Key InputTemple(KeyCode _key, Key _keyCode)
+    {
+        if (Input.GetKeyUp(_key) || Input.GetKeyDown(_key))
+        {
+            return _keyCode;
+        }
+        return 0;
+    }
+
 }

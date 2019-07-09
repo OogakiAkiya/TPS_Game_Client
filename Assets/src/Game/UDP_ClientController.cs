@@ -7,54 +7,26 @@ using UnityEngine;
 
 public class UDP_ClientController : MonoBehaviour
 {
-    //udp
-    //UDP_Server socket = new UDP_Server();
-    UDP_Client socket = new UDP_Client();
 
     public int recvPort = 12343;
     public int sendPort = 12344;
     public string serverIP = "127.0.0.1";
     private ClientController clientController;
     private GameObject player;
-    //ClientState sender = new ClientState();
+    private uint nowSequence=0;
+    private UDP_Client socket = new UDP_Client();
 
-    public uint nowSequence=0;
     // Start is called before the first frame update
     void Start()
     {
         clientController = this.GetComponent<ClientController>();
         player = GameObject.FindGameObjectWithTag("Player");
 
+        //ソケット初期化
         socket.Init(recvPort, sendPort);
 
-        //temp
-        List<byte> sendData=new List<byte>();
-        System.Text.Encoding enc = System.Text.Encoding.UTF8;
-        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + HeaderConstant.USERID_LENGTH + "}", player.name));              //12byteに設定する
-        byte[] rotationData = new byte[sizeof(float) * 3];
-        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.x), 0, rotationData, 0 * sizeof(float), sizeof(float));
-        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.y), 0, rotationData, 1 * sizeof(float), sizeof(float));
-        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.z), 0, rotationData, 2 * sizeof(float), sizeof(float));
-        sendData.AddRange(userName);
-        sendData.Add(HeaderConstant.ID_INIT);
-        sendData.AddRange(rotationData);
-        socket.Send(sendData.ToArray(),serverIP, sendPort);
-
-
-        /*
-        ClientState client = new ClientState();
-        client.socket = new UdpClient();
-        byte[] data = new byte[3];
-        data[0] = 0x0001;
-        data[1] = 0x0002;
-        data[2] = 0x0003;
-        int sendData = client.socket.Send(data, data.Length, serverIP, sendPort);
-        Console.WriteLine("send={0}", sendData);
-
-        client.socket.Close();
-        */
-
-
+        //初期化用データ送信
+        SendRotation(HeaderConstant.ID_INIT);
     }
 
     // Update is called once per frame
@@ -65,18 +37,8 @@ public class UDP_ClientController : MonoBehaviour
             RecvRoutine();
         }
 
-        List<byte> sendData = new List<byte>();
-        System.Text.Encoding enc = System.Text.Encoding.UTF8;
-        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + HeaderConstant.USERID_LENGTH + "}", player.name));              //12byteに設定する
-        byte[] rotationData = new byte[sizeof(float) * 3];
-        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.x), 0, rotationData, 0 * sizeof(float), sizeof(float));
-        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.y), 0, rotationData, 1 * sizeof(float), sizeof(float));
-        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.z), 0, rotationData, 2 * sizeof(float), sizeof(float));
-        sendData.AddRange(userName);
-        sendData.Add(HeaderConstant.ID_GAME);
-        sendData.AddRange(rotationData);
-        socket.Send(sendData.ToArray(),serverIP, sendPort);
-
+        //角度の送信
+        SendRotation(HeaderConstant.ID_GAME);
     }
 
     private void RecvRoutine()
@@ -99,22 +61,35 @@ public class UDP_ClientController : MonoBehaviour
         if (data[sizeof(uint)] == HeaderConstant.ID_GAME)
         {
             bool addUserFlg = true;
+            int headerSize = sizeof(uint) + sizeof(byte) * 2 + HeaderConstant.USERID_LENGTH;
+
             //player用
             if (userId.Trim() == player.name)
             {
-                UpdateUserPosition(player,data);
+
+                //座標の代入
+                player.transform.position = GetVector3(data, headerSize);
+
+                //アニメーション変更
+                player.GetComponent<Client>().animationState = (int)data[headerSize + 6 * sizeof(float)];
+
+
                 addUserFlg = false;
             }
 
-
-            //座標の代入
+            //Player以外のユーザー用
             foreach (var obj in clientController.objects)
             {
                 if (obj.name.Equals(userId.Trim()))
                 {
                     if (data[sizeof(uint) + sizeof(byte) + HeaderConstant.USERID_LENGTH] == HeaderConstant.CODE_GAME_BASICDATA)
                     {
-                        UpdateUserPosition(obj,data);
+                        //座標の代入
+                        obj.transform.position = GetVector3(data, headerSize);
+
+                        //アニメーション変更
+                        obj.GetComponent<Client>().animationState = (int)data[headerSize + 6 * sizeof(float)];
+
                     }
                     addUserFlg = false;
                 }
@@ -124,36 +99,37 @@ public class UDP_ClientController : MonoBehaviour
             //user追加
             if (addUserFlg)
             {
-                Vector3 vect = Vector3.zero;
-                vect.x = BitConverter.ToSingle(data, sizeof(uint) + sizeof(byte) * 2 + b_userId.Length + 0 * sizeof(float));
-                vect.y = BitConverter.ToSingle(data, sizeof(uint) + sizeof(byte) * 2 + b_userId.Length + 1 * sizeof(float));
-                vect.z = BitConverter.ToSingle(data, sizeof(uint) + sizeof(byte) * 2 + b_userId.Length + 2 * sizeof(float));
+                Vector3 pos =GetVector3(data, headerSize);
 
-                //クライアント追加処理
-                //Array.Copy(data, sizeof(byte), b_userId, 0, b_userId.Length);
-                //string userName = System.Text.Encoding.UTF8.GetString(b_userId);
                 //ユーザーの追加
-                this.GetComponent<ClientController>().AddUser(userId.Trim());
+                this.GetComponent<ClientController>().AddUser(userId.Trim(),pos);
             }
         }
     }
 
-
-    private void UpdateUserPosition(GameObject _obj,byte[] _data)
+    private Vector3 GetVector3(byte[] _data, int _beginPoint = 0, bool _x = true, bool _y = true, bool _z = true)
     {
         Vector3 vect = Vector3.zero;
-        vect.x = BitConverter.ToSingle(_data, sizeof(uint)+sizeof(byte) * 2 + 12 + 0 * sizeof(float));
-        vect.y = BitConverter.ToSingle(_data, sizeof(uint) + sizeof(byte) * 2 + 12 + 1 * sizeof(float));
-        vect.z = BitConverter.ToSingle(_data, sizeof(uint) + sizeof(byte) * 2 + 12 + 2 * sizeof(float));
-        _obj.transform.position = vect;
+        if (_data.Length < sizeof(float) * 3) return vect;
+        if (_x) vect.x = BitConverter.ToSingle(_data, _beginPoint + 0 * sizeof(float));
+        if (_y) vect.y = BitConverter.ToSingle(_data, _beginPoint + 1 * sizeof(float));
+        if (_z) vect.z = BitConverter.ToSingle(_data, _beginPoint + 2 * sizeof(float));
+        return vect;
+    }
 
-        vect = Vector3.zero;
-        vect.x = BitConverter.ToSingle(_data, sizeof(uint) + sizeof(byte) * 2 + 12 + 3 * sizeof(float));
-        vect.y = BitConverter.ToSingle(_data, sizeof(uint) + sizeof(byte) * 2 + 12 + 4 * sizeof(float));
-        vect.z = BitConverter.ToSingle(_data, sizeof(uint) + sizeof(byte) * 2 + 12 + 5 * sizeof(float));
-        //_obj.transform.rotation = Quaternion.Euler(vect);
-
-        _obj.GetComponent<Client>().animationState=(int)_data[sizeof(uint) + sizeof(byte) * 2 + 12 + 6 * sizeof(float)];
+    private void SendRotation(byte _id)
+    {
+        List<byte> sendData = new List<byte>();
+        System.Text.Encoding enc = System.Text.Encoding.UTF8;
+        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + HeaderConstant.USERID_LENGTH + "}", player.name));              //12byteに設定する
+        byte[] rotationData = new byte[sizeof(float) * 3];
+        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.x), 0, rotationData, 0 * sizeof(float), sizeof(float));
+        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.y), 0, rotationData, 1 * sizeof(float), sizeof(float));
+        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.z), 0, rotationData, 2 * sizeof(float), sizeof(float));
+        sendData.AddRange(userName);
+        sendData.Add(_id);
+        sendData.AddRange(rotationData);
+        socket.Send(sendData.ToArray(), serverIP, sendPort);
 
     }
 }

@@ -23,9 +23,9 @@ public class ClientController : MonoBehaviour
     {
     }
 
-    public void AddUser(string _userID)
+    public void AddUser(string _userID,Vector3 _pos)
     {
-        var add = Instantiate(userPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+        var add = Instantiate(userPrefab, _pos, Quaternion.identity) as GameObject;
         add.name = _userID;
         add.GetComponent<Client>().SetUserID(_userID);
         userList.Add(add);
