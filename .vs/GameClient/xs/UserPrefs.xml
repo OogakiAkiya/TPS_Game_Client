@@ -1,9 +1,11 @@
 ﻿<Properties StartupConfiguration="{70B263AF-5707-DA2D-B24B-B59941E3F798}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/src/Game/TCP_ClientController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/src/Game/PlayerController.cs">
     <Files>
-      <File FileName="Assets/src/ClientController.cs" Line="35" Column="2" />
-      <File FileName="Assets/src/Client.cs" Line="61" Column="1" />
+      <File FileName="Assets/src/ClientController.cs" Line="12" Column="75" />
+      <File FileName="Assets/src/Client.cs" Line="46" Column="6" />
       <File FileName="Assets/src/TCP_ClientController.cs" Line="106" Column="1" />
+      <File FileName="Assets/src/Game/UDP_ClientController.cs" Line="18" Column="12" />
+      <File FileName="Assets/src/Game/PlayerController.cs" Line="19" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -12,7 +14,7 @@
             <Node name="Assets" expanded="True">
               <Node name="src" expanded="True">
                 <Node name="Game" expanded="True">
-                  <Node name="TCP_ClientController.cs" selected="True" />
+                  <Node name="PlayerController.cs" selected="True" />
                 </Node>
               </Node>
             </Node>

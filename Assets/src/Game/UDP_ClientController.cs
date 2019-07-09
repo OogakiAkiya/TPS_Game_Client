@@ -14,8 +14,8 @@ public class UDP_ClientController : MonoBehaviour
     public int recvPort = 12343;
     public int sendPort = 12344;
     public string serverIP = "127.0.0.1";
-    public ClientController clientController;
-    public GameObject player;
+    private ClientController clientController;
+    private GameObject player;
     //ClientState sender = new ClientState();
 
     public uint nowSequence=0;
@@ -130,10 +130,10 @@ public class UDP_ClientController : MonoBehaviour
                 vect.z = BitConverter.ToSingle(data, sizeof(uint) + sizeof(byte) * 2 + b_userId.Length + 2 * sizeof(float));
 
                 //クライアント追加処理
-                Array.Copy(data, sizeof(byte), b_userId, 0, b_userId.Length);
-                string userName = System.Text.Encoding.UTF8.GetString(b_userId);
+                //Array.Copy(data, sizeof(byte), b_userId, 0, b_userId.Length);
+                //string userName = System.Text.Encoding.UTF8.GetString(b_userId);
                 //ユーザーの追加
-                this.GetComponent<ClientController>().AddUser(userName.Trim());
+                this.GetComponent<ClientController>().AddUser(userId.Trim());
             }
         }
     }
