@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 
@@ -61,12 +62,21 @@ public class TCP_ClientController : MonoBehaviour
     {
         System.Text.Encoding enc = System.Text.Encoding.UTF8;
         byte[] userName = enc.GetBytes(System.String.Format("{0, -" + HeaderConstant.USERID_LENGTH + "}", player.name));              //12byteに設定する
+        List<byte> sendData = new List<byte>();
+        sendData.Add(_id);
+        sendData.AddRange(userName);
+        sendData.Add(_code);
+        sendData.AddRange(BitConverter.GetBytes((short)_keyCode));
+        /*
         byte[] sendData = new byte[sizeof(byte) * 2 + userName.Length+sizeof(Key)];
         sendData[0] = _id;
         userName.CopyTo(sendData, sizeof(byte));
         sendData[sizeof(byte) + userName.Length] = _code;
-        sendData[sizeof(byte) * 2 + userName.Length] = (byte)_keyCode;
-        var task=socket.Send(sendData, sendData.Length);
+        //sendData[sizeof(byte) * 2 + userName.Length] = (byte)_keyCode;
+        //sendData[sizeof(byte) * 2 + userName.Length] = BitConverter.GetBytes((short)_keyCode);
+        */
+        byte[] data = sendData.ToArray();
+        var task =socket.Send(sendData.ToArray(), sendData.Count);
     }
 
 }

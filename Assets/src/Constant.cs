@@ -26,5 +26,6 @@ public enum Key : short
     G = 0x020,
     R = 0x040,
     LEFT_BUTTON = 0x080,
-    RIGHT_BUTTON = 0x100
+    RIGHT_BUTTON = 0x100,
+    SPACE=0x200
 }

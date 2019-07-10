@@ -66,10 +66,12 @@
     <Compile Include="Assets\src\Game\PlayerController.cs" />
     <Compile Include="Assets\src\Game\TCP_ClientController.cs" />
     <Compile Include="Assets\src\Game\UDP_ClientController.cs" />
+    <Compile Include="Assets\src\Library\Animator\AnimatorBehaviour.cs" />
     <Compile Include="Assets\src\Library\OpenSocket\TCP_Client.cs" />
     <Compile Include="Assets\src\Library\OpenSocket\TCP_Server.cs" />
     <Compile Include="Assets\src\Library\OpenSocket\UDP_Client.cs" />
     <Compile Include="Assets\src\Library\OpenSocket\UDP_Server.cs" />
+    <Compile Include="Assets\src\Library\StateMachine\StateMachine.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>/Users/oogakiakiya/Desktop/GameClient/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>

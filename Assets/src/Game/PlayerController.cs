@@ -39,7 +39,12 @@ public class PlayerController : MonoBehaviour
         sendKey |= InputTemple(KeyCode.A, Key.A);
         sendKey |= InputTemple(KeyCode.D, Key.D);
         sendKey |= InputTemple(KeyCode.LeftShift, Key.SHIFT);
+        sendKey |= InputTemple(KeyCode.Space, Key.SPACE);
+        if (sendKey.HasFlag(Key.SPACE))
+        {
+            return sendKey;
 
+        }
         return sendKey;
 
     }

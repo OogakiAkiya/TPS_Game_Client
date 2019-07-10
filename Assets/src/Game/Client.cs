@@ -11,7 +11,9 @@ public class Client : MonoBehaviour
         Idle,
         Walk,
         Run,
-        Jump
+        JumpUP,
+        JumpStay,
+        JumpDown
     }
 
     string userID;
@@ -55,7 +57,20 @@ public class Client : MonoBehaviour
         if (stateInfo.nameHash != Animator.StringToHash("Base Layer.Run")){
             if (animationState == (int)AnimationKey.Run) animator.CrossFadeInFixedTime("Run", 0.0f);
         }
-
+        
+        if (stateInfo.nameHash != Animator.StringToHash("Base Layer.JumpUP"))
+        {
+            if (animationState == (int)AnimationKey.JumpUP) animator.CrossFadeInFixedTime("JumpUP", 0.0f);
+        }
+        if (stateInfo.nameHash != Animator.StringToHash("Base Layer.JumpStay"))
+        {
+            if (animationState == (int)AnimationKey.JumpStay) animator.CrossFadeInFixedTime("JumpStay", 0.0f);
+        }
+        if (stateInfo.nameHash != Animator.StringToHash("Base Layer.JumpDown"))
+        {
+            if (animationState == (int)AnimationKey.JumpDown) animator.CrossFadeInFixedTime("JumpDown", 0.0f);
+        }
+        
 
     }
 }
