@@ -10,7 +10,15 @@ public class Client : MonoBehaviour
     {
         Idle,
         Walk,
+        WalkForward,
+        WalkBack,
+        WalkLeft,
+        WalkRight,
         Run,
+        RunForward,
+        RunBack,
+        RunLeft,
+        RunRight,
         JumpUP,
         JumpStay,
         JumpDown
@@ -18,8 +26,34 @@ public class Client : MonoBehaviour
 
     string userID;
     List<byte[]> recvDataList = new List<byte[]>();
-    public int animationState = 0;
+    private AnimationKey animationState = AnimationKey.Idle;
     private Animator animator;
+    public StateMachine<AnimationKey> stateMachine { get; private set; } = new StateMachine<AnimationKey>();
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        animator = this.GetComponent<Animator>();
+        AddStates();
+        stateMachine.ChangeState(AnimationKey.Idle);
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (stateMachine.currentKey != animationState)
+        {
+            stateMachine.ChangeState(animationState);
+        }
+    }
+
+    public void SetAnimationState(int _state)
+    {
+        animationState = (AnimationKey)_state;
+    }
+
     public void SetUserID(string _id)
     {
         userID = _id;
@@ -37,40 +71,111 @@ public class Client : MonoBehaviour
         recvDataList.RemoveAt(0);
         return returnData;
     }
-    // Start is called before the first frame update
-    void Start()
+
+
+    //=================================================================
+    //statesの情報設定
+    //=================================================================
+    private void AddStates()
     {
-        animator = this.GetComponent<Animator>();
+        //Idle
+        stateMachine.AddState(AnimationKey.Idle,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("Idle", 0.1f);
+            });
+
+        //Walk
+        stateMachine.AddState(AnimationKey.Walk,
+            ()=>
+            {
+                animator.CrossFadeInFixedTime("Walk", 0.1f);
+
+            });
+        //WalkForward
+        stateMachine.AddState(AnimationKey.WalkForward,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("WalkForward", 0.1f);
+
+            });
+        //WalkBack
+        stateMachine.AddState(AnimationKey.WalkBack,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("WalkBack", 0.1f);
+
+            });
+        //WalkLeft
+        stateMachine.AddState(AnimationKey.WalkLeft,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("WalkLeft", 0.1f);
+
+            });
+        //WalkRight
+        stateMachine.AddState(AnimationKey.WalkRight,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("WalkRight", 0.1f);
+
+            });
+
+        //Run
+        stateMachine.AddState(AnimationKey.Run,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("Run", 0.1f);
+            });
+        //RunForward
+        stateMachine.AddState(AnimationKey.RunForward,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("RunForward", 0.1f);
+            });
+        //RunBack
+        stateMachine.AddState(AnimationKey.RunBack,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("RunBack", 0.1f);
+            });
+        //RunLeft
+        stateMachine.AddState(AnimationKey.RunLeft,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("RunLeft", 0.1f);
+            });
+        //RunRight
+        stateMachine.AddState(AnimationKey.RunRight,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("RunRight", 0.1f);
+            });
+
+        //JumpUP
+        stateMachine.AddState(AnimationKey.JumpUP,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("JumpUP", 0.0f);
+            }
+            );
+
+        //JumpStay
+        stateMachine.AddState(AnimationKey.JumpStay,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("JumpStay", 0.0f);
+            }
+            );
+
+
+        //JumpDown
+        stateMachine.AddState(AnimationKey.JumpDown,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("JumpDown", 0.0f);
+            }
+            );
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        //アニメーション遷移
-        if (stateInfo.nameHash != Animator.StringToHash("Base Layer.Idle")){
-            if (animationState == (int)AnimationKey.Idle) animator.CrossFadeInFixedTime("Idle", 0.0f);
-        }
-        if (stateInfo.nameHash != Animator.StringToHash("Base Layer.Walk")){
-            if (animationState == (int)AnimationKey.Walk) animator.CrossFadeInFixedTime("Walk", 0.0f);
-        }
-        if (stateInfo.nameHash != Animator.StringToHash("Base Layer.Run")){
-            if (animationState == (int)AnimationKey.Run) animator.CrossFadeInFixedTime("Run", 0.0f);
-        }
-        
-        if (stateInfo.nameHash != Animator.StringToHash("Base Layer.JumpUP"))
-        {
-            if (animationState == (int)AnimationKey.JumpUP) animator.CrossFadeInFixedTime("JumpUP", 0.0f);
-        }
-        if (stateInfo.nameHash != Animator.StringToHash("Base Layer.JumpStay"))
-        {
-            if (animationState == (int)AnimationKey.JumpStay) animator.CrossFadeInFixedTime("JumpStay", 0.0f);
-        }
-        if (stateInfo.nameHash != Animator.StringToHash("Base Layer.JumpDown"))
-        {
-            if (animationState == (int)AnimationKey.JumpDown) animator.CrossFadeInFixedTime("JumpDown", 0.0f);
-        }
-        
-
-    }
 }

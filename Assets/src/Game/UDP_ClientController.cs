@@ -71,9 +71,7 @@ public class UDP_ClientController : MonoBehaviour
                 player.transform.position = GetVector3(data, headerSize);
 
                 //アニメーション変更
-                player.GetComponent<Client>().animationState = (int)data[headerSize + 6 * sizeof(float)];
-
-
+                player.GetComponent<Client>().SetAnimationState(BitConverter.ToInt32(data, headerSize + 6 * sizeof(float)));
                 addUserFlg = false;
             }
 
@@ -88,7 +86,7 @@ public class UDP_ClientController : MonoBehaviour
                         obj.transform.position = GetVector3(data, headerSize);
 
                         //アニメーション変更
-                        obj.GetComponent<Client>().animationState = (int)data[headerSize + 6 * sizeof(float)];
+                        obj.GetComponent<Client>().SetAnimationState(BitConverter.ToInt32(data, headerSize + 6 * sizeof(float)));
 
                     }
                     addUserFlg = false;

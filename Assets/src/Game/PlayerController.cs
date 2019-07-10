@@ -24,7 +24,10 @@ public class PlayerController : MonoBehaviour
         //視点移動
         float x = Input.GetAxis("Mouse X");
         float y = Input.GetAxis("Mouse Y");
-        if (System.Math.Abs(mouse.y+y) > 30)y = 0;
+        //if (System.Math.Abs(mouse.y+y) > 30)y = 0;
+        if (mouse.y + y > 30) y = 0;
+        if (mouse.y + y < -60) y = 0;
+
         mouse += new Vector2(x, y);
         this.transform.rotation = Quaternion.Euler(new Vector3(-mouse.y, mouse.x,0));
     }

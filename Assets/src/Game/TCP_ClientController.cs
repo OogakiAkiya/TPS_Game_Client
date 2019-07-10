@@ -67,15 +67,6 @@ public class TCP_ClientController : MonoBehaviour
         sendData.AddRange(userName);
         sendData.Add(_code);
         sendData.AddRange(BitConverter.GetBytes((short)_keyCode));
-        /*
-        byte[] sendData = new byte[sizeof(byte) * 2 + userName.Length+sizeof(Key)];
-        sendData[0] = _id;
-        userName.CopyTo(sendData, sizeof(byte));
-        sendData[sizeof(byte) + userName.Length] = _code;
-        //sendData[sizeof(byte) * 2 + userName.Length] = (byte)_keyCode;
-        //sendData[sizeof(byte) * 2 + userName.Length] = BitConverter.GetBytes((short)_keyCode);
-        */
-        byte[] data = sendData.ToArray();
         var task =socket.Send(sendData.ToArray(), sendData.Count);
     }
 
