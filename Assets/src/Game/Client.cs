@@ -156,7 +156,7 @@ public class Client : MonoBehaviour
         stateMachine.AddState(AnimationKey.JumpUP,
             () =>
             {
-                animator.CrossFadeInFixedTime("JumpUP", 0.0f);
+                animator.CrossFadeInFixedTime("JumpUP", 0.1f);
             }
             );
 
@@ -164,7 +164,7 @@ public class Client : MonoBehaviour
         stateMachine.AddState(AnimationKey.JumpStay,
             () =>
             {
-                animator.CrossFadeInFixedTime("JumpStay", 0.0f);
+                animator.CrossFadeInFixedTime("JumpStay", 0.1f);
             }
             );
 
@@ -173,7 +173,7 @@ public class Client : MonoBehaviour
         stateMachine.AddState(AnimationKey.JumpDown,
             () =>
             {
-                animator.CrossFadeInFixedTime("JumpDown", 0.0f);
+                animator.CrossFadeInFixedTime("JumpDown", 0.1f);
             }
             );
     }
