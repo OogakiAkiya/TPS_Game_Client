@@ -9,7 +9,9 @@ public class ClientController : MonoBehaviour
 
     GameObject userPrefab;
     List<GameObject> userList = new List<GameObject>();
-    public GameObject[] objects { get; private set; } = new GameObject[0];
+    //public GameObject[] objects { get; private set; } = new GameObject[0];
+    public List<Client> objects { get; private set; } = new List<Client>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +31,12 @@ public class ClientController : MonoBehaviour
         add.name = _userID;
         add.GetComponent<Client>().SetUserID(_userID);
         userList.Add(add);
-        objects= GameObject.FindGameObjectsWithTag("users");
+        //objects= GameObject.FindGameObjectsWithTag("users");
+        objects.Clear();
+        foreach(var user in GameObject.FindGameObjectsWithTag("users"))
+        {
+            objects.Add(user.GetComponent<Client>());
+        }
     }
 
 }

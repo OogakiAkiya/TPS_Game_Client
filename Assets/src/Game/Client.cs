@@ -24,7 +24,8 @@ public class Client : MonoBehaviour
         JumpDown
     }
 
-    string userID;
+    private string userID;
+    public int hp = 100;
     List<byte[]> recvDataList = new List<byte[]>();
     private AnimationKey animationState = AnimationKey.Idle;
     private Animator animator;

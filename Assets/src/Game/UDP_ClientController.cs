@@ -86,7 +86,11 @@ public class UDP_ClientController : MonoBehaviour
                         obj.transform.position = GetVector3(data, headerSize);
 
                         //アニメーション変更
-                        obj.GetComponent<Client>().SetAnimationState(BitConverter.ToInt32(data, headerSize + 6 * sizeof(float)));
+                        obj.SetAnimationState(BitConverter.ToInt32(data, headerSize + 6 * sizeof(float)));
+
+                        //hp設定
+                        obj.hp = BitConverter.ToInt32(data, headerSize + 7 * sizeof(float));
+
 
                     }
                     addUserFlg = false;
