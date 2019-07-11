@@ -6,20 +6,36 @@ public class PlayerController : MonoBehaviour
 {
 
     private Vector2 mouse=new Vector2(0,0);
+    private Camera cam;
+    public RectTransform _imageRect;
+    private Canvas canvas;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        cam= transform.FindChild("Camera").gameObject.GetComponent<Camera>();
+        canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        /*
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
-        */
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Ray ray = cam.ScreenPointToRay(GetUIScreenPos(_imageRect));
+            Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
+
+            RaycastHit hit = new RaycastHit();
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.tag == "Finish") Debug.Log("Hit");
+            }
+        }
+
+    /*
+    float x = Input.GetAxis("Horizontal");
+    float y = Input.GetAxis("Vertical");
+    */
 
         //視点移動
         float x = Input.GetAxis("Mouse X");
@@ -61,4 +77,13 @@ public class PlayerController : MonoBehaviour
         return 0;
     }
 
+
+    Vector2 GetUIScreenPos(RectTransform rt)
+    {
+
+        //UIのCanvasに使用されるカメラは Hierarchy 上には表示されないので、
+        //変換したいUIが所属しているcanvasを映しているカメラを取得し、 WorldToScreenPoint() で座標変換する
+        return RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, rt.position);
+
+    }
 }
