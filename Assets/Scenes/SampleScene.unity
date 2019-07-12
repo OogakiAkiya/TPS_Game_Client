@@ -247,7 +247,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e23ca5f2f4b874fd1bdab32d467e3833, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _imageRect: {fileID: 1440562373}
 --- !u!1 &136791186
 GameObject:
   m_ObjectHideFlags: 0
@@ -675,7 +674,7 @@ GameObject:
   - component: {fileID: 1440562375}
   - component: {fileID: 1440562374}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Pointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -6,8 +6,9 @@ public class PlayerController : MonoBehaviour
 {
 
     private Vector2 mouse=new Vector2(0,0);
+
     private Camera cam;
-    public RectTransform _imageRect;
+    private RectTransform imageRect;
     private Canvas canvas;
 
     // Start is called before the first frame update
@@ -15,6 +16,8 @@ public class PlayerController : MonoBehaviour
     {
         cam= transform.FindChild("Camera").gameObject.GetComponent<Camera>();
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        imageRect = GameObject.Find("Canvas").transform.FindChild("Pointer").GetComponent<RectTransform>();
+
     }
 
     // Update is called once per frame
@@ -22,8 +25,13 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            Ray ray = cam.ScreenPointToRay(GetUIScreenPos(_imageRect));
-            Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
+            var move = cam.transform.forward * 1.5f;
+            cam.transform.position = cam.transform.position + move;
+
+            Ray ray = cam.ScreenPointToRay(GetUIScreenPos(imageRect));
+
+            cam.transform.position=cam.transform.position - move;
+            Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow,5.0f);
 
             RaycastHit hit = new RaycastHit();
             if (Physics.Raycast(ray, out hit))
@@ -32,10 +40,10 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-    /*
-    float x = Input.GetAxis("Horizontal");
-    float y = Input.GetAxis("Vertical");
-    */
+        /*
+        float x = Input.GetAxis("Horizontal");
+        float y = Input.GetAxis("Vertical");
+        */
 
         //視点移動
         float x = Input.GetAxis("Mouse X");
@@ -59,6 +67,7 @@ public class PlayerController : MonoBehaviour
         sendKey |= InputTemple(KeyCode.D, Key.D);
         sendKey |= InputTemple(KeyCode.LeftShift, Key.SHIFT);
         sendKey |= InputTemple(KeyCode.Space, Key.SPACE);
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0)) sendKey |= Key.LEFT_BUTTON;
         if (sendKey.HasFlag(Key.SPACE))
         {
             return sendKey;

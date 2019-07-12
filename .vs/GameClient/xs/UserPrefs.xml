@@ -1,12 +1,12 @@
 ﻿<Properties StartupConfiguration="{70B263AF-5707-DA2D-B24B-B59941E3F798}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/src/Game/PlayerController.cs">
     <Files>
-      <File FileName="Assets/src/Game/PlayerController.cs" Line="14" Column="1" />
+      <File FileName="Assets/src/Game/PlayerController.cs" Line="41" Column="1" />
       <File FileName="Assets/src/Constant.cs" />
-      <File FileName="Assets/src/Game/Client.cs" />
-      <File FileName="Assets/src/Game/TCP_ClientController.cs" />
-      <File FileName="Assets/src/Game/UDP_ClientController.cs" />
-      <File FileName="Assets/src/Game/ClientController.cs" />
+      <File FileName="Assets/src/Game/Client.cs" Line="27" Column="13" />
+      <File FileName="Assets/src/Game/TCP_ClientController.cs" Line="14" Column="37" />
+      <File FileName="Assets/src/Game/UDP_ClientController.cs" Line="131" Column="37" />
+      <File FileName="Assets/src/Game/ClientController.cs" Line="35" Column="25" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
