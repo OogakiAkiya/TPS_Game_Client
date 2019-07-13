@@ -44,6 +44,7 @@ public class Client : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (hp <= 0) this.gameObject.SetActive(false);
         if (stateMachine.currentKey != animationState)
         {
             stateMachine.ChangeState(animationState);

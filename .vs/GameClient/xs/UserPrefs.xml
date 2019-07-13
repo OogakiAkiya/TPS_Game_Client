@@ -1,12 +1,12 @@
 ﻿<Properties StartupConfiguration="{70B263AF-5707-DA2D-B24B-B59941E3F798}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/src/Game/PlayerController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/src/Game/Client.cs">
     <Files>
       <File FileName="Assets/src/Game/PlayerController.cs" Line="41" Column="1" />
       <File FileName="Assets/src/Constant.cs" />
-      <File FileName="Assets/src/Game/Client.cs" Line="27" Column="13" />
-      <File FileName="Assets/src/Game/TCP_ClientController.cs" Line="14" Column="37" />
-      <File FileName="Assets/src/Game/UDP_ClientController.cs" Line="131" Column="37" />
-      <File FileName="Assets/src/Game/ClientController.cs" Line="35" Column="25" />
+      <File FileName="Assets/src/Game/Client.cs" Line="47" Column="55" />
+      <File FileName="Assets/src/Game/TCP_ClientController.cs" />
+      <File FileName="Assets/src/Game/UDP_ClientController.cs" />
+      <File FileName="Assets/src/Game/ClientController.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -15,7 +15,7 @@
             <Node name="Assets" expanded="True">
               <Node name="src" expanded="True">
                 <Node name="Game" expanded="True">
-                  <Node name="PlayerController.cs" selected="True" />
+                  <Node name="Client.cs" selected="True" />
                 </Node>
                 <Node name="Library" expanded="True">
                   <Node name="OpenSocket" expanded="True" />
@@ -29,7 +29,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="4d334581-5f4f-4148-8071-2e7a9520cd22" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="b30db550-4bd2-4211-8666-10f3c1464488" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
