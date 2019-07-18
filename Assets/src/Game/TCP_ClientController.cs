@@ -39,7 +39,7 @@ public class TCP_ClientController : MonoBehaviour
         socket.Update();
         while (socket.RecvDataSize() > 0)
         {
-            socket.GetRecvData();
+            var da=socket.GetRecvData();
         }
 
     }

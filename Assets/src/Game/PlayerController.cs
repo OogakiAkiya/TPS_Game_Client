@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
 
     private Vector2 mouse=new Vector2(0,0);
+    public GameObject effect;
 
     private Camera cam;
     private RectTransform imageRect;
@@ -38,6 +39,16 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.collider.tag == "Finish") Debug.Log("Hit");
             }
+        }
+
+        //発砲エフェクト表示
+        if (Input.GetMouseButtonDown(0))
+        {
+            effect.SetActive(true);
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            effect.SetActive(false);
         }
 
         /*

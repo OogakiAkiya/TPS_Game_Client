@@ -10,7 +10,7 @@ public class UDP_ClientController : MonoBehaviour
 
     public int recvPort = 12343;
     public int sendPort = 12344;
-    public string serverIP = "127.0.0.1";
+    public string serverIP = "54.250.204.102";
     private ClientController clientController;
     private GameObject player;
     private uint nowSequence=0;

@@ -59,7 +59,7 @@ class UDP_Client
     public ServerState server { get; private set; } = new ServerState();
     private ClientState sender = new ClientState();
 
-    int port = 0;
+    int port = 12343;
     int sendPort = 12344;
     uint sequence = 0;
 
@@ -76,7 +76,9 @@ class UDP_Client
     {
         port = _port;
         sendPort = _sendPort;
+        System.Net.IPEndPoint localEP =new System.Net.IPEndPoint(IPAddress.Any, port);
         server.socket = new UdpClient(port);
+        //server.socket = new UdpClient(localEP);
         server.socket.BeginReceive(new AsyncCallback(ReceiveCallback), server);
         sender.socket = new UdpClient();
     }
