@@ -12,13 +12,18 @@ public class PlayerController : MonoBehaviour
     private RectTransform imageRect;
     private Canvas canvas;
 
+    //Bullet
+    public int count = 0;
+    public int interval = 30;
+
+
     // Start is called before the first frame update
     void Start()
     {
         cam= transform.FindChild("Camera").gameObject.GetComponent<Camera>();
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         imageRect = GameObject.Find("Canvas").transform.FindChild("Pointer").GetComponent<RectTransform>();
-
+        if (effect) effect.SetActive(false);
     }
 
     // Update is called once per frame
@@ -49,6 +54,16 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             effect.SetActive(false);
+        }
+
+        //発砲
+        if (Input.GetMouseButton(0))
+        {
+            count++;
+            if (count > interval)
+            {
+                count = 0;
+            }
         }
 
         /*

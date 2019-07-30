@@ -79,6 +79,7 @@ class UDP_Client
         System.Net.IPEndPoint localEP =new System.Net.IPEndPoint(IPAddress.Any, port);
         server.socket = new UdpClient(port);
         //server.socket = new UdpClient(localEP);
+        
         server.socket.BeginReceive(new AsyncCallback(ReceiveCallback), server);
         sender.socket = new UdpClient();
     }
@@ -118,6 +119,8 @@ class UDP_Client
     private void ReceiveCallback(IAsyncResult ar)
     {
         ServerState client = (ServerState)ar.AsyncState;
+        //ClientState client = (ClientState)ar.AsyncState;
+
         byte[] buf = client.socket.EndReceive(ar, ref client.endPoint);
         client.AddRecvData(client.endPoint, buf);
         client.socket.BeginReceive(ReceiveCallback, client);

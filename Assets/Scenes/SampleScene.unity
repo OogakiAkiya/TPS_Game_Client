@@ -249,6 +249,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effect: {fileID: 294084543}
+  count: 0
+  interval: 10
 --- !u!1 &136791186
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,7 +556,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c6e2ce5d0d5b846c99b0f878bec1e250, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -608,6 +610,7 @@ GameObject:
   - component: {fileID: 1276040711}
   - component: {fileID: 1276040713}
   - component: {fileID: 1276040714}
+  - component: {fileID: 1276040715}
   m_Layer: 0
   m_Name: Client
   m_TagString: Untagged
@@ -653,7 +656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 526f67aad3a4e45a6b83cf4bec00a32b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ipOrHost: 52.194.253.212
+  ipOrHost: 127.0.0.1
   port: 12345
 --- !u!114 &1276040714
 MonoBehaviour:
@@ -669,7 +672,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recvPort: 12343
   sendPort: 12344
-  serverIP: 52.194.253.212
+  serverIP: 127.0.0.1
+--- !u!114 &1276040715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1276040710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58e4d1bb2a89b402c94f39c1da48dc6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1440562372
 GameObject:
   m_ObjectHideFlags: 0
@@ -982,7 +997,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 30b4cc2728d8cec499fad63ba93785a4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.37
+      value: 0.22
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 30b4cc2728d8cec499fad63ba93785a4, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1036,6 +1051,18 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 19800004, guid: 30b4cc2728d8cec499fad63ba93785a4, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.a
+      value: 0.7490196
+      objectReference: {fileID: 0}
+    - target: {fileID: 19900004, guid: 30b4cc2728d8cec499fad63ba93785a4, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10800000, guid: 30b4cc2728d8cec499fad63ba93785a4, type: 3}
+      propertyPath: m_Range
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30b4cc2728d8cec499fad63ba93785a4, type: 3}
 --- !u!1 &1657185382
@@ -1088,7 +1115,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 321b2d4fc5f8940daacbae43e065a6be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
