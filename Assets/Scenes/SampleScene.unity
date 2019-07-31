@@ -656,7 +656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 526f67aad3a4e45a6b83cf4bec00a32b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ipOrHost: 127.0.0.1
+  ipOrHost: 54.250.160.128
   port: 12345
 --- !u!114 &1276040714
 MonoBehaviour:
@@ -672,7 +672,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recvPort: 12343
   sendPort: 12344
-  serverIP: 127.0.0.1
+  serverIP: 54.250.160.128
 --- !u!114 &1276040715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -685,6 +685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58e4d1bb2a89b402c94f39c1da48dc6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hostIP: 192.168.179.1
 --- !u!1 &1440562372
 GameObject:
   m_ObjectHideFlags: 0

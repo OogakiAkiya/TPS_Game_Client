@@ -10,20 +10,52 @@ using UnityEngine;
 
 class UPnPController : MonoBehaviour
 {
+    private string selfIP = "192.168.179.2";
+    public string hostIP = "192.168.179.1";
     private void Start()
     {
-        UPnPTest();
+        selfIP=CheckSelfIP();
+        if(selfIP!="")AddPort();
 
     }
 
     private void OnDestroy()
     {
-        DeletePort();
+        if(selfIP != "")DeletePort();
 
     }
 
+    private string CheckSelfIP()
+    {
+        try
+        {
+            //ホスト名を取得
+            string hostname = System.Net.Dns.GetHostName();
 
-    private void UPnPTest()
+            //ホスト名からIPアドレスを取得
+            System.Net.IPAddress[] addr_arr = System.Net.Dns.GetHostAddresses(hostname);
+
+            //探す
+            foreach (System.Net.IPAddress addr in addr_arr)
+            {
+                string addr_str = addr.ToString();
+
+                //IPv4 && localhostでない
+                if (addr_str.IndexOf(".") > 0 && !addr_str.StartsWith("127."))
+                {
+                    return addr_str;
+                }
+            }
+        }
+        catch (Exception)
+        {
+            return "";
+        }
+        return "";
+
+    }
+
+    private void AddPort()
     {
         int port = 0;
         Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -88,7 +120,7 @@ class UPnPController : MonoBehaviour
     "   <NewExternalPort>" + 12343 + "</NewExternalPort>" +
     "   <NewProtocol>" + "UDP" + "</NewProtocol>" +
     "   <NewInternalPort>" + 12343 + "</NewInternalPort>" +
-    "   <NewInternalClient>" + "192.168.179.2" + "</NewInternalClient>" +
+    "   <NewInternalClient>" + selfIP + "</NewInternalClient>" +
     "   <NewEnabled>1</NewEnabled>" +
     "   <NewPortMappingDescription>" + "GAME" + "</NewPortMappingDescription>" +
     "   <NewLeaseDuration>0</NewLeaseDuration>" +
@@ -99,7 +131,7 @@ class UPnPController : MonoBehaviour
 
         byte[] bodyByte = UTF8Encoding.ASCII.GetBytes(bodyString);
         string headString = "POST " + controlUrl + " HTTP/1.1\r\n" +
-                            "HOST: " + "192.168.179.1" + ":" + port + "\r\n" +
+                            "HOST: " + hostIP + ":" + port + "\r\n" +
                             "CONTENT-LENGTH: " + bodyByte.Length + "\r\n" +
                             "CONTENT-TYPE: text/xml; charset=\"utf-8\"" + "\r\n" +
                             "SOAPACTION: \"" + urn + "#" + "AddPortMapping" + "\"\r\n" +
@@ -116,7 +148,7 @@ class UPnPController : MonoBehaviour
     private void SOAPSend(byte[] _data, int _port)
     {
         Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        EndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.179.1"), _port);                        //IPはルーター
+        EndPoint endPoint = new IPEndPoint(IPAddress.Parse(hostIP), _port);                        //IPはルーター
         client.Connect(endPoint);
         client.Send(_data, _data.Length, SocketFlags.None);
 
@@ -210,7 +242,7 @@ class UPnPController : MonoBehaviour
 
         byte[] bodyByte = UTF8Encoding.ASCII.GetBytes(bodyString);
         string headString = "POST " + controlUrl + " HTTP/1.1\r\n" +
-                            "HOST: " + "192.168.179.1" + ":" + port + "\r\n" +
+                            "HOST: " + hostIP + ":" + port + "\r\n" +
                             "CONTENT-LENGTH: " + bodyByte.Length + "\r\n" +
                             "CONTENT-TYPE: text/xml; charset=\"utf-8\"" + "\r\n" +
                             "SOAPACTION: \"" + urn + "#" + "DeletePortMapping" + "\"\r\n" +
