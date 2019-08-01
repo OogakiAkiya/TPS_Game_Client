@@ -11,7 +11,7 @@ using UnityEngine;
 class UPnPController : MonoBehaviour
 {
     private string selfIP = "192.168.179.2";
-    public string hostIP = "192.168.179.1";
+    private string hostIP = "192.168.179.0";
     private void Start()
     {
         selfIP=CheckSelfIP();
@@ -55,6 +55,23 @@ class UPnPController : MonoBehaviour
 
     }
 
+    private void SerchHostIP(string _str)
+    {
+        //HostIPの取得
+        if (_str.Contains("http://"))
+        {
+            var temp = _str.Replace("http://", "");
+            hostIP  = temp.Substring(0, temp.IndexOf(":"));
+            return;
+        }
+        if (_str.Contains("https://"))
+        {
+            var temp = _str.Replace("http://", "");
+            hostIP = temp.Substring(0, temp.IndexOf(":"));
+        }
+
+    }
+
     private void AddPort()
     {
         int port = 0;
@@ -75,7 +92,7 @@ class UPnPController : MonoBehaviour
         byte[] responseByte = new byte[1024];
         client.ReceiveFrom(responseByte, ref endPoint2);
         var responseString = Encoding.ASCII.GetString(responseByte);
-        Debug.Log(responseString);
+        FileController.GetInstance().Write("UPnP", responseString);
         string location = "";
         string[] parts = responseString.Split(new string[] { System.Environment.NewLine }, System.StringSplitOptions.RemoveEmptyEntries);
         foreach (string part in parts)
@@ -91,13 +108,16 @@ class UPnPController : MonoBehaviour
                 break;
             }
         }
-        Debug.Log(location);
+        SerchHostIP(location);
+        FileController.GetInstance().Write("UPnP", location);
+
         string controlUrl;
         string urn = "urn:schemas-upnp-org:service:WANPPPConnection:1";
         using (WebClient webClient = new WebClient())
         {
             var st = webClient.DownloadString(location);
-            Debug.Log(st);
+            FileController.GetInstance().Write("UPnP", "XML=="+st);
+
             int serviceIndex = st.IndexOf(urn);
             if (serviceIndex == -1)
             {
@@ -190,7 +210,8 @@ class UPnPController : MonoBehaviour
         byte[] responseByte = new byte[1024];
         client.ReceiveFrom(responseByte, ref endPoint2);
         var responseString = Encoding.ASCII.GetString(responseByte);
-        Debug.Log(responseString);
+        FileController.GetInstance().Write("UPnP", responseString);
+
         string location = "";
         string[] parts = responseString.Split(new string[] { System.Environment.NewLine }, System.StringSplitOptions.RemoveEmptyEntries);
         foreach (string part in parts)
@@ -206,13 +227,16 @@ class UPnPController : MonoBehaviour
                 break;
             }
         }
-        Debug.Log(location);
+        FileController.GetInstance().Write("UPnP", location);
+
         string controlUrl;
         string urn = "urn:schemas-upnp-org:service:WANPPPConnection:1";
         using (WebClient webClient = new WebClient())
         {
             var st = webClient.DownloadString(location);
-            Debug.Log(st);
+
+            FileController.GetInstance().Write("UPnP", "XML="+st);
+
             int serviceIndex = st.IndexOf(urn);
             if (serviceIndex == -1)
             {
