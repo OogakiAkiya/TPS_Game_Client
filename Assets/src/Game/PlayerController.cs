@@ -13,9 +13,12 @@ public class PlayerController : MonoBehaviour
     private Canvas canvas;
 
     //Bullet
-    public int count = 0;
-    public int interval = 30;
+    private int count = 0;
+    public int interval = 3;
 
+    //Timer
+    public float timeOut=0.5f;
+    public float timeElapsed=0;
 
     // Start is called before the first frame update
     void Start()
@@ -29,21 +32,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetMouseButton(0))
         {
-            var move = cam.transform.forward * 1.5f;
-            cam.transform.position = cam.transform.position + move;
+            //timeElapsed
 
-            Ray ray = cam.ScreenPointToRay(GetUIScreenPos(imageRect));
-
-            cam.transform.position=cam.transform.position - move;
-            Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow,5.0f);
-
-            RaycastHit hit = new RaycastHit();
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.collider.tag == "Finish") Debug.Log("Hit");
-            }
         }
 
         //発砲エフェクト表示
@@ -62,6 +54,20 @@ public class PlayerController : MonoBehaviour
             count++;
             if (count > interval)
             {
+                //レイの作成
+                Ray ray = cam.ScreenPointToRay(GetUIScreenPos(imageRect));
+                //レイの可視化
+                //Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow,10f);
+
+                RaycastHit hit = new RaycastHit();
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.collider.tag == "users")
+                    {
+                        hit.collider.GetComponent<Client>().CreateDamageEffect();
+                    }
+                }
+
                 count = 0;
             }
         }

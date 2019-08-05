@@ -30,7 +30,7 @@ public class Client : MonoBehaviour
     private AnimationKey animationState = AnimationKey.Idle;
     private Animator animator;
     public StateMachine<AnimationKey> stateMachine { get; private set; } = new StateMachine<AnimationKey>();
-
+    private GameObject damageEffectPref;
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +38,7 @@ public class Client : MonoBehaviour
         animator = this.GetComponent<Animator>();
         AddStates();
         stateMachine.ChangeState(AnimationKey.Idle);
+        damageEffectPref = (GameObject)Resources.Load("blood");
 
     }
 
@@ -64,6 +65,18 @@ public class Client : MonoBehaviour
     public void AddRecvData(byte[] _addData)
     {
         recvDataList.Add(_addData);
+    }
+
+    public void CreateDamageEffect()
+    {
+        if (damageEffectPref)
+        {
+            GameObject add=Instantiate(damageEffectPref) as GameObject;
+            add.transform.parent = this.transform;
+            Vector3 pos = this.transform.position;
+            pos += new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(0.8f,1.5f),0.0f);
+            add.transform.position=pos;
+        }
     }
 
     private byte[] GetRecvData()
