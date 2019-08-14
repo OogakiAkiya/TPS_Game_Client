@@ -24,7 +24,7 @@ public class TCP_ClientController : MonoBehaviour
         socket.StartRecvThread();                     //非同期通信Recv
 
         //初期設定用の通信
-        TestSend(HeaderConstant.ID_INIT);
+        TestSend((byte)Header.ID.INIT);
 
     }
 
@@ -33,7 +33,7 @@ public class TCP_ClientController : MonoBehaviour
     {
         //playerのキー入力取得
         Key sendKey=playerController.InputUpdate();
-        if (sendKey != 0) TestInputSend(HeaderConstant.ID_GAME, HeaderConstant.CODE_GAME_BASICDATA, sendKey);
+        if (sendKey != 0) TestInputSend((byte)Header.ID.GAME, (byte)Header.GameCode.BASICDATA, sendKey);
 
 
         socket.Update();
@@ -48,7 +48,7 @@ public class TCP_ClientController : MonoBehaviour
     void TestSend(byte _id, byte _code = 0x0001, byte _keyCode = 0x0001)
     {
         System.Text.Encoding enc = System.Text.Encoding.UTF8;
-        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + HeaderConstant.USERID_LENGTH + "}", player.name));              //12byteに設定する
+        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + Header.USERID_LENGTH + "}", player.name));              //12byteに設定する
         byte[] sendData = new byte[sizeof(byte) * 3 + userName.Length];
         sendData[0] = _id;
         userName.CopyTo(sendData, sizeof(byte));
@@ -61,7 +61,7 @@ public class TCP_ClientController : MonoBehaviour
     void TestInputSend(byte _id, byte _code, Key _keyCode)
     {
         System.Text.Encoding enc = System.Text.Encoding.UTF8;
-        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + HeaderConstant.USERID_LENGTH + "}", player.name));              //12byteに設定する
+        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + Header.USERID_LENGTH + "}", player.name));              //12byteに設定する
         List<byte> sendData = new List<byte>();
         sendData.Add(_id);
         sendData.AddRange(userName);

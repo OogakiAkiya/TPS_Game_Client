@@ -21,7 +21,8 @@ public class Client : MonoBehaviour
         RunRight,
         JumpUP,
         JumpStay,
-        JumpDown
+        JumpDown,
+        Dying
     }
 
     private string userID;
@@ -45,7 +46,7 @@ public class Client : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (hp <= 0) this.gameObject.SetActive(false);
+        //if (hp <= 0) this.gameObject.SetActive(false);
         if (stateMachine.currentKey != animationState)
         {
             stateMachine.ChangeState(animationState);
@@ -191,6 +192,19 @@ public class Client : MonoBehaviour
                 animator.CrossFadeInFixedTime("JumpDown", 0.1f);
             }
             );
+        //JumpDown
+        stateMachine.AddState(AnimationKey.Dying,
+            () =>
+            {
+                animator.CrossFadeInFixedTime("Dying", 0.1f);
+                this.GetComponent<CapsuleCollider>().enabled = false;
+            },
+            _end: () =>
+            {
+                this.GetComponent<CapsuleCollider>().enabled = true;
+            }
+            );
+
     }
 
 }
