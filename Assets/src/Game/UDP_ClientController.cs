@@ -76,16 +76,6 @@ public class UDP_ClientController : MonoBehaviour
         //データ種類ごとの処理
         state.Update();
 
-        }
-
-    private Vector3 GetVector3(byte[] _data, int _beginPoint = 0, bool _x = true, bool _y = true, bool _z = true)
-    {
-        Vector3 vect = Vector3.zero;
-        if (_data.Length < sizeof(float) * 3) return vect;
-        if (_x) vect.x = BitConverter.ToSingle(_data, _beginPoint + 0 * sizeof(float));
-        if (_y) vect.y = BitConverter.ToSingle(_data, _beginPoint + 1 * sizeof(float));
-        if (_z) vect.z = BitConverter.ToSingle(_data, _beginPoint + 2 * sizeof(float));
-        return vect;
     }
 
     private void SendRotation(byte _id)
@@ -122,7 +112,7 @@ public class UDP_ClientController : MonoBehaviour
         {
 
             //座標の代入
-            player.transform.position = GetVector3(recvData, headerSize);
+            player.transform.position = Convert.GetVector3(recvData, headerSize);
 
             //アニメーション変更
             player.GetComponent<Client>().SetAnimationState(BitConverter.ToInt32(recvData, headerSize + 6 * sizeof(float)));
@@ -137,7 +127,7 @@ public class UDP_ClientController : MonoBehaviour
                 if (recvData[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.BASICDATA)
                 {
                     //座標の代入
-                    obj.transform.position = GetVector3(recvData, headerSize);
+                    obj.transform.position = Convert.GetVector3(recvData, headerSize);
 
                     //アニメーション変更
                     obj.SetAnimationState(BitConverter.ToInt32(recvData, headerSize + 6 * sizeof(float)));
@@ -155,7 +145,7 @@ public class UDP_ClientController : MonoBehaviour
         //user追加
         if (addUserFlg)
         {
-            Vector3 pos = GetVector3(recvData, headerSize);
+            Vector3 pos = Convert.GetVector3(recvData, headerSize);
 
             //ユーザーの追加
             this.GetComponent<ClientController>().AddUser(userId.Trim(), pos);

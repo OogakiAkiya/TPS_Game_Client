@@ -10,7 +10,7 @@ public static class Header
 
     public enum ID : byte
     {
-        //byte ID = 0x001,
+        DEBUG = 0x001,
         INIT = 0x002,
         GAME = 0x003
     }

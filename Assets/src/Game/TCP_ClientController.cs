@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class TCP_ClientController : MonoBehaviour
@@ -12,6 +13,11 @@ public class TCP_ClientController : MonoBehaviour
     private TCP_Client socket = new TCP_Client();
     private GameObject player;
     private PlayerController playerController;
+
+    //Debug用
+    System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+    bool timerFlg=false;
+    public Text debugText=null;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +32,8 @@ public class TCP_ClientController : MonoBehaviour
         //初期設定用の通信
         TestSend((byte)Header.ID.INIT);
 
+
+
     }
 
     // Update is called once per frame
@@ -35,25 +43,42 @@ public class TCP_ClientController : MonoBehaviour
         Key sendKey=playerController.InputUpdate();
         if (sendKey != 0) TestInputSend((byte)Header.ID.GAME, (byte)Header.GameCode.BASICDATA, sendKey);
 
+        if (!timerFlg)
+        {
+            //通信情報の確認
+            timer.Restart();
+            TestSend((byte)Header.ID.DEBUG, (byte)Header.GameCode.BASICDATA);
+            timerFlg = true;
+        }
+
 
         socket.Update();
         while (socket.RecvDataSize() > 0)
         {
-            var da=socket.GetRecvData();
+            var recvData=socket.GetRecvData();
+            if ((Header.ID)recvData[0] == Header.ID.DEBUG)
+            {
+                int sum = BitConverter.ToInt32(recvData, sizeof(byte) * 2 + Header.USERID_LENGTH);
+                timer.Stop();
+                timerFlg = false;
+                if (debugText)
+                {
+                    debugText.text = $"人数:"+sum+"\nTCP応答時間:"+timer.ElapsedMilliseconds+"ミリ秒";
+                }
+            }
         }
 
     }
 
 
-    void TestSend(byte _id, byte _code = 0x0001, byte _keyCode = 0x0001)
+    void TestSend(byte _id, byte _code = 0x0001)
     {
         System.Text.Encoding enc = System.Text.Encoding.UTF8;
         byte[] userName = enc.GetBytes(System.String.Format("{0, -" + Header.USERID_LENGTH + "}", player.name));              //12byteに設定する
-        byte[] sendData = new byte[sizeof(byte) * 3 + userName.Length];
+        byte[] sendData = new byte[sizeof(byte) * 2 + userName.Length];
         sendData[0] = _id;
         userName.CopyTo(sendData, sizeof(byte));
         sendData[sizeof(byte) + userName.Length] = _code;
-        sendData[sizeof(byte) * 2 + userName.Length] = (byte)_keyCode;
         var task=socket.Send(sendData, sendData.Length);
     }
 
