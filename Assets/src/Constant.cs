@@ -6,7 +6,7 @@ public static class Header
     //定数
     //====================================================
     public static readonly int USERID_LENGTH = 12;
-
+    public static readonly int HEADER_SIZE= sizeof(uint) + sizeof(ID)+sizeof(GameCode)+USERID_LENGTH;
 
     public enum ID : byte
     {
@@ -35,6 +35,19 @@ public enum Key : short
     SPACE=0x200
 }
 
+
+public enum WEAPONTYPE : int
+{
+    MACHINEGUN
+}
+
+public enum WEAPONSTATE : int
+{
+    WAIT,
+    ATACK,
+    RELOAD
+
+}
 
 
 

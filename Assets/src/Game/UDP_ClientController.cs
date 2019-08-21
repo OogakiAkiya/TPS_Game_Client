@@ -105,38 +105,12 @@ public class UDP_ClientController : MonoBehaviour
 
 
         bool addUserFlg = true;
-        int headerSize = sizeof(uint) + sizeof(byte) * 2 + Header.USERID_LENGTH;
 
-        //player用
-        if (userId.Trim() == player.name)
-        {
-
-            //座標の代入
-            player.transform.position = Convert.GetVector3(recvData, headerSize);
-
-            //アニメーション変更
-            player.GetComponent<Client>().SetAnimationState(BitConverter.ToInt32(recvData, headerSize + 6 * sizeof(float)));
-            addUserFlg = false;
-        }
-
-        //Player以外のユーザー用
         foreach (var obj in clientController.objects)
         {
             if (obj.name.Equals(userId.Trim()))
             {
-                if (recvData[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.BASICDATA)
-                {
-                    //座標の代入
-                    obj.transform.position = Convert.GetVector3(recvData, headerSize);
-
-                    //アニメーション変更
-                    obj.SetAnimationState(BitConverter.ToInt32(recvData, headerSize + 6 * sizeof(float)));
-
-                    //hp設定
-                    obj.hp = BitConverter.ToInt32(recvData, headerSize + 7 * sizeof(float));
-
-
-                }
+                if (recvData[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.BASICDATA) obj.AddRecvData(recvData);
                 addUserFlg = false;
             }
         }
@@ -145,7 +119,7 @@ public class UDP_ClientController : MonoBehaviour
         //user追加
         if (addUserFlg)
         {
-            Vector3 pos = Convert.GetVector3(recvData, headerSize);
+            Vector3 pos = Convert.GetVector3(recvData, Header.HEADER_SIZE);
 
             //ユーザーの追加
             this.GetComponent<ClientController>().AddUser(userId.Trim(), pos);

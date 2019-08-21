@@ -16,6 +16,7 @@ public class ClientController : MonoBehaviour
     void Start()
     {
         userPrefab = (GameObject)Resources.Load("user");
+        objects.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<Client>());
 
 
     }
@@ -29,10 +30,12 @@ public class ClientController : MonoBehaviour
     {
         var add = Instantiate(userPrefab, _pos, Quaternion.identity) as GameObject;
         add.name = _userID;
-        add.GetComponent<Client>().SetUserID(_userID);
+        add.GetComponent<Client>().userID=_userID;
         userList.Add(add);
         //objects= GameObject.FindGameObjectsWithTag("users");
         objects.Clear();
+
+        objects.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<Client>());
         foreach(var user in GameObject.FindGameObjectsWithTag("users"))
         {
             objects.Add(user.GetComponent<Client>());
