@@ -43,6 +43,14 @@ public class BaseWeapon
         if (!texture) return;
         _image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
     }
+
+    public static BaseWeapon CreateInstance(WEAPONTYPE _type,Action _action=null)
+    {
+        if (_type == WEAPONTYPE.MACHINEGUN) return new MachineGun(_action);
+        if (_type == WEAPONTYPE.HANDGUN) return new HandGun(_action);
+
+        return null;
+    }
 }
 
 
@@ -58,6 +66,7 @@ public class MachineGun : BaseWeapon
         range = 10;
         atackMethod = _atack;
         texture = Resources.Load("Weapon_MachineGun") as Texture2D;
+        type = WEAPONTYPE.MACHINEGUN;
 
         state.AddState(WEAPONSTATE.WAIT);
         state.AddState(WEAPONSTATE.ATACK,
@@ -94,7 +103,76 @@ public class MachineGun : BaseWeapon
 
     public byte[] GetStatus()
     {
-        return GetStatus(WEAPONTYPE.MACHINEGUN);
+        return GetStatus(type);
+    }
+    public override void SetTexture(Image _image)
+    {
+        if (!texture) return;
+        _image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+        _image.GetComponent<Transform>().localScale = new Vector3(0.5f, 0.5f, 0.5f);
+    }
+
+
+}
+
+public class HandGun : BaseWeapon
+{
+    public HandGun(Action _atack)
+    {
+        interval = 200;
+        power = 10;
+        reloadTime = 1000;      //1秒
+        magazine = 12;
+        remainingBullet = magazine;
+        range = 5;
+        atackMethod = _atack;
+        texture = Resources.Load("Weapon_HandGun") as Texture2D;
+        type = WEAPONTYPE.HANDGUN;
+
+        state.AddState(WEAPONSTATE.WAIT);
+        state.AddState(WEAPONSTATE.ATACK,
+            () =>
+            {
+                timer.Restart();
+            },
+            () =>
+            {
+                if (timer.ElapsedMilliseconds > interval)
+                {
+                    atackMethod();
+                }
+            },
+            () =>
+            {
+                timer.Stop();
+            }
+            );
+        state.AddState(WEAPONSTATE.RELOAD,
+            () =>
+            {
+            },
+            () =>
+            {
+            },
+            () =>
+            {
+            }
+            );
+
+        state.ChangeState(WEAPONSTATE.WAIT);
+    }
+
+    public byte[] GetStatus()
+    {
+        return GetStatus(type);
+    }
+
+    public override void SetTexture(Image _image)
+    {
+        if (!texture) return;
+        _image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+        _image.GetComponent<Transform>().localScale = new Vector3(0.3f, 0.3f, 0.3f);
     }
 
 }
+

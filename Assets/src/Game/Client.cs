@@ -71,26 +71,17 @@ public class Client : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
-        if (weapon.state.currentKey == WEAPONSTATE.WAIT)
-        {
-            if (Input.GetMouseButton(0))
-            {
-                weapon.state.ChangeState(WEAPONSTATE.ATACK);
-            }
-        }
-        */
-        weapon.state.Update();
-        if (weapon_UI) weapon_UI.text = weapon.remainingBullet + "/" + weapon.magazine;
-
-
-
         //受信データの代入
         while (recvDataList.Count > 0)
         {
             var recvData=GetRecvData();
             SetStatus(recvData);
         }
+
+        //武器関係
+        weapon.state.Update();
+        if (weapon_UI) weapon_UI.text = weapon.remainingBullet + "/" + weapon.magazine;
+
 
         //アニメーション変更
         if (stateMachine.currentKey != animationState)stateMachine.ChangeState(animationState);
@@ -110,6 +101,15 @@ public class Client : MonoBehaviour
 
             if (weapon!=null)
             {
+                //武器の変更
+                WEAPONTYPE type = (WEAPONTYPE)System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 7 * sizeof(float) + sizeof(int));             //武器の種類
+                if (weapon.type != type)
+                {
+                    weapon = BaseWeapon.CreateInstance(type, Shoot);
+                    if (weapon_Image) weapon.SetTexture(weapon_Image);
+                }
+
+                //武器ステータス設定
                 weapon.SetStatus(_data, Header.HEADER_SIZE + 7 * sizeof(float) + sizeof(int));
             }
         }
