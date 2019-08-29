@@ -16,7 +16,9 @@ public class BaseWeapon
     public float range { get; protected set; }              //射程
     public WEAPONTYPE type { get; protected set; }
     protected Action atackMethod;                           //攻撃時メソッド
-    protected Texture2D texture =null;
+    protected Texture2D texture =null;                      //UIテクスチャ
+    public GameObject model = null;                      //武器のプレハブ
+
     protected System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
 
 
@@ -66,19 +68,23 @@ public class MachineGun : BaseWeapon
         range = 10;
         atackMethod = _atack;
         texture = Resources.Load("Weapon_MachineGun") as Texture2D;
-        type = WEAPONTYPE.MACHINEGUN;
+        model = Resources.Load("M4a1") as GameObject;
+
+        type = WEAPONTYPE.BASE;
 
         state.AddState(WEAPONSTATE.WAIT);
         state.AddState(WEAPONSTATE.ATACK,
             () =>
             {
                 timer.Restart();
+                atackMethod();
             },
             () =>
             {
                 if (timer.ElapsedMilliseconds > interval)
                 {
-                    atackMethod();
+                    state.ChangeState(WEAPONSTATE.WAIT);
+
                 }
             },
             () =>
@@ -119,7 +125,7 @@ public class HandGun : BaseWeapon
 {
     public HandGun(Action _atack)
     {
-        interval = 200;
+        interval = 1000;
         power = 10;
         reloadTime = 1000;      //1秒
         magazine = 12;
@@ -127,6 +133,8 @@ public class HandGun : BaseWeapon
         range = 5;
         atackMethod = _atack;
         texture = Resources.Load("Weapon_HandGun") as Texture2D;
+        model = Resources.Load("M9") as GameObject;
+
         type = WEAPONTYPE.HANDGUN;
 
         state.AddState(WEAPONSTATE.WAIT);
@@ -134,12 +142,13 @@ public class HandGun : BaseWeapon
             () =>
             {
                 timer.Restart();
+                atackMethod();
             },
             () =>
             {
                 if (timer.ElapsedMilliseconds > interval)
                 {
-                    atackMethod();
+                    state.ChangeState(WEAPONSTATE.WAIT);
                 }
             },
             () =>

@@ -37,6 +37,9 @@ public class Client : MonoBehaviour
 
     private BaseWeapon weapon=null;
     public GameObject effect=null;
+    public GameObject weaponAddPosition = null;
+    private GameObject weaponModel;
+
     //UI
     public Text weapon_UI;
     public Image weapon_Image;
@@ -45,6 +48,9 @@ public class Client : MonoBehaviour
     private RectTransform imageRect;
     private Canvas canvas;
 
+    //Score
+    public int deathAmount = 0;          //死んだ回数
+    public int killAmount = 0;           //殺した回数
 
     // Start is called before the first frame update
     void Start()
@@ -56,11 +62,12 @@ public class Client : MonoBehaviour
 
 
         //攻撃関係
-        if (effect!=null)effect.SetActive(false);
-        
-        weapon = new MachineGun(Shoot);
-        if(weapon_Image)weapon.SetTexture(weapon_Image);
+        //if (effect!=null)effect.SetActive(false);
 
+        //weapon = new MachineGun(Shoot);
+        weapon = new BaseWeapon();
+        if(weapon_Image)weapon.SetTexture(weapon_Image);
+        
         if (this.tag != "Player") return;
         cam = transform.FindChild("Camera").gameObject.GetComponent<Camera>();
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
@@ -75,7 +82,21 @@ public class Client : MonoBehaviour
         while (recvDataList.Count > 0)
         {
             var recvData=GetRecvData();
-            SetStatus(recvData);
+            if (recvData[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.BASICDATA)
+            {
+                if (this.tag == "Player")
+                {
+                    SetPlayerStatus(recvData);
+                }
+                else
+                {
+                    SetStatus(recvData);
+                }
+            }
+
+            //スコア
+            if (recvData[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.SCOREDATA) SetScore(recvData);
+
         }
 
         //武器関係
@@ -87,48 +108,77 @@ public class Client : MonoBehaviour
         if (stateMachine.currentKey != animationState)stateMachine.ChangeState(animationState);
     }
 
-    public void SetStatus(byte[] _data)
+    private void SetStatus(byte[] _data)
     {
-        if (this.tag == "Player")
-        {
-            //座標の代入
-            this.transform.position = Convert.GetVector3(_data, Header.HEADER_SIZE);
-
-            //アニメーション変更
-            animationState = (AnimationKey)System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 6 * sizeof(float));
-
-            hp = System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 7 * sizeof(float));
-
-            if (weapon!=null)
-            {
-                //武器の変更
-                WEAPONTYPE type = (WEAPONTYPE)System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 7 * sizeof(float) + sizeof(int));             //武器の種類
-                if (weapon.type != type)
-                {
-                    weapon = BaseWeapon.CreateInstance(type, Shoot);
-                    if (weapon_Image) weapon.SetTexture(weapon_Image);
-                }
-
-                //武器ステータス設定
-                weapon.SetStatus(_data, Header.HEADER_SIZE + 7 * sizeof(float) + sizeof(int));
-            }
-        }
-
         //座標の代入
         this.transform.position = Convert.GetVector3(_data, Header.HEADER_SIZE);
+
+        //アニメーション変更
+        animationState = (AnimationKey)System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 6 * sizeof(float));
+
+        //hpの設定
+        hp = System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 7 * sizeof(float));
 
         //回転座標の代入
         this.transform.rotation = Quaternion.Euler(Convert.GetVector3(_data, Header.HEADER_SIZE + 3 * sizeof(float)));
 
-        //アニメーション変更
-        animationState=(AnimationKey)System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 6 * sizeof(float));
+    }
 
-        //hp設定
+    private void SetPlayerStatus(byte[] _data)
+    {
+        //座標の代入
+        this.transform.position = Convert.GetVector3(_data, Header.HEADER_SIZE);
+
+        //アニメーション変更
+        animationState = (AnimationKey)System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 6 * sizeof(float));
+
+        //hpの設定
         hp = System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 7 * sizeof(float));
 
+        if (weapon != null)
+        {
+            //武器の変更
+            ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 7 * sizeof(float) + sizeof(int)));
+            //武器ステータス設定
+            weapon.SetStatus(_data, Header.HEADER_SIZE + 7 * sizeof(float) + sizeof(int));
+        }
 
     }
-    
+
+    private void SetScore(byte[] _data)
+    {
+        deathAmount=System.BitConverter.ToInt32(_data,Header.HEADER_SIZE);
+        killAmount = System.BitConverter.ToInt32(_data, Header.HEADER_SIZE+sizeof(int));
+
+    }
+
+    private void ChangeWeapon(WEAPONTYPE _type)
+    {
+        //武器が変更されているかチェック
+        if (weapon.type == _type) return;
+
+        //武器の作成
+        weapon = BaseWeapon.CreateInstance(_type, Shoot);
+        if (weapon_Image) weapon.SetTexture(weapon_Image);
+
+        //武器のモデル変更
+        if (!weaponAddPosition) return;
+        if (!weapon.model) return;
+        if (weaponModel) Destroy(weaponModel);
+
+        //武器インスタンスの作成
+        weaponModel = (GameObject)Instantiate(weapon.model);
+        weaponModel.transform.parent = weaponAddPosition.transform;
+
+        //武器をローカル座標への移動
+        weaponModel.transform.localPosition = weapon.model.transform.position;
+        weaponModel.transform.localRotation = weapon.model.transform.rotation;
+
+
+        effect = weaponModel.transform.Find("Effect").gameObject;
+        effect.SetActive(false);
+    }
+
     public void CreateDamageEffect()
     {
         if (damageEffectPref)
@@ -143,8 +193,10 @@ public class Client : MonoBehaviour
 
     private void Shoot()
     {
-        //発砲エフェクト
-        if (effect!=null) effect.SetActive(true);
+        if (effect)
+        {
+            effect.SetActive(true);
+        }
 
         if (this.tag != "Player") return;
         //レイの作成

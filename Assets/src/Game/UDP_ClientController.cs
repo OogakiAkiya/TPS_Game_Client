@@ -106,11 +106,11 @@ public class UDP_ClientController : MonoBehaviour
 
         bool addUserFlg = true;
 
-        foreach (var obj in clientController.objects)
+        foreach (var obj in clientController.clientList)
         {
             if (obj.name.Equals(userId.Trim()))
             {
-                if (recvData[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.BASICDATA) obj.AddRecvData(recvData);
+                obj.AddRecvData(recvData);
                 addUserFlg = false;
             }
         }
