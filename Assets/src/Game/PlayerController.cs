@@ -38,24 +38,19 @@ public class PlayerController : MonoBehaviour
         sendKey |= InputTemple(KeyCode.S, Key.S);
         sendKey |= InputTemple(KeyCode.A, Key.A);
         sendKey |= InputTemple(KeyCode.D, Key.D);
+        sendKey |= InputTemple(KeyCode.R, Key.R);
         sendKey |= InputTemple(KeyCode.LeftShift, Key.SHIFT);
         sendKey |= InputTemple(KeyCode.Space, Key.SPACE);
-        /*
-        sendKey |= InputTemple(KeyCode.LeftArrow, Key.LEFT_BUTTON);
-        sendKey |= InputTemple(KeyCode.RightArrow, Key.RIGHT_BUTTON);
-        */
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            sendKey |= Key.LEFT_BUTTON;
-        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))sendKey |= Key.LEFT_BUTTON;
         if (Input.GetKeyDown(KeyCode.RightArrow)) sendKey |= Key.RIGHT_BUTTON;
-
         if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0)) sendKey |= Key.LEFT_CLICK;
+        /*
         if (sendKey.HasFlag(Key.SPACE))
         {
             return sendKey;
 
         }
+        */
         return sendKey;
 
     }
