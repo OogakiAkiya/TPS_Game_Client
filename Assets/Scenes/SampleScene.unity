@@ -1217,7 +1217,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100144, guid: 34a3ddc70efea4d07897832397d7f513, type: 3}
       propertyPath: m_Name
-      value: user1
+      value: user2
       objectReference: {fileID: 0}
     - target: {fileID: 100144, guid: 34a3ddc70efea4d07897832397d7f513, type: 3}
       propertyPath: m_TagString

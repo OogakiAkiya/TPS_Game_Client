@@ -9,8 +9,6 @@ public class ClientController : MonoBehaviour
 {
 
     GameObject userPrefab;
-    //List<GameObject> userGameObjectList = new List<GameObject>();
-    //public GameObject[] objects { get; private set; } = new GameObject[0];
     public List<Client> clientList { get; private set; } = new List<Client>();
     public Text ranking;
 

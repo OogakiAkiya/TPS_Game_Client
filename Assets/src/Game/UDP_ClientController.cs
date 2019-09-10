@@ -18,27 +18,25 @@ public class UDP_ClientController : MonoBehaviour
     public int sendPort = 12344;
     public string serverIP = "127.0.0.1";
     private ClientController clientController;
-    private GameObject player;
+    private PlayerController player;
     private uint nowSequence = 0;
     private UDP_Client socket = new UDP_Client();
 
     private StateMachine<Header.ID> state = new StateMachine<Header.ID>();
     private byte[] recvData;
 
-
     // Start is called before the first frame update
     void Start()
     {
-
-
         clientController = this.GetComponent<ClientController>();
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
         //ソケット初期化
         socket.Init(recvPort, sendPort);
 
 
-        state.AddState(Header.ID.INIT,()=> {
+        state.AddState(Header.ID.INIT, () =>
+        {
             //初期化用データ送信
             SendRotation((byte)Header.ID.INIT);
             state.ChangeState(Header.ID.GAME);
@@ -56,8 +54,8 @@ public class UDP_ClientController : MonoBehaviour
             RecvRoutine();
         }
 
-        //角度の送信
-        SendRotation((byte)Header.ID.GAME);
+        //角度の送信(30fpsで良い)
+        if (player.GetRotationSendFlg()) SendRotation((byte)Header.ID.GAME);
     }
 
     private void RecvRoutine()
@@ -74,6 +72,7 @@ public class UDP_ClientController : MonoBehaviour
         nowSequence = sequence;
 
         //データ種類ごとの処理
+        //state.ChangeState((Header.ID)recvData[sizeof(uint) + Header.USERID_LENGTH]);
         state.Update();
 
     }
@@ -98,6 +97,7 @@ public class UDP_ClientController : MonoBehaviour
 
     void GameUpdate()
     {
+        
         //ユーザーID取得
         byte[] b_userId = new byte[Header.USERID_LENGTH];
         System.Array.Copy(recvData, sizeof(uint) + sizeof(byte), b_userId, 0, b_userId.Length);
@@ -111,7 +111,9 @@ public class UDP_ClientController : MonoBehaviour
             if (obj.name.Equals(userId.Trim()))
             {
                 obj.AddRecvData(recvData);
+
                 addUserFlg = false;
+                break;
             }
         }
 
@@ -124,7 +126,8 @@ public class UDP_ClientController : MonoBehaviour
             //ユーザーの追加
             this.GetComponent<ClientController>().AddUser(userId.Trim(), pos);
         }
-
     }
+
+
 }
 

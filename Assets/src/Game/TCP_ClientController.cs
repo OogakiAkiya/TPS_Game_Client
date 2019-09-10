@@ -22,8 +22,7 @@ public class TCP_ClientController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerController = player.GetComponent<PlayerController>();
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
         //通信設定
         socket.Init(ipOrHost, port);
@@ -74,7 +73,7 @@ public class TCP_ClientController : MonoBehaviour
     void TestSend(byte _id, byte _code = 0x0001)
     {
         System.Text.Encoding enc = System.Text.Encoding.UTF8;
-        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + Header.USERID_LENGTH + "}", player.name));              //12byteに設定する
+        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + Header.USERID_LENGTH + "}", playerController.name));              //12byteに設定する
         byte[] sendData = new byte[sizeof(byte) * 2 + userName.Length];
         sendData[0] = _id;
         userName.CopyTo(sendData, sizeof(byte));
@@ -86,7 +85,7 @@ public class TCP_ClientController : MonoBehaviour
     void TestInputSend(byte _id, byte _code, Key _keyCode)
     {
         System.Text.Encoding enc = System.Text.Encoding.UTF8;
-        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + Header.USERID_LENGTH + "}", player.name));              //12byteに設定する
+        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + Header.USERID_LENGTH + "}", playerController.name));              //12byteに設定する
         List<byte> sendData = new List<byte>();
         sendData.Add(_id);
         sendData.AddRange(userName);
