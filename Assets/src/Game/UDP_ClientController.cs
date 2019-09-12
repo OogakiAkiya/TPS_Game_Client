@@ -80,15 +80,17 @@ public class UDP_ClientController : MonoBehaviour
     private void SendRotation(byte _id)
     {
         List<byte> sendData = new List<byte>();
-        System.Text.Encoding enc = System.Text.Encoding.UTF8;
-        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + Header.USERID_LENGTH + "}", player.name));              //12byteに設定する
+        Header header = new Header();
+        header.CreateNewData((Header.ID)_id, player.name, Header.GameCode.BASICDATA);
+
         byte[] rotationData = new byte[sizeof(float) * 3];
         Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.x), 0, rotationData, 0 * sizeof(float), sizeof(float));
         Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.y), 0, rotationData, 1 * sizeof(float), sizeof(float));
         Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.z), 0, rotationData, 2 * sizeof(float), sizeof(float));
-        sendData.AddRange(userName);
-        sendData.Add(_id);
+
+        sendData.AddRange(header.GetHeader());
         sendData.AddRange(rotationData);
+
         socket.Send(sendData.ToArray(), serverIP, sendPort);
 
     }
@@ -110,7 +112,8 @@ public class UDP_ClientController : MonoBehaviour
         {
             if (obj.name.Equals(userId.Trim()))
             {
-                obj.AddRecvData(recvData);
+                var addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
+                obj.AddRecvData(addData);
 
                 addUserFlg = false;
                 break;
@@ -121,7 +124,7 @@ public class UDP_ClientController : MonoBehaviour
         //user追加
         if (addUserFlg)
         {
-            Vector3 pos = Convert.GetVector3(recvData, Header.HEADER_SIZE);
+            Vector3 pos = Convert.GetVector3(recvData, Header.HEADER_SIZE+sizeof(uint));
 
             //ユーザーの追加
             this.GetComponent<ClientController>().AddUser(userId.Trim(), pos);

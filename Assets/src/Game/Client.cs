@@ -69,9 +69,9 @@ public class Client : MonoBehaviour
         if(weapon_Image)weapon.SetTexture(weapon_Image);
         
         if (this.tag != "Player") return;
-        cam = transform.FindChild("Camera").gameObject.GetComponent<Camera>();
+        cam = transform.Find("Camera").gameObject.GetComponent<Camera>();
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-        imageRect = GameObject.Find("Canvas").transform.FindChild("Pointer").GetComponent<RectTransform>();
+        imageRect = GameObject.Find("Canvas").transform.Find("Pointer").GetComponent<RectTransform>();
 
     }
 
@@ -82,7 +82,24 @@ public class Client : MonoBehaviour
         while (recvDataList.Count > 0)
         {
             var recvData=GetRecvData();
+            /*
             if (recvData[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.BASICDATA)
+            {
+                if (this.tag == "Player")
+                {
+                    SetPlayerStatus(recvData);
+                }
+                else
+                {
+                    SetStatus(recvData);
+                }
+            }
+            
+            //スコア
+            if (recvData[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.SCOREDATA) SetScore(recvData);
+            */
+
+            if (recvData[sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.BASICDATA)
             {
                 if (this.tag == "Player")
                 {
@@ -95,7 +112,7 @@ public class Client : MonoBehaviour
             }
 
             //スコア
-            if (recvData[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.SCOREDATA) SetScore(recvData);
+            if (recvData[sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.SCOREDATA) SetScore(recvData);
 
         }
 
@@ -126,6 +143,7 @@ public class Client : MonoBehaviour
 
     private void SetPlayerStatus(byte[] _data)
     {
+        //どこかおかしい？
         //座標の代入
         this.transform.position = Convert.GetVector3(_data, Header.HEADER_SIZE);
 

@@ -2,36 +2,53 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeaderClass
+public class Header
 {
-    public string userName { get; private set; }
-    public Header.ID id { get; private set; }
-    public Header.GameCode gameCode { get; private set; }
+    //====================================================
+    //定数
+    //====================================================
+    public static readonly int USERID_LENGTH = 12;
+    public static readonly int HEADER_SIZE = sizeof(ID) + sizeof(GameCode) + USERID_LENGTH;
 
-    public void CreateNewData(string _name = "", Header.ID _id=Header.ID.INIT, Header.GameCode _gameCode=Header.GameCode.BASICDATA)
+    public enum ID : byte
+    {
+        DEBUG = 0x001,
+        INIT = 0x002,
+        GAME = 0x003
+    }
+    public enum GameCode : byte
+    {
+        BASICDATA = 0x0001,
+        SCOREDATA = 0x0002
+
+    }
+
+    public string userName { get; private set; }
+    public ID id { get; private set; } = ID.INIT;
+    public GameCode gameCode { get; private set; } = GameCode.BASICDATA;
+
+    public void CreateNewData(ID _id = ID.INIT, string _name = "", GameCode _gameCode = GameCode.BASICDATA)
     {
         if (_name != "") userName = _name;
         if (id != _id) id = _id;
         if (gameCode != _gameCode) gameCode = _gameCode;
     }
 
-    public void SetHeader(byte[] _data,int _index=0)
+    public void SetHeader(byte[] _data, int _index = 0)
     {
-        id=(Header.ID)_data[_index];
-
-        byte[] b_userId = new byte[Header.USERID_LENGTH];
+        id = (ID)_data[_index];
+        byte[] b_userId = new byte[USERID_LENGTH];
         System.Array.Copy(_data, _index + sizeof(byte), b_userId, 0, b_userId.Length);
         userName = System.Text.Encoding.UTF8.GetString(b_userId);
-
-        gameCode=(Header.GameCode)_data[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH];
+        gameCode = (GameCode)_data[_index + sizeof(byte) + USERID_LENGTH];
     }
 
     public byte[] GetHeader()
     {
-        List<byte> returnData=new List<byte>();
+        List<byte> returnData = new List<byte>();
 
         System.Text.Encoding enc = System.Text.Encoding.UTF8;
-        byte[] b_userName = enc.GetBytes(System.String.Format("{0, -" + Header.USERID_LENGTH + "}", userName));              //12byteに設定する
+        byte[] b_userName = enc.GetBytes(System.String.Format("{0, -" + USERID_LENGTH + "}", userName));              //12byteに設定する
         byte[] sendData = new byte[sizeof(byte) * 2 + userName.Length];
         returnData.Add((byte)id);
         returnData.AddRange(b_userName);

@@ -72,24 +72,20 @@ public class TCP_ClientController : MonoBehaviour
 
     void TestSend(byte _id, byte _code = 0x0001)
     {
-        System.Text.Encoding enc = System.Text.Encoding.UTF8;
-        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + Header.USERID_LENGTH + "}", playerController.name));              //12byteに設定する
-        byte[] sendData = new byte[sizeof(byte) * 2 + userName.Length];
-        sendData[0] = _id;
-        userName.CopyTo(sendData, sizeof(byte));
-        sendData[sizeof(byte) + userName.Length] = _code;
-        var task=socket.Send(sendData, sendData.Length);
+        List<byte> sendData = new List<byte>();
+        Header header = new Header();
+        header.CreateNewData((Header.ID)_id,playerController.name,(Header.GameCode)_code);
+        sendData.AddRange(header.GetHeader());
+        var task=socket.Send(sendData.ToArray(), sendData.Count);
     }
 
 
     void TestInputSend(byte _id, byte _code, Key _keyCode)
     {
-        System.Text.Encoding enc = System.Text.Encoding.UTF8;
-        byte[] userName = enc.GetBytes(System.String.Format("{0, -" + Header.USERID_LENGTH + "}", playerController.name));              //12byteに設定する
         List<byte> sendData = new List<byte>();
-        sendData.Add(_id);
-        sendData.AddRange(userName);
-        sendData.Add(_code);
+        Header header = new Header();
+        header.CreateNewData((Header.ID)_id, playerController.name, (Header.GameCode)_code);
+        sendData.AddRange(header.GetHeader());
         sendData.AddRange(BitConverter.GetBytes((short)_keyCode));
         var task =socket.Send(sendData.ToArray(), sendData.Count);
     }

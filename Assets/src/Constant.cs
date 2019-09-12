@@ -1,27 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-public static class Header
-{
-    //====================================================
-    //定数
-    //====================================================
-    public static readonly int USERID_LENGTH = 12;
-    public static readonly int HEADER_SIZE= sizeof(uint) + sizeof(ID)+sizeof(GameCode)+USERID_LENGTH;
-
-    public enum ID : byte
-    {
-        DEBUG = 0x001,
-        INIT = 0x002,
-        GAME = 0x003
-    }
-    public enum GameCode : byte
-    {
-        BASICDATA = 0x0001,
-        SCOREDATA = 0x0002
-
-    }
-
-}
 
 public enum Key : short
 {
