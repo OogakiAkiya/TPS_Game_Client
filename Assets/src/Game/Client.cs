@@ -35,8 +35,8 @@ public class Client : MonoBehaviour
     public StateMachine<AnimationKey> stateMachine { get; private set; } = new StateMachine<AnimationKey>();
     private GameObject damageEffectPref;
 
-    private BaseWeapon weapon=null;
-    public GameObject effect=null;
+    private BaseWeapon weapon = null;
+    public GameObject effect = null;
     public GameObject weaponAddPosition = null;
     private GameObject weaponModel;
 
@@ -66,8 +66,8 @@ public class Client : MonoBehaviour
 
         //weapon = new MachineGun(Shoot);
         weapon = new BaseWeapon();
-        if(weapon_Image)weapon.SetTexture(weapon_Image);
-        
+        if (weapon_Image) weapon.SetTexture(weapon_Image);
+
         if (this.tag != "Player") return;
         cam = transform.Find("Camera").gameObject.GetComponent<Camera>();
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
@@ -81,7 +81,7 @@ public class Client : MonoBehaviour
         //受信データの代入
         while (recvDataList.Count > 0)
         {
-            var recvData=GetRecvData();
+            var recvData = GetRecvData();
             /*
             if (recvData[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.BASICDATA)
             {
@@ -99,7 +99,7 @@ public class Client : MonoBehaviour
             if (recvData[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.SCOREDATA) SetScore(recvData);
             */
 
-            if (recvData[sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.BASICDATA)
+            if (recvData[sizeof(byte) + GameHeader.USERID_LENGTH] == (byte)GameHeader.GameCode.BASICDATA)
             {
                 if (this.tag == "Player")
                 {
@@ -112,7 +112,7 @@ public class Client : MonoBehaviour
             }
 
             //スコア
-            if (recvData[sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.SCOREDATA) SetScore(recvData);
+            if (recvData[sizeof(byte) + GameHeader.USERID_LENGTH] == (byte)GameHeader.GameCode.SCOREDATA) SetScore(recvData);
 
         }
 
@@ -122,22 +122,22 @@ public class Client : MonoBehaviour
 
 
         //アニメーション変更
-        if (stateMachine.currentKey != animationState)stateMachine.ChangeState(animationState);
+        if (stateMachine.currentKey != animationState) stateMachine.ChangeState(animationState);
     }
 
     private void SetStatus(byte[] _data)
     {
         //座標の代入
-        this.transform.position = Convert.GetVector3(_data, Header.HEADER_SIZE);
+        this.transform.position = Convert.GetVector3(_data, GameHeader.HEADER_SIZE);
 
         //アニメーション変更
-        animationState = (AnimationKey)System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 6 * sizeof(float));
+        animationState = (AnimationKey)System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 6 * sizeof(float));
 
         //hpの設定
-        hp = System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 7 * sizeof(float));
+        hp = System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 7 * sizeof(float));
 
         //回転座標の代入
-        this.transform.rotation = Quaternion.Euler(Convert.GetVector3(_data, Header.HEADER_SIZE + 3 * sizeof(float)));
+        this.transform.rotation = Quaternion.Euler(Convert.GetVector3(_data, GameHeader.HEADER_SIZE + 3 * sizeof(float)));
 
     }
 
@@ -145,28 +145,28 @@ public class Client : MonoBehaviour
     {
         //どこかおかしい？
         //座標の代入
-        this.transform.position = Convert.GetVector3(_data, Header.HEADER_SIZE);
+        this.transform.position = Convert.GetVector3(_data, GameHeader.HEADER_SIZE);
 
         //アニメーション変更
-        animationState = (AnimationKey)System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 6 * sizeof(float));
+        animationState = (AnimationKey)System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 6 * sizeof(float));
 
         //hpの設定
-        hp = System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 7 * sizeof(float));
+        hp = System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 7 * sizeof(float));
 
         if (weapon != null)
         {
             //武器の変更
-            ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, Header.HEADER_SIZE + 7 * sizeof(float) + sizeof(int)));
+            ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 7 * sizeof(float) + sizeof(int)));
             //武器ステータス設定
-            weapon.SetStatus(_data, Header.HEADER_SIZE + 7 * sizeof(float) + sizeof(int));
+            weapon.SetStatus(_data, GameHeader.HEADER_SIZE + 7 * sizeof(float) + sizeof(int));
         }
 
     }
 
     private void SetScore(byte[] _data)
     {
-        deathAmount=System.BitConverter.ToInt32(_data,Header.HEADER_SIZE);
-        killAmount = System.BitConverter.ToInt32(_data, Header.HEADER_SIZE+sizeof(int));
+        deathAmount = System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE);
+        killAmount = System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + sizeof(int));
 
     }
 
@@ -201,11 +201,11 @@ public class Client : MonoBehaviour
     {
         if (damageEffectPref)
         {
-            GameObject add=Instantiate(damageEffectPref) as GameObject;
+            GameObject add = Instantiate(damageEffectPref) as GameObject;
             add.transform.parent = this.transform;
             Vector3 pos = this.transform.position;
-            pos += new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(0.8f,1.5f),0.0f);
-            add.transform.position=pos;
+            pos += new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(0.8f, 1.5f), 0.0f);
+            add.transform.position = pos;
         }
     }
 
@@ -272,7 +272,7 @@ public class Client : MonoBehaviour
 
         //Walk
         stateMachine.AddState(AnimationKey.Walk,
-            ()=>
+            () =>
             {
                 animator.CrossFadeInFixedTime("Walk", 0.1f);
 

@@ -2,32 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Header
+public class GameHeader
 {
-    //====================================================
-    //定数
-    //====================================================
     public static readonly int USERID_LENGTH = 12;
-    public static readonly int HEADER_SIZE = sizeof(ID) + sizeof(GameCode) + USERID_LENGTH;
-
+    public static readonly int HEADER_SIZE = sizeof(byte) * 2 + USERID_LENGTH;
     public enum ID : byte
     {
         DEBUG = 0x001,
         INIT = 0x002,
-        GAME = 0x003
+        TITLE = 0x003,
+        GAME = 0x004
     }
+
+    public enum LoginCode : byte
+    {
+        LOGINCHECK = 0x0001,
+        LOGINSUCCES = 0x0002,
+        LOGINFAILURE = 0x0003
+    }
+
+
     public enum GameCode : byte
     {
         BASICDATA = 0x0001,
         SCOREDATA = 0x0002
-
     }
 
     public string userName { get; private set; }
     public ID id { get; private set; } = ID.INIT;
-    public GameCode gameCode { get; private set; } = GameCode.BASICDATA;
+    public byte gameCode { get; private set; } = 0x00ff;
 
-    public void CreateNewData(ID _id = ID.INIT, string _name = "", GameCode _gameCode = GameCode.BASICDATA)
+    public void CreateNewData(ID _id = ID.INIT, string _name = "", byte _gameCode = 0x00ff)
     {
         if (_name != "") userName = _name;
         if (id != _id) id = _id;
@@ -40,7 +45,7 @@ public class Header
         byte[] b_userId = new byte[USERID_LENGTH];
         System.Array.Copy(_data, _index + sizeof(byte), b_userId, 0, b_userId.Length);
         userName = System.Text.Encoding.UTF8.GetString(b_userId);
-        gameCode = (GameCode)_data[_index + sizeof(byte) + USERID_LENGTH];
+        gameCode = _data[_index + sizeof(byte) + USERID_LENGTH];
     }
 
     public byte[] GetHeader()
@@ -55,5 +60,9 @@ public class Header
         returnData.Add((byte)gameCode);
 
         return returnData.ToArray();
+    }
+    public int GetHeaderLength()
+    {
+        return sizeof(ID) + sizeof(GameCode) + USERID_LENGTH;
     }
 }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Net;
 using System.Net.Sockets;
-
+using UnityEngine;
 
 class TCP_Client
 {
@@ -13,12 +13,39 @@ class TCP_Client
     //ソケット作成
     private System.Net.Sockets.TcpClient tcp=null;
     private System.Net.Sockets.NetworkStream ns;
-    private Object lockObject = new Object();
+    private System.Object lockObject = new System.Object();
     private bool deleteFlg = false;
 
     public TCP_Client() { }
 
-    ~TCP_Client() { Close(); }
+    ~TCP_Client() { tcp.Close(); }
+
+    public bool TryConnect(string _ipAddr, int _port)
+    {
+        try
+        {
+            int timeout = 1000;
+            tcp = new TcpClient();
+            Task task = tcp.ConnectAsync(_ipAddr, _port);
+            if (!task.Wait(timeout))
+            {
+                Debug.Log("false");
+                tcp.Close();
+                //throw new SocketException(10060);
+                return false;
+            }
+        }catch(SocketException e)
+        {
+            tcp.Close();
+            return false;
+        }catch(AggregateException ae)
+        {
+            tcp.Close();
+            return false;
+        }
+        tcp.Close();
+        return true;
+    }
 
     public void Init(string _ipAddr, int _port)
     {

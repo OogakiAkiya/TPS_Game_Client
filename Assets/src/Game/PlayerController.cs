@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (PlayerPrefs.HasKey(SavedData.UserID)) this.name = PlayerPrefs.GetString(SavedData.UserID);
         oldRotation = transform.localEulerAngles;
     }
 

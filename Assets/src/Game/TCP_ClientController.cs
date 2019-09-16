@@ -24,12 +24,15 @@ public class TCP_ClientController : MonoBehaviour
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
+
+        if (PlayerPrefs.HasKey(SavedData.ServerIP))ipOrHost= PlayerPrefs.GetString(SavedData.ServerIP);
+        
         //通信設定
         socket.Init(ipOrHost, port);
         socket.StartRecvThread();                     //非同期通信Recv
 
         //初期設定用の通信
-        TestSend((byte)Header.ID.INIT);
+        TestSend((byte)GameHeader.ID.INIT);
 
 
 
@@ -40,13 +43,13 @@ public class TCP_ClientController : MonoBehaviour
     {
         //playerのキー入力取得
         Key sendKey=playerController.InputUpdate();
-        if (sendKey != 0) TestInputSend((byte)Header.ID.GAME, (byte)Header.GameCode.BASICDATA, sendKey);
+        if (sendKey != 0) TestInputSend((byte)GameHeader.ID.GAME, (byte)GameHeader.GameCode.BASICDATA, sendKey);
 
         if (!timerFlg)
         {
             //通信情報の確認
             timer.Restart();
-            TestSend((byte)Header.ID.DEBUG, (byte)Header.GameCode.BASICDATA);
+            TestSend((byte)GameHeader.ID.DEBUG, (byte)GameHeader.GameCode.BASICDATA);
             timerFlg = true;
         }
 
@@ -55,9 +58,9 @@ public class TCP_ClientController : MonoBehaviour
         while (socket.RecvDataSize() > 0)
         {
             var recvData=socket.GetRecvData();
-            if ((Header.ID)recvData[0] == Header.ID.DEBUG)
+            if ((GameHeader.ID)recvData[0] == GameHeader.ID.DEBUG)
             {
-                int sum = BitConverter.ToInt32(recvData, sizeof(byte) * 2 + Header.USERID_LENGTH);
+                int sum = BitConverter.ToInt32(recvData, sizeof(byte) * 2 + GameHeader.USERID_LENGTH);
                 timer.Stop();
                 timerFlg = false;
                 if (debugText)
@@ -73,8 +76,8 @@ public class TCP_ClientController : MonoBehaviour
     void TestSend(byte _id, byte _code = 0x0001)
     {
         List<byte> sendData = new List<byte>();
-        Header header = new Header();
-        header.CreateNewData((Header.ID)_id,playerController.name,(Header.GameCode)_code);
+        GameHeader header = new GameHeader();
+        header.CreateNewData((GameHeader.ID)_id,playerController.name,_code);
         sendData.AddRange(header.GetHeader());
         var task=socket.Send(sendData.ToArray(), sendData.Count);
     }
@@ -83,8 +86,8 @@ public class TCP_ClientController : MonoBehaviour
     void TestInputSend(byte _id, byte _code, Key _keyCode)
     {
         List<byte> sendData = new List<byte>();
-        Header header = new Header();
-        header.CreateNewData((Header.ID)_id, playerController.name, (Header.GameCode)_code);
+        GameHeader header = new GameHeader();
+        header.CreateNewData((GameHeader.ID)_id, playerController.name, _code);
         sendData.AddRange(header.GetHeader());
         sendData.AddRange(BitConverter.GetBytes((short)_keyCode));
         var task =socket.Send(sendData.ToArray(), sendData.Count);

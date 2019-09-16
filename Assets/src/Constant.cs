@@ -1,6 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
+public static  class SavedData{
+    public static string ServerIP = "ServerIP";
+    public static string UserID = "UserID";
+
+}
+
 public enum Key : short
 {
     W = 0x001,

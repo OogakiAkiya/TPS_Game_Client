@@ -22,7 +22,7 @@ public class UDP_ClientController : MonoBehaviour
     private uint nowSequence = 0;
     private UDP_Client socket = new UDP_Client();
 
-    private StateMachine<Header.ID> state = new StateMachine<Header.ID>();
+    private StateMachine<GameHeader.ID> state = new StateMachine<GameHeader.ID>();
     private byte[] recvData;
 
     // Start is called before the first frame update
@@ -35,14 +35,14 @@ public class UDP_ClientController : MonoBehaviour
         socket.Init(recvPort, sendPort);
 
 
-        state.AddState(Header.ID.INIT, () =>
+        state.AddState(GameHeader.ID.INIT, () =>
         {
             //初期化用データ送信
-            SendRotation((byte)Header.ID.INIT);
-            state.ChangeState(Header.ID.GAME);
+            SendRotation((byte)GameHeader.ID.INIT);
+            state.ChangeState(GameHeader.ID.GAME);
         });
-        state.AddState(Header.ID.GAME, _update: GameUpdate);
-        state.ChangeState(Header.ID.INIT);
+        state.AddState(GameHeader.ID.GAME, _update: GameUpdate);
+        state.ChangeState(GameHeader.ID.INIT);
 
     }
 
@@ -55,7 +55,7 @@ public class UDP_ClientController : MonoBehaviour
         }
 
         //角度の送信(30fpsで良い)
-        if (player.GetRotationSendFlg()) SendRotation((byte)Header.ID.GAME);
+        if (player.GetRotationSendFlg()) SendRotation((byte)GameHeader.ID.GAME);
     }
 
     private void RecvRoutine()
@@ -80,8 +80,8 @@ public class UDP_ClientController : MonoBehaviour
     private void SendRotation(byte _id)
     {
         List<byte> sendData = new List<byte>();
-        Header header = new Header();
-        header.CreateNewData((Header.ID)_id, player.name, Header.GameCode.BASICDATA);
+        GameHeader header = new GameHeader();
+        header.CreateNewData((GameHeader.ID)_id, player.name, (byte)GameHeader.GameCode.BASICDATA);
 
         byte[] rotationData = new byte[sizeof(float) * 3];
         Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.x), 0, rotationData, 0 * sizeof(float), sizeof(float));
@@ -101,7 +101,7 @@ public class UDP_ClientController : MonoBehaviour
     {
         
         //ユーザーID取得
-        byte[] b_userId = new byte[Header.USERID_LENGTH];
+        byte[] b_userId = new byte[GameHeader.USERID_LENGTH];
         System.Array.Copy(recvData, sizeof(uint) + sizeof(byte), b_userId, 0, b_userId.Length);
         string userId = System.Text.Encoding.UTF8.GetString(b_userId);
 
@@ -124,7 +124,7 @@ public class UDP_ClientController : MonoBehaviour
         //user追加
         if (addUserFlg)
         {
-            Vector3 pos = Convert.GetVector3(recvData, Header.HEADER_SIZE+sizeof(uint));
+            Vector3 pos = Convert.GetVector3(recvData, GameHeader.HEADER_SIZE+sizeof(uint));
 
             //ユーザーの追加
             this.GetComponent<ClientController>().AddUser(userId.Trim(), pos);
