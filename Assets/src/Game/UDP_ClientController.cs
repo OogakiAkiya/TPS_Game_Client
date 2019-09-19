@@ -24,6 +24,7 @@ public class UDP_ClientController : MonoBehaviour
 
     private StateMachine<GameHeader.ID> state = new StateMachine<GameHeader.ID>();
     private byte[] recvData;
+    private GameHeader header=new GameHeader();
 
     // Start is called before the first frame update
     void Start()
@@ -71,8 +72,11 @@ public class UDP_ClientController : MonoBehaviour
         }
         nowSequence = sequence;
 
+        //ヘッダー所得
+        header.SetHeader(recvData,sizeof(uint));
+
         //データ種類ごとの処理
-        //state.ChangeState((Header.ID)recvData[sizeof(uint) + Header.USERID_LENGTH]);
+        state.ChangeState(header.id);
         state.Update();
 
     }
@@ -99,38 +103,45 @@ public class UDP_ClientController : MonoBehaviour
 
     void GameUpdate()
     {
-        
-        //ユーザーID取得
-        byte[] b_userId = new byte[GameHeader.USERID_LENGTH];
-        System.Array.Copy(recvData, sizeof(uint) + sizeof(byte), b_userId, 0, b_userId.Length);
-        string userId = System.Text.Encoding.UTF8.GetString(b_userId);
-
-
-        bool addUserFlg = true;
-
-        foreach (var obj in clientController.clientList)
+        //グレネード処理
+        if((GameHeader.GameCode)header.gameCode == GameHeader.GameCode.GRENEDEDATA)
         {
-            if (obj.name.Equals(userId.Trim()))
-            {
-                var addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
-                obj.AddRecvData(addData);
 
-                addUserFlg = false;
-                break;
+            if (GameObject.Find(header.userName)) return;
+            var pos = Convert.GetVector3(recvData, header.GetHeaderLength()+ sizeof(uint));
+            var direction = Convert.GetVector3(recvData, sizeof(uint) + sizeof(float)*3 + header.GetHeaderLength());
+            clientController.AddGrenade(header.userName,pos,direction);
+            return;
+        }
+
+        //ユーザー処理
+        if ((GameHeader.GameCode)header.gameCode == GameHeader.GameCode.BASICDATA)
+        {
+            bool addUserFlg = true;
+
+            foreach (var obj in clientController.clientList)
+            {
+                if (obj.name.Equals(header.userName.Trim()))
+                {
+                    var addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
+                    obj.AddRecvData(addData);
+
+                    addUserFlg = false;
+                    break;
+                }
+            }
+
+
+            //user追加
+            if (addUserFlg)
+            {
+                Vector3 pos = Convert.GetVector3(recvData, GameHeader.HEADER_SIZE + sizeof(uint));
+
+                //ユーザーの追加
+                clientController.AddUser(header.userName.Trim(), pos);
             }
         }
-
-
-        //user追加
-        if (addUserFlg)
-        {
-            Vector3 pos = Convert.GetVector3(recvData, GameHeader.HEADER_SIZE+sizeof(uint));
-
-            //ユーザーの追加
-            this.GetComponent<ClientController>().AddUser(userId.Trim(), pos);
-        }
     }
-
 
 }
 

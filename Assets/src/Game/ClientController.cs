@@ -62,4 +62,13 @@ public class ClientController : MonoBehaviour
         }
     }
 
+    public void AddGrenade(string _name,Vector3 _pos,Vector3 _direction)
+    {
+        GameObject bom = Instantiate(Resources.Load("Bom") as GameObject) as GameObject;
+        bom.name = _name;
+        bom.transform.position = _pos;
+        bom.GetComponent<Grenade>().SetDirection(_direction);
+        //bom.transform.position = this.transform.forward + new Vector3(0, 1, 0);
+        //bom.transform.rotation = this.transform.rotation;
+    }
 }

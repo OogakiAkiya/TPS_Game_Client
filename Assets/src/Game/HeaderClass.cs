@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameHeader
 {
-    public static readonly int USERID_LENGTH = 12;
+    public static readonly int USERID_LENGTH = 14;
     public static readonly int HEADER_SIZE = sizeof(byte) * 2 + USERID_LENGTH;
     public enum ID : byte
     {
@@ -25,7 +25,9 @@ public class GameHeader
     public enum GameCode : byte
     {
         BASICDATA = 0x0001,
-        SCOREDATA = 0x0002
+        SCOREDATA = 0x0002,
+        GRENEDEDATA = 0x0003
+
     }
 
     public string userName { get; private set; }

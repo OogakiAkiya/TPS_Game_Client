@@ -1,35 +1,10 @@
 ﻿<Properties StartupConfiguration="{70B263AF-5707-DA2D-B24B-B59941E3F798}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/src/Library/OpenSocket/TCP_Client.cs">
-    <Files>
-      <File FileName="Assets/src/Game/TCP_ClientController.cs" Line="18" Column="37" />
-      <File FileName="Assets/src/Game/UDP_ClientController.cs" Line="71" Column="10" />
-      <File FileName="Assets/src/Game/PlayerController.cs" Line="16" Column="101" />
-      <File FileName="Assets/src/Library/BaseWeapon.cs" Line="1" Column="1" />
-      <File FileName="Assets/src/Constant.cs" Line="6" Column="42" />
-      <File FileName="Assets/src/Game/Client.cs" Line="131" Column="1" />
-      <File FileName="Assets/src/Game/HeaderClass.cs" Line="8" Column="79" />
-      <File FileName="Assets/src/Library/StateMachine/StateMachine.cs" Line="25" Column="1" />
-      <File FileName="Assets/src/Title/TitleController.cs" Line="44" Column="1" />
-      <File FileName="Assets/src/Library/OpenSocket/TCP_Server.cs" Line="6" Column="1" />
-      <File FileName="Assets/src/Library/OpenSocket/TCP_Client.cs" Line="25" Column="1" />
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="GameClient" expanded="True">
-            <Node name="Assets" expanded="True">
-              <Node name="src" expanded="True">
-                <Node name="Game" expanded="True" />
-                <Node name="Library" expanded="True">
-                  <Node name="Animator" expanded="True" />
-                  <Node name="OpenSocket" expanded="True">
-                    <Node name="TCP_Client.cs" selected="True" />
-                  </Node>
-                  <Node name="StateMachine" expanded="True" />
-                </Node>
-                <Node name="Title" expanded="True" />
-              </Node>
-            </Node>
+            <Node name="Assets" expanded="True" selected="True" />
           </Node>
         </State>
       </Pad>
@@ -37,11 +12,9 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="6321b4f2-99ce-44bc-b541-24873c89366a" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="f7205e1e-5d8e-4ee0-b5ab-041340da7608" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/oogakiakiya/Desktop/GameClient/Assets/src/Title/TitleController.cs" relfile="Assets/src/Title/TitleController.cs" line="44" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>

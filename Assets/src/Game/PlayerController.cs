@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         //視点移動
         float x = Input.GetAxis("Mouse X");
         float y = Input.GetAxis("Mouse Y");
@@ -41,7 +40,6 @@ public class PlayerController : MonoBehaviour
         sendKey |= InputTemple(KeyCode.S, Key.S);
         sendKey |= InputTemple(KeyCode.A, Key.A);
         sendKey |= InputTemple(KeyCode.D, Key.D);
-        sendKey |= InputTemple(KeyCode.R, Key.R);
         sendKey |= InputTemple(KeyCode.LeftShift, Key.SHIFT);
         sendKey |= InputTemple(KeyCode.Space, Key.SPACE);
         if (Input.GetKeyDown(KeyCode.LeftArrow))sendKey |= Key.LEFT_BUTTON;
@@ -51,6 +49,10 @@ public class PlayerController : MonoBehaviour
             sendKey |= Key.LEFT_CLICK;
             shootFlg = !shootFlg;
         }
+        if (Input.GetKeyDown(KeyCode.G))sendKey |= Key.G;
+        if (Input.GetKeyDown(KeyCode.R)) sendKey |= Key.R;
+
+
         return sendKey;
     }
 

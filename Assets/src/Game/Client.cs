@@ -82,23 +82,6 @@ public class Client : MonoBehaviour
         while (recvDataList.Count > 0)
         {
             var recvData = GetRecvData();
-            /*
-            if (recvData[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.BASICDATA)
-            {
-                if (this.tag == "Player")
-                {
-                    SetPlayerStatus(recvData);
-                }
-                else
-                {
-                    SetStatus(recvData);
-                }
-            }
-            
-            //スコア
-            if (recvData[sizeof(uint) + sizeof(byte) + Header.USERID_LENGTH] == (byte)Header.GameCode.SCOREDATA) SetScore(recvData);
-            */
-
             if (recvData[sizeof(byte) + GameHeader.USERID_LENGTH] == (byte)GameHeader.GameCode.BASICDATA)
             {
                 if (this.tag == "Player")

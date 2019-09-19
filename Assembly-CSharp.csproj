@@ -75,6 +75,8 @@
     <Compile Include="Assets\JMO Assets\WarFX\Scripts\WFX_LightFlicker.cs" />
     <Compile Include="Assets\JMO Assets\WarFX\Spawn System\CFX_SpawnSystem.cs" />
     <Compile Include="Assets\src\Constant.cs" />
+    <Compile Include="Assets\src\Game\Bom\Explosion.cs" />
+    <Compile Include="Assets\src\Game\Bom\Grenade.cs" />
     <Compile Include="Assets\src\Game\Client.cs" />
     <Compile Include="Assets\src\Game\ClientController.cs" />
     <Compile Include="Assets\src\Game\HeaderClass.cs" />
