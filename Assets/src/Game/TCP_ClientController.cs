@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 
 public class TCP_ClientController : MonoBehaviour
-{ 
+{
+    [SerializeField] GameController gameController;
     //ipアドレスとポート番号設定
     public string ipOrHost = "127.0.0.1";
     public int port = 12345;
@@ -41,9 +42,12 @@ public class TCP_ClientController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //playerのキー入力取得
-        Key sendKey=playerController.InputUpdate();
-        if (sendKey != 0) TestInputSend((byte)GameHeader.ID.GAME, (byte)GameHeader.GameCode.BASICDATA, sendKey);
+        if (gameController && !gameController.stopFlg)
+        {
+            //playerのキー入力取得
+            Key sendKey = playerController.InputUpdate();
+            if (sendKey != 0) TestInputSend((byte)GameHeader.ID.GAME, (byte)GameHeader.GameCode.BASICDATA, sendKey);
+        }
 
         if (!timerFlg)
         {

@@ -6,12 +6,12 @@ public class Grenade : MonoBehaviour
 {
     protected System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
     GameObject explosionPref;
+
     // Start is called before the first frame update
     void Start()
     {
         timer.Start();
         explosionPref = Resources.Load("Explosion") as GameObject;
-        //this.GetComponent<Rigidbody>().AddForce(pos.normalized*250);
 
     }
 

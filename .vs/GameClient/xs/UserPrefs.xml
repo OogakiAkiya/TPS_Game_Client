@@ -1,10 +1,36 @@
 ﻿<Properties StartupConfiguration="{70B263AF-5707-DA2D-B24B-B59941E3F798}|">
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/src/Game/Client.cs">
+    <Files>
+      <File FileName="Assets/src/Game/TCP_ClientController.cs" Line="45" Column="32" />
+      <File FileName="Assets/src/Game/UDP_ClientController.cs" Line="1" Column="1" />
+      <File FileName="Assets/src/Game/PlayerController.cs" Line="35" Column="19" />
+      <File FileName="Assets/src/Library/BaseWeapon.cs" />
+      <File FileName="Assets/src/Constant.cs" />
+      <File FileName="Assets/src/Game/Client.cs" Line="1" Column="1" />
+      <File FileName="Assets/src/Game/HeaderClass.cs" />
+      <File FileName="Assets/src/Game/Bom/Grenade.cs" Line="9" Column="1" />
+      <File FileName="Assets/src/Game/GameController.cs" Line="21" Column="1" />
+      <File FileName="Assets/src/Game/StartCanvasController.cs" Line="43" Column="48" />
+      <File FileName="Assets/src/Game/ClientController.cs" Line="1" Column="1" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="GameClient" expanded="True">
-            <Node name="Assets" expanded="True" selected="True" />
+            <Node name="Assets" expanded="True">
+              <Node name="src" expanded="True">
+                <Node name="Game" expanded="True">
+                  <Node name="Bom" expanded="True" />
+                  <Node name="Client.cs" selected="True" />
+                </Node>
+                <Node name="Library" expanded="True">
+                  <Node name="Animator" expanded="True" />
+                  <Node name="OpenSocket" expanded="True" />
+                  <Node name="StateMachine" expanded="True" />
+                </Node>
+                <Node name="Title" expanded="True" />
+              </Node>
+            </Node>
           </Node>
         </State>
       </Pad>
@@ -12,7 +38,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="f7205e1e-5d8e-4ee0-b5ab-041340da7608" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="2d417eb0-aa34-4b97-aa5a-17d31bbfe458" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

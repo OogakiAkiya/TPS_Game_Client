@@ -52,6 +52,15 @@ public class Client : MonoBehaviour
     public int deathAmount = 0;          //死んだ回数
     public int killAmount = 0;           //殺した回数
 
+    private void Awake()
+    {
+        if (this.tag != "Player") return;
+        cam = transform.Find("Camera").gameObject.GetComponent<Camera>();
+        canvas = GameObject.Find("GameCanvas").GetComponent<Canvas>();
+        imageRect = GameObject.Find("GameCanvas").transform.Find("Pointer").GetComponent<RectTransform>();
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -68,10 +77,6 @@ public class Client : MonoBehaviour
         weapon = new BaseWeapon();
         if (weapon_Image) weapon.SetTexture(weapon_Image);
 
-        if (this.tag != "Player") return;
-        cam = transform.Find("Camera").gameObject.GetComponent<Camera>();
-        canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-        imageRect = GameObject.Find("Canvas").transform.Find("Pointer").GetComponent<RectTransform>();
 
     }
 

@@ -51,8 +51,6 @@ public class ClientController : MonoBehaviour
         var add = Instantiate(userPrefab, _pos, Quaternion.identity) as GameObject;
         add.name = _userID;
         add.GetComponent<Client>().userID=_userID;
-        //userGameObjectList.Add(add);
-        //objects= GameObject.FindGameObjectsWithTag("users");
         clientList.Clear();
 
         clientList.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<Client>());
@@ -68,7 +66,5 @@ public class ClientController : MonoBehaviour
         bom.name = _name;
         bom.transform.position = _pos;
         bom.GetComponent<Grenade>().SetDirection(_direction);
-        //bom.transform.position = this.transform.forward + new Vector3(0, 1, 0);
-        //bom.transform.rotation = this.transform.rotation;
     }
 }
