@@ -115,7 +115,7 @@ public class UDP_ClientController : MonoBehaviour
         }
 
         //ユーザー処理
-        if ((GameHeader.GameCode)header.gameCode == GameHeader.GameCode.BASICDATA)
+        if ((GameHeader.GameCode)header.gameCode == GameHeader.GameCode.BASICDATA|| (GameHeader.GameCode)header.gameCode == GameHeader.GameCode.SCOREDATA)
         {
             bool addUserFlg = true;
 

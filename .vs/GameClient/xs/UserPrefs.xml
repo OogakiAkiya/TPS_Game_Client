@@ -2,16 +2,16 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/src/Game/Client.cs">
     <Files>
       <File FileName="Assets/src/Game/TCP_ClientController.cs" Line="45" Column="32" />
-      <File FileName="Assets/src/Game/UDP_ClientController.cs" Line="1" Column="1" />
+      <File FileName="Assets/src/Game/UDP_ClientController.cs" Line="118" Column="154" />
       <File FileName="Assets/src/Game/PlayerController.cs" Line="35" Column="19" />
       <File FileName="Assets/src/Library/BaseWeapon.cs" />
       <File FileName="Assets/src/Constant.cs" />
-      <File FileName="Assets/src/Game/Client.cs" Line="1" Column="1" />
-      <File FileName="Assets/src/Game/HeaderClass.cs" />
-      <File FileName="Assets/src/Game/Bom/Grenade.cs" Line="9" Column="1" />
-      <File FileName="Assets/src/Game/GameController.cs" Line="21" Column="1" />
-      <File FileName="Assets/src/Game/StartCanvasController.cs" Line="43" Column="48" />
-      <File FileName="Assets/src/Game/ClientController.cs" Line="1" Column="1" />
+      <File FileName="Assets/src/Game/Client.cs" Line="90" Column="1" />
+      <File FileName="Assets/src/Game/HeaderClass.cs" Line="1" Column="1" />
+      <File FileName="Assets/src/Game/Bom/Grenade.cs" />
+      <File FileName="Assets/src/Game/GameController.cs" />
+      <File FileName="Assets/src/Game/StartCanvasController.cs" Line="39" Column="10" />
+      <File FileName="Assets/src/Game/ClientController.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -38,9 +38,11 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="2d417eb0-aa34-4b97-aa5a-17d31bbfe458" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="d415a008-f4db-431f-a72c-9d7b39e3486e" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/oogakiakiya/Desktop/GameClient/Assets/src/Game/Client.cs" relfile="Assets/src/Game/Client.cs" line="156" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>
