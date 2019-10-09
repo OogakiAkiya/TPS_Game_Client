@@ -9,8 +9,8 @@ public class TCP_ClientController : MonoBehaviour
 {
     [SerializeField] GameController gameController;
     //ipアドレスとポート番号設定
-    public string ipOrHost = "127.0.0.1";
-    public int port = 12345;
+    [SerializeField] string ipOrHost;
+    [SerializeField] int port = 12345;
     private TCP_Client socket = new TCP_Client();
     private GameObject player;
     private PlayerController playerController;
@@ -18,7 +18,7 @@ public class TCP_ClientController : MonoBehaviour
     //Debug用
     System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
     bool timerFlg=false;
-    public Text debugText=null;
+    [SerializeField] Text debugText=null;
 
     // Start is called before the first frame update
     void Start()

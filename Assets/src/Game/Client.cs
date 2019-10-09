@@ -28,7 +28,7 @@ public class Client : MonoBehaviour
     }
 
     public string userID;
-    public int hp = 100;
+    [SerializeField] int hp = 100;
     List<byte[]> recvDataList = new List<byte[]>();
     private AnimationKey animationState = AnimationKey.Idle;
     private Animator animator;
@@ -36,21 +36,21 @@ public class Client : MonoBehaviour
     private GameObject damageEffectPref;
 
     private BaseWeapon weapon = null;
-    public GameObject effect = null;
-    public GameObject weaponAddPosition = null;
+    [SerializeField] GameObject effect = null;
+    [SerializeField] GameObject weaponAddPosition = null;
     private GameObject weaponModel;
 
     //UI
-    public Text weapon_UI;
-    public Image weapon_Image;
+    [SerializeField] Text weapon_UI;
+    [SerializeField] Image weapon_Image;
     //当たり判定
     private Camera cam;
     private RectTransform imageRect;
     private Canvas canvas;
 
     //Score
-    public int deathAmount = 0;          //死んだ回数
-    public int killAmount = 0;           //殺した回数
+    public int deathAmount { get; private set; } = 0;          //死んだ回数
+    public int killAmount { get; private set; } = 0;           //殺した回数
 
     private void Awake()
     {

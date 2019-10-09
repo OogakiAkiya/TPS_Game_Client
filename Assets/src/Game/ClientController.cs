@@ -7,17 +7,16 @@ using UnityEngine.UI;
 
 public class ClientController : MonoBehaviour
 {
-
+    [SerializeField] GameObject userList;
+    [SerializeField] Text ranking;
     GameObject userPrefab;
-    public List<Client> clientList { get; private set; } = new List<Client>();
-    public Text ranking;
+    public Client[] clientArray { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
         userPrefab = (GameObject)Resources.Load("user");
-        clientList.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<Client>());
-
+        clientArray = userList.transform.GetComponentsInChildren<Client>();
 
     }
 
@@ -27,7 +26,7 @@ public class ClientController : MonoBehaviour
 
         //ランキング表示
         Dictionary<string, int> dic = new Dictionary<string, int>();
-        foreach (var user in clientList)
+        foreach (var user in clientArray)
         {
             dic.Add(user.name, user.killAmount);
         }
@@ -48,16 +47,11 @@ public class ClientController : MonoBehaviour
 
     public void AddUser(string _userID,Vector3 _pos)
     {
-        var add = Instantiate(userPrefab, _pos, Quaternion.identity) as GameObject;
+        var add = Instantiate(userPrefab,userList.transform) as GameObject;
+        add.transform.position = _pos;
         add.name = _userID;
         add.GetComponent<Client>().userID=_userID;
-        clientList.Clear();
-
-        clientList.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<Client>());
-        foreach(var user in GameObject.FindGameObjectsWithTag("users"))
-        {
-            clientList.Add(user.GetComponent<Client>());
-        }
+        clientArray = userList.transform.GetComponentsInChildren<Client>();
     }
 
     public void AddGrenade(string _name,Vector3 _pos,Vector3 _direction)

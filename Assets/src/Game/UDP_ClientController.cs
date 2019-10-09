@@ -14,9 +14,9 @@ using UnityEngine;
 public class UDP_ClientController : MonoBehaviour
 {
 
-    public int recvPort = 12343;
-    public int sendPort = 12344;
-    public string serverIP = "127.0.0.1";
+    [SerializeField] int recvPort = 12343;
+    [SerializeField] int sendPort = 12344;
+    [SerializeField] string serverIP = "127.0.0.1";
     private ClientController clientController;
     private PlayerController player;
     private uint nowSequence = 0;
@@ -39,7 +39,6 @@ public class UDP_ClientController : MonoBehaviour
         state.AddState(GameHeader.ID.INIT, () =>
         {
             //初期化用データ送信
-            SendRotation((byte)GameHeader.ID.INIT);
             state.ChangeState(GameHeader.ID.GAME);
         });
         state.AddState(GameHeader.ID.GAME, _update: GameUpdate);
@@ -119,7 +118,7 @@ public class UDP_ClientController : MonoBehaviour
         {
             bool addUserFlg = true;
 
-            foreach (var obj in clientController.clientList)
+            foreach (var obj in clientController.clientArray)
             {
                 if (obj.name.Equals(header.userName.Trim()))
                 {

@@ -96,6 +96,7 @@
     <Compile Include="Assets\src\Library\OpenSocket\UDP_Server.cs" />
     <Compile Include="Assets\src\Library\OpenSocket\UPnPController.cs" />
     <Compile Include="Assets\src\Library\StateMachine\StateMachine.cs" />
+    <Compile Include="Assets\src\Library\TimeMeasurment.cs" />
     <Compile Include="Assets\src\Title\TitleController.cs" />
     <None Include="Assets\JMO Assets\WarFX\Shaders\WFX_S AlphaBlend Scroll.shader" />
     <None Include="Assets\JMO Assets\WarFX\Shaders\WFX_S Particle AddSoft A8.shader" />
