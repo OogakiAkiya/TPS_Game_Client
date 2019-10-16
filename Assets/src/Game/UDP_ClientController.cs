@@ -29,6 +29,9 @@ public class UDP_ClientController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (PlayerPrefs.HasKey(SavedData.ServerIP)) serverIP = PlayerPrefs.GetString(SavedData.ServerIP);
+
+
         clientController = this.GetComponent<ClientController>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
