@@ -1,18 +1,19 @@
 ﻿<Properties StartupConfiguration="{70B263AF-5707-DA2D-B24B-B59941E3F798}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/src/Game/PlayerController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/src/Title/TitleController.cs">
     <Files>
       <File FileName="Assets/src/Game/TCP_ClientController.cs" Line="12" Column="34" />
-      <File FileName="Assets/src/Game/UDP_ClientController.cs" Line="61" Column="33" />
+      <File FileName="Assets/src/Game/UDP_ClientController.cs" />
       <File FileName="Assets/src/Game/PlayerController.cs" Line="68" Column="29" />
       <File FileName="Assets/src/Library/BaseWeapon.cs" />
       <File FileName="Assets/src/Constant.cs" />
       <File FileName="Assets/src/Game/Client.cs" />
       <File FileName="Assets/src/Game/HeaderClass.cs" />
       <File FileName="Assets/src/Game/Bom/Grenade.cs" />
-      <File FileName="Assets/src/Game/GameController.cs" Line="1" Column="1" />
+      <File FileName="Assets/src/Game/GameController.cs" />
       <File FileName="Assets/src/Game/StartCanvasController.cs" />
       <File FileName="Assets/src/Game/ClientController.cs" />
       <File FileName="Assets/src/Library/OpenSocket/UPnPController.cs" />
+      <File FileName="Assets/src/Title/TitleController.cs" Line="72" Column="46" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -22,14 +23,15 @@
               <Node name="src" expanded="True">
                 <Node name="Game" expanded="True">
                   <Node name="Bom" expanded="True" />
-                  <Node name="PlayerController.cs" selected="True" />
                 </Node>
                 <Node name="Library" expanded="True">
                   <Node name="Animator" expanded="True" />
                   <Node name="OpenSocket" expanded="True" />
                   <Node name="StateMachine" expanded="True" />
                 </Node>
-                <Node name="Title" expanded="True" />
+                <Node name="Title" expanded="True">
+                  <Node name="TitleController.cs" selected="True" />
+                </Node>
               </Node>
             </Node>
           </Node>
@@ -39,7 +41,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="006a7419-763b-490a-9837-bb1d7085c974" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="910d37cf-cbb2-4cf8-a0a6-5c11d24facef" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/oogakiakiya/Desktop/GameClient/Assets/src/Game/Client.cs" relfile="Assets/src/Game/Client.cs" line="156" column="1" />
