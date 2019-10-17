@@ -39,5 +39,4 @@ public static class Convert
     {
         return System.BitConverter.GetBytes(_data);
     }
-
 }
