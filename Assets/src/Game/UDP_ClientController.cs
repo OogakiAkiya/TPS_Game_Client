@@ -58,8 +58,15 @@ public class UDP_ClientController : MonoBehaviour
         }
 
         //角度の送信(30fpsで良い)
+        if (!IsInvoking("Second30Invoke")) Invoke("Second30Invoke", 1f / 30);
+    }
+
+    private void Second30Invoke()
+    {
         if (player.GetRotationSendFlg()) SendRotation((byte)GameHeader.ID.GAME);
     }
+
+
 
     private void RecvRoutine()
     {
@@ -88,14 +95,14 @@ public class UDP_ClientController : MonoBehaviour
         List<byte> sendData = new List<byte>();
         GameHeader header = new GameHeader();
         header.CreateNewData((GameHeader.ID)_id, player.name, (byte)GameHeader.GameCode.BASICDATA);
-
+        /*
         byte[] rotationData = new byte[sizeof(float) * 3];
         Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.x), 0, rotationData, 0 * sizeof(float), sizeof(float));
         Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.y), 0, rotationData, 1 * sizeof(float), sizeof(float));
         Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.z), 0, rotationData, 2 * sizeof(float), sizeof(float));
-
+        */
         sendData.AddRange(header.GetHeader());
-        sendData.AddRange(rotationData);
+        sendData.AddRange(Convert.GetByteVector2(player.transform.localEulerAngles));
 
         socket.Send(sendData.ToArray(), serverIP, sendPort);
 
