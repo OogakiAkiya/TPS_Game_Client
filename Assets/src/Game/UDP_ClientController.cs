@@ -95,12 +95,6 @@ public class UDP_ClientController : MonoBehaviour
         List<byte> sendData = new List<byte>();
         GameHeader header = new GameHeader();
         header.CreateNewData((GameHeader.ID)_id, player.name, (byte)GameHeader.GameCode.BASICDATA);
-        /*
-        byte[] rotationData = new byte[sizeof(float) * 3];
-        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.x), 0, rotationData, 0 * sizeof(float), sizeof(float));
-        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.y), 0, rotationData, 1 * sizeof(float), sizeof(float));
-        Buffer.BlockCopy(BitConverter.GetBytes(player.transform.localEulerAngles.z), 0, rotationData, 2 * sizeof(float), sizeof(float));
-        */
         sendData.AddRange(header.GetHeader());
         sendData.AddRange(Convert.GetByteVector2(player.transform.localEulerAngles));
 
