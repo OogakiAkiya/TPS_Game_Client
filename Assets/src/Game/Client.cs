@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +26,7 @@ public class Client : MonoBehaviour
         Reloading,
         Dying
     }
+    private UserBodyData bodyData = new UserBodyData();
 
     public string userID;
     [SerializeField] int hp = 100;
@@ -106,7 +106,7 @@ public class Client : MonoBehaviour
         }
 
         //武器関係
-        weapon.state.Update();
+        if (weapon != null) weapon.state.Update();
         if (weapon_UI) weapon_UI.text = weapon.remainingBullet + "/" + weapon.magazine;
 
 
@@ -116,37 +116,25 @@ public class Client : MonoBehaviour
 
     private void SetStatus(byte[] _data)
     {
-        //座標の代入
-        this.transform.position = Convert.GetVector3(_data, GameHeader.HEADER_SIZE);
-
-        //アニメーション変更
-        animationState = (AnimationKey)System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 6 * sizeof(float));
-
-        //hpの設定
-        hp = System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 7 * sizeof(float));
-
-        //回転座標の代入
-        this.transform.rotation = Quaternion.Euler(Convert.GetVector3(_data, GameHeader.HEADER_SIZE + 3 * sizeof(float)));
-
+        bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
+        this.transform.position = bodyData.position;
+        this.transform.rotation = Quaternion.Euler(bodyData.rotetion);
+        animationState = (AnimationKey)bodyData.animationKey;
+        hp = bodyData.hp;
     }
 
     private void SetPlayerStatus(byte[] _data)
     {
-        //座標の代入
-        this.transform.position = Convert.GetVector3(_data, GameHeader.HEADER_SIZE);
-
-        //アニメーション変更
-        animationState = (AnimationKey)System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 6 * sizeof(float));
-
-        //hpの設定
-        hp = System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 7 * sizeof(float));
-
+        int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
+        this.transform.position = bodyData.position;
+        animationState = (AnimationKey)bodyData.animationKey;
+        hp = bodyData.hp;
         if (weapon != null)
         {
             //武器の変更
-            ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 7 * sizeof(float) + sizeof(int)));
+            ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, index));
             //武器ステータス設定
-            weapon.SetStatus(_data, GameHeader.HEADER_SIZE + 7 * sizeof(float) + sizeof(int));
+            weapon.SetStatus(_data, index);
         }
 
     }
@@ -374,115 +362,3 @@ public class Client : MonoBehaviour
 
 }
 
-public class UserBodyData
-{
-    public enum USERDATAFLG : byte
-    {
-        POSITION_X = 0x001,
-        POSITION_Y = 0x002,
-        POSITION_Z = 0x004,
-        ROTATION_X = 0x008,
-        ROTATION_Y = 0x010,
-        ROTATION_Z = 0x020,
-    }
-
-
-    public Vector3 position = Vector3.zero;
-    public Vector3 rotetion = Vector3.zero;
-    public int animationKey = 0;
-    public int hp = 0;
-
-    private USERDATAFLG sendDataFlg = 0x000;
-
-    void SetData(Vector3 _position, Vector3 _rotetion, int _currentKey, int _hp)
-    {
-        //position
-        {
-            bool flg = false;
-            if (Math.Abs(position.x - _position.x) > 0.001)
-            {
-                sendDataFlg |= USERDATAFLG.POSITION_X;
-                flg = true;
-            }
-            if (Math.Abs(position.y - _position.y) > 0.001)
-            {
-                sendDataFlg |= USERDATAFLG.POSITION_Y;
-                flg = true;
-            }
-            if (Math.Abs(position.y - _position.y) > 0.001)
-            {
-                sendDataFlg |= USERDATAFLG.POSITION_Z;
-                flg = true;
-            }
-            if (flg) position = _position;
-
-        }
-
-        //rotation
-        {
-            bool flg = false;
-            if (Math.Abs(rotetion.x - _rotetion.x) > 0.001)
-            {
-                sendDataFlg |= USERDATAFLG.ROTATION_X;
-                flg = true;
-            }
-            if (Math.Abs(rotetion.y - _rotetion.y) > 0.001)
-            {
-                sendDataFlg |= USERDATAFLG.ROTATION_Y;
-                flg = true;
-            }
-            if (Math.Abs(rotetion.y - _rotetion.y) > 0.001)
-            {
-                sendDataFlg |= USERDATAFLG.ROTATION_Z;
-                flg = true;
-            }
-            if (flg) rotetion = _rotetion;
-
-        }
-
-        animationKey = _currentKey;
-        hp = _hp;
-    }
-
-    byte[] GetData(UserBodyData _oldData = null)
-    {
-
-        List<byte> returnData = new List<byte>();
-
-        //送信データ作成
-        returnData.Add((byte)sendDataFlg);
-        if (sendDataFlg.HasFlag(USERDATAFLG.POSITION_X)) returnData.AddRange(BitConverter.GetBytes(position.x));
-        if (sendDataFlg.HasFlag(USERDATAFLG.POSITION_Y)) returnData.AddRange(BitConverter.GetBytes(position.y));
-        if (sendDataFlg.HasFlag(USERDATAFLG.POSITION_Z)) returnData.AddRange(BitConverter.GetBytes(position.z));
-        if (sendDataFlg.HasFlag(USERDATAFLG.ROTATION_X)) returnData.AddRange(BitConverter.GetBytes(rotetion.x));
-        if (sendDataFlg.HasFlag(USERDATAFLG.ROTATION_Y)) returnData.AddRange(BitConverter.GetBytes(rotetion.y));
-        if (sendDataFlg.HasFlag(USERDATAFLG.ROTATION_Z)) returnData.AddRange(BitConverter.GetBytes(rotetion.z));
-
-        returnData.AddRange(BitConverter.GetBytes(animationKey));
-        returnData.AddRange(BitConverter.GetBytes(hp));
-        sendDataFlg = 0;
-
-
-        return returnData.ToArray();
-    }
-
-    void Deserialize(byte[] _data, int _index)
-    {
-        int nowIndex = _index;
-        USERDATAFLG nowFlg = (USERDATAFLG)_data[_index++];
-        if (nowFlg.HasFlag(USERDATAFLG.POSITION_X)) position.x = GetFloat(_data, ref nowIndex);
-        if (nowFlg.HasFlag(USERDATAFLG.POSITION_Y)) position.y = GetFloat(_data, ref nowIndex);
-        if (nowFlg.HasFlag(USERDATAFLG.POSITION_Z)) position.z = GetFloat(_data, ref nowIndex);
-        if (nowFlg.HasFlag(USERDATAFLG.ROTATION_X)) rotetion.x = GetFloat(_data, ref nowIndex);
-        if (nowFlg.HasFlag(USERDATAFLG.ROTATION_Y)) rotetion.y = GetFloat(_data, ref nowIndex);
-        if (nowFlg.HasFlag(USERDATAFLG.ROTATION_Z)) rotetion.z = GetFloat(_data, ref nowIndex);
-        animationKey = BitConverter.ToInt32(_data, nowIndex);
-        nowIndex += sizeof(int);
-        hp = BitConverter.ToInt32(_data, nowIndex);
-    }
-    private float GetFloat(byte[] _data, ref int _startIndex)
-    {
-        _startIndex += 4;
-        return BitConverter.ToSingle(_data, _startIndex - 4);
-    }
-}

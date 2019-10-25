@@ -79,12 +79,13 @@
     <Compile Include="Assets\src\Game\Bom\Grenade.cs" />
     <Compile Include="Assets\src\Game\Client.cs" />
     <Compile Include="Assets\src\Game\ClientController.cs" />
+    <Compile Include="Assets\src\Game\Communication\HeaderClass.cs" />
+    <Compile Include="Assets\src\Game\Communication\TCP_ClientController.cs" />
+    <Compile Include="Assets\src\Game\Communication\UDP_ClientController.cs" />
+    <Compile Include="Assets\src\Game\Communication\UserBodyData.cs" />
     <Compile Include="Assets\src\Game\GameController.cs" />
-    <Compile Include="Assets\src\Game\HeaderClass.cs" />
     <Compile Include="Assets\src\Game\PlayerController.cs" />
     <Compile Include="Assets\src\Game\StartCanvasController.cs" />
-    <Compile Include="Assets\src\Game\TCP_ClientController.cs" />
-    <Compile Include="Assets\src\Game\UDP_ClientController.cs" />
     <Compile Include="Assets\src\Library\ActiveFalse.cs" />
     <Compile Include="Assets\src\Library\Animator\AnimatorBehaviour.cs" />
     <Compile Include="Assets\src\Library\BaseWeapon.cs" />
