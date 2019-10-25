@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 class ClientState
 {
     public UdpClient socket = null;
-    public IPEndPoint endPoint=null;
+    public IPEndPoint endPoint;
     private List<KeyValuePair<IPEndPoint, byte[]>> recvDataList = new List<KeyValuePair<IPEndPoint, byte[]>>();
     private System.Object lockObject = new System.Object();
 
@@ -34,10 +34,19 @@ class ClientState
 
     public void AddRecvData(IPEndPoint _iPEndPoint, byte[] _data)
     {
-        KeyValuePair<IPEndPoint, byte[]> addData = new KeyValuePair<IPEndPoint, byte[]>(_iPEndPoint, _data);
         lock (lockObject)
         {
-            recvDataList.Add(addData);
+            int count = 0;
+            while (true)
+            {
+                int size = System.BitConverter.ToInt32(_data, count);
+                if (_data.Length - count < size) return;
+                KeyValuePair<IPEndPoint, byte[]> addData = new KeyValuePair<IPEndPoint, byte[]>(_iPEndPoint, new byte[size - sizeof(int)]);
+                Array.Copy(_data, (count + sizeof(int)), addData.Value, 0, addData.Value.Length);
+                recvDataList.Add(addData);
+                count += size;
+                if (_data.Length - count < sizeof(int)) return;
+            }
         }
     }
 
@@ -56,7 +65,7 @@ class ClientState
 class UDP_Client
 {
     
-    public ServerState server { get; private set; } = new ServerState();
+    public ClientState server { get; private set; } = new ClientState();
     private ClientState sender = new ClientState();
 
     int port = 12343;
@@ -118,8 +127,7 @@ class UDP_Client
 
     private void ReceiveCallback(IAsyncResult ar)
     {
-        ServerState client = (ServerState)ar.AsyncState;
-        //ClientState client = (ClientState)ar.AsyncState;
+        ClientState client = (ClientState)ar.AsyncState;
 
         byte[] buf = client.socket.EndReceive(ar, ref client.endPoint);
         client.AddRecvData(client.endPoint, buf);

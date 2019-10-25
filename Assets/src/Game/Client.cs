@@ -26,6 +26,7 @@ public class Client : MonoBehaviour
         Reloading,
         Dying
     }
+    private UserBodyData bodyData = new UserBodyData();
 
     public string userID;
     [SerializeField] int hp = 100;
@@ -105,7 +106,7 @@ public class Client : MonoBehaviour
         }
 
         //武器関係
-        weapon.state.Update();
+        if (weapon != null) weapon.state.Update();
         if (weapon_UI) weapon_UI.text = weapon.remainingBullet + "/" + weapon.magazine;
 
 
@@ -115,38 +116,25 @@ public class Client : MonoBehaviour
 
     private void SetStatus(byte[] _data)
     {
-        //座標の代入
-        this.transform.position = Convert.GetVector3(_data, GameHeader.HEADER_SIZE);
-
-        //アニメーション変更
-        animationState = (AnimationKey)System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 6 * sizeof(float));
-
-        //hpの設定
-        hp = System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 7 * sizeof(float));
-
-        //回転座標の代入
-        this.transform.rotation = Quaternion.Euler(Convert.GetVector3(_data, GameHeader.HEADER_SIZE + 3 * sizeof(float)));
-
+        bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
+        this.transform.position = bodyData.position;
+        this.transform.rotation = Quaternion.Euler(bodyData.rotetion);
+        animationState = (AnimationKey)bodyData.animationKey;
+        hp = bodyData.hp;
     }
 
     private void SetPlayerStatus(byte[] _data)
     {
-        //どこかおかしい？
-        //座標の代入
-        this.transform.position = Convert.GetVector3(_data, GameHeader.HEADER_SIZE);
-
-        //アニメーション変更
-        animationState = (AnimationKey)System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 6 * sizeof(float));
-
-        //hpの設定
-        hp = System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 7 * sizeof(float));
-
+        int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
+        this.transform.position = bodyData.position;
+        animationState = (AnimationKey)bodyData.animationKey;
+        hp = bodyData.hp;
         if (weapon != null)
         {
             //武器の変更
-            ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, GameHeader.HEADER_SIZE + 7 * sizeof(float) + sizeof(int)));
+            ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, index));
             //武器ステータス設定
-            weapon.SetStatus(_data, GameHeader.HEADER_SIZE + 7 * sizeof(float) + sizeof(int));
+            weapon.SetStatus(_data, index);
         }
 
     }
@@ -192,7 +180,7 @@ public class Client : MonoBehaviour
             GameObject add = Instantiate(damageEffectPref) as GameObject;
             add.transform.parent = this.transform;
             Vector3 pos = this.transform.position;
-            pos += new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(0.8f, 1.5f), 0.0f);
+            pos += new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(0.8f, 1.5f), 0.0f);
             add.transform.position = pos;
         }
     }
@@ -373,3 +361,4 @@ public class Client : MonoBehaviour
     }
 
 }
+

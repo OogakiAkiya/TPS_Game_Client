@@ -16,7 +16,7 @@ public class BaseWeapon
     public float range { get; protected set; }              //射程
     public WEAPONTYPE type { get; protected set; }
     protected Action atackMethod;                           //攻撃時メソッド
-    protected Texture2D texture =null;                      //UIテクスチャ
+    protected Texture2D texture = null;                      //UIテクスチャ
     public GameObject model = null;                      //武器のプレハブ
 
     protected System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
@@ -31,11 +31,11 @@ public class BaseWeapon
         return returnData.ToArray();
     }
 
-    public void SetStatus(byte[] _data,int _index)
+    public void SetStatus(byte[] _data, int _index)
     {
-        type=(WEAPONTYPE)System.BitConverter.ToInt32(_data, _index);             //武器の種類
+        type = (WEAPONTYPE)System.BitConverter.ToInt32(_data, _index);             //武器の種類
         var nowStatus = (WEAPONSTATE)System.BitConverter.ToInt32(_data, _index + sizeof(WEAPONTYPE));
-        if(state.currentKey!=nowStatus)state.ChangeState(nowStatus);             //状態
+        if (state.currentKey != nowStatus) state.ChangeState(nowStatus);             //状態
         remainingBullet = System.BitConverter.ToInt32(_data, _index + sizeof(WEAPONTYPE) + sizeof(WEAPONSTATE));             //残弾数
 
     }
@@ -46,7 +46,7 @@ public class BaseWeapon
         _image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
     }
 
-    public static BaseWeapon CreateInstance(WEAPONTYPE _type,Action _action=null)
+    public static BaseWeapon CreateInstance(WEAPONTYPE _type, Action _action = null)
     {
         if (_type == WEAPONTYPE.MACHINEGUN) return new MachineGun(_action);
         if (_type == WEAPONTYPE.HANDGUN) return new HandGun(_action);
