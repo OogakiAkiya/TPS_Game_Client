@@ -118,9 +118,8 @@ public class UDP_ClientController : MonoBehaviour
         }
 
         //ユーザー処理
-        if ((GameHeader.GameCode)header.gameCode == GameHeader.GameCode.BASICDATA|| (GameHeader.GameCode)header.gameCode == GameHeader.GameCode.SCOREDATA)
+        if ((GameHeader.GameCode)header.gameCode == GameHeader.GameCode.BASICDATA || (GameHeader.GameCode)header.gameCode == GameHeader.GameCode.SCOREDATA)
         {
-            bool addUserFlg = true;
 
             foreach (var obj in clientController.clientArray)
             {
@@ -129,20 +128,35 @@ public class UDP_ClientController : MonoBehaviour
                     var addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
                     obj.AddRecvData(addData);
 
-                    addUserFlg = false;
                     break;
                 }
             }
+        }
 
+        if ((GameHeader.GameCode)header.gameCode == GameHeader.GameCode.CHECKDATA)
+        {
+            bool addUserFlg = true;
+            for (int i=0;i< clientController.clientArray.Length; i++)
+            {
+                Client client = clientController.clientArray[i];
+                if (client.name.Equals(header.userName.Trim()))
+                {
+                    var addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
+                    client.AddRecvData(addData);
+                    addUserFlg = false;
+                    break;
+                }
+
+            }
 
             //user追加
             if (addUserFlg)
             {
-                Vector3 pos = Convert.GetVector3(recvData, GameHeader.HEADER_SIZE + sizeof(uint));
-
+                Vector3 pos = Convert.GetVector3(recvData, GameHeader.HEADER_SIZE + sizeof(uint)+sizeof(byte));
                 //ユーザーの追加
                 clientController.AddUser(header.userName.Trim(), pos);
             }
+
         }
     }
 

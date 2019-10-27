@@ -88,7 +88,10 @@ public class Client : MonoBehaviour
         while (recvDataList.Count > 0)
         {
             var recvData = GetRecvData();
-            if (recvData[sizeof(byte) + GameHeader.USERID_LENGTH] == (byte)GameHeader.GameCode.BASICDATA)
+            var header = new GameHeader();
+            header.SetHeader(recvData);
+
+            if (header.gameCode == (byte)GameHeader.GameCode.BASICDATA)
             {
                 if (this.tag == "Player")
                 {
@@ -98,6 +101,10 @@ public class Client : MonoBehaviour
                 {
                     SetStatus(recvData);
                 }
+            }
+            if(header.gameCode == (byte)GameHeader.GameCode.CHECKDATA)
+            {
+                SetStatus(recvData);
             }
 
             //スコア
