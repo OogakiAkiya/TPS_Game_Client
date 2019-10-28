@@ -45,13 +45,15 @@ public class ClientController : MonoBehaviour
 
     }
 
-    public void AddUser(string _userID,Vector3 _pos)
+    public Client AddUser(string _userID,Vector3 _pos)
     {
         var add = Instantiate(userPrefab,userList.transform) as GameObject;
         add.transform.position = _pos;
         add.name = _userID;
-        add.GetComponent<Client>().userID=_userID;
+        Client client = add.GetComponent<Client>();
+        client.userID=_userID;
         clientArray = userList.transform.GetComponentsInChildren<Client>();
+        return client;
     }
 
     public void AddGrenade(string _name,Vector3 _pos,Vector3 _direction)

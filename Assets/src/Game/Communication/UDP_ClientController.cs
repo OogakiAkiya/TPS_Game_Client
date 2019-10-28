@@ -125,7 +125,7 @@ public class UDP_ClientController : MonoBehaviour
             {
                 if (obj.name.Equals(header.userName.Trim()))
                 {
-                    var addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
+                    byte[] addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
                     obj.AddRecvData(addData);
 
                     break;
@@ -141,7 +141,7 @@ public class UDP_ClientController : MonoBehaviour
                 Client client = clientController.clientArray[i];
                 if (client.name.Equals(header.userName.Trim()))
                 {
-                    var addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
+                    byte[] addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
                     client.AddRecvData(addData);
                     addUserFlg = false;
                     break;
@@ -153,8 +153,11 @@ public class UDP_ClientController : MonoBehaviour
             if (addUserFlg)
             {
                 Vector3 pos = Convert.GetVector3(recvData, GameHeader.HEADER_SIZE + sizeof(uint)+sizeof(byte));
+                byte[] addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
+
                 //ユーザーの追加
-                clientController.AddUser(header.userName.Trim(), pos);
+                clientController.AddUser(header.userName.Trim(), pos).AddRecvData(addData);
+
             }
 
         }

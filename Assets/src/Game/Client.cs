@@ -108,7 +108,10 @@ public class Client : MonoBehaviour
             }
 
             //スコア
-            if (recvData[sizeof(byte) + GameHeader.USERID_LENGTH] == (byte)GameHeader.GameCode.SCOREDATA) SetScore(recvData);
+            if (header.gameCode == (byte)GameHeader.GameCode.SCOREDATA)
+            {
+                SetScore(recvData);
+            }
 
         }
 
