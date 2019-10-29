@@ -129,8 +129,8 @@ class UDP_Client
     {
         ClientState client = (ClientState)ar.AsyncState;
 
-        byte[] buf = client.socket.EndReceive(ar, ref client.endPoint);
-        client.AddRecvData(client.endPoint, buf);
+        byte[] decodeData=CompressionWrapper.Decode(client.socket.EndReceive(ar, ref client.endPoint));
+        client.AddRecvData(client.endPoint, decodeData);
         client.socket.BeginReceive(ReceiveCallback, client);
     }
     
