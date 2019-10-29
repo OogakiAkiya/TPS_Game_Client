@@ -24,9 +24,10 @@ class ClientState
     public KeyValuePair<IPEndPoint, byte[]> GetRecvData()
     {
         KeyValuePair<IPEndPoint, byte[]> returnByte;
+        returnByte = recvDataList[0];
+
         lock (lockObject)
         {
-            returnByte = recvDataList[0];
             recvDataList.RemoveAt(0);
         }
         return returnByte;
@@ -128,7 +129,6 @@ class UDP_Client
     private void ReceiveCallback(IAsyncResult ar)
     {
         ClientState client = (ClientState)ar.AsyncState;
-
         byte[] decodeData=CompressionWrapper.Decode(client.socket.EndReceive(ar, ref client.endPoint));
         client.AddRecvData(client.endPoint, decodeData);
         client.socket.BeginReceive(ReceiveCallback, client);
