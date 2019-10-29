@@ -56,6 +56,7 @@ public class TCP_ClientController : MonoBehaviour
             TestSend((byte)GameHeader.ID.DEBUG, (byte)GameHeader.GameCode.BASICDATA);
             timerFlg = true;
         }
+        if (!IsInvoking("InputCheck")) Invoke("InputCheck", 2f);
 
 
         socket.Update();
@@ -74,6 +75,12 @@ public class TCP_ClientController : MonoBehaviour
             }
         }
 
+    }
+
+    public void InputCheck()
+    {
+        Key sendKey = playerController.CheckNowInput();
+        TestInputSend((byte)GameHeader.ID.GAME, (byte)GameHeader.GameCode.CHECKDATA, sendKey);
     }
 
 

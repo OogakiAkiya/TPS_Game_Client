@@ -51,8 +51,23 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.G))sendKey |= Key.G;
         if (Input.GetKeyDown(KeyCode.R)) sendKey |= Key.R;
+        return sendKey;
+    }
 
-
+    public Key CheckNowInput()
+    {
+        Key sendKey = 0;
+        if (Input.GetKey(KeyCode.W)) sendKey |= Key.W;
+        if (Input.GetKey(KeyCode.S)) sendKey |= Key.S;
+        if (Input.GetKey(KeyCode.A)) sendKey |= Key.A;
+        if (Input.GetKey(KeyCode.D)) sendKey |= Key.D;
+        if (Input.GetKey(KeyCode.LeftShift)) sendKey |= Key.SHIFT;
+        if (Input.GetKey(KeyCode.Space)) sendKey |= Key.SPACE;
+        if (Input.GetKey(KeyCode.LeftArrow)) sendKey |= Key.LEFT_BUTTON;
+        if (Input.GetKey(KeyCode.RightArrow)) sendKey |= Key.RIGHT_BUTTON;
+        if (Input.GetMouseButton(0)) sendKey |= Key.LEFT_CLICK;
+        if (Input.GetKeyDown(KeyCode.G)) sendKey |= Key.G;
+        if (Input.GetKeyDown(KeyCode.R)) sendKey |= Key.R;
         return sendKey;
     }
 
