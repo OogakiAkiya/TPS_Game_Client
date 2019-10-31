@@ -1950,7 +1950,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 1a911f3b14d9241b5b278a91019bcbad, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -1968,7 +1968,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 719b89f2e32f84e9388320f7c7c1aeab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userID: 
   hp: 100
+  effect: {fileID: 0}
+  weaponAddPosition: {fileID: 0}
+  weapon_UI: {fileID: 0}
+  weapon_Image: {fileID: 0}
 --- !u!136 &9058048337147519092
 CapsuleCollider:
   m_ObjectHideFlags: 0

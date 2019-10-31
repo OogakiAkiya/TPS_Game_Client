@@ -53,13 +53,17 @@ public class Client : MonoBehaviour
     public int deathAmount { get; private set; } = 0;          //死んだ回数
     public int killAmount { get; private set; } = 0;           //殺した回数
 
+    //test
+    private Transform hip;
+    public Vector3 hipRotation=Vector3.zero;
     private void Awake()
     {
+        hip= this.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips);
         if (this.tag != "Player") return;
         cam = transform.Find("Camera").gameObject.GetComponent<Camera>();
         canvas = GameObject.Find("GameCanvas").GetComponent<Canvas>();
         imageRect = GameObject.Find("GameCanvas").transform.Find("Pointer").GetComponent<RectTransform>();
-
+        
     }
 
     // Start is called before the first frame update
@@ -122,6 +126,16 @@ public class Client : MonoBehaviour
 
         //アニメーション変更
         if (stateMachine.currentKey != animationState) stateMachine.ChangeState(animationState);
+
+        //hip.rotation = new Quaternion(hip.rotation.x + initRote.x, hip.rotation.y + initRote.y, hip.rotation.z + initRote.z, hip.rotation.w);
+    }
+
+    private void LateUpdate()
+    {
+        
+        Quaternion rotation = Quaternion.Euler(hipRotation.x, hipRotation.y, hipRotation.x);
+        hip.rotation *= rotation;
+        
     }
 
     private void SetStatus(byte[] _data)
@@ -162,7 +176,7 @@ public class Client : MonoBehaviour
         if (weapon.type == _type) return;
 
         //武器の作成
-        weapon = BaseWeapon.CreateInstance(_type, Shoot);
+        weapon = BaseWeapon.CreateInstance(_type, Shoot,ShootAnimationChengeInit,ShootAnimationChengeEnd);
         if (weapon_Image) weapon.SetTexture(weapon_Image);
 
         //武器のモデル変更
@@ -193,6 +207,55 @@ public class Client : MonoBehaviour
             pos += new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(0.8f, 1.5f), 0.0f);
             add.transform.position = pos;
         }
+    }
+
+    private void ShootAnimationChengeInit()
+    {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        if (weapon.type == WEAPONTYPE.MACHINEGUN)
+        {
+            if (weapon.state.currentKey == WEAPONSTATE.ATACK)
+            {
+                if (stateInfo.nameHash != Animator.StringToHash("Upper.Aiming"))
+                {
+                    animator.CrossFadeInFixedTime("Aiming", 0.1f, 1);
+                    animator.SetLayerWeight(1, 1.0f);
+                }
+            }
+            if (weapon.state.currentKey == WEAPONSTATE.RELOAD)
+            {
+                if((stateInfo.nameHash != Animator.StringToHash("Upper.Reloading"))){
+                    animator.CrossFadeInFixedTime("Reloading", 0.1f, 1);
+                    animator.SetLayerWeight(1, 1.0f);
+                }
+            }
+
+        }
+
+        if (weapon.type == WEAPONTYPE.HANDGUN)
+        {
+            if (weapon.state.currentKey == WEAPONSTATE.WAIT||weapon.state.currentKey == WEAPONSTATE.ATACK)
+            {
+                if (stateInfo.nameHash != Animator.StringToHash("Upper.Pistol Idle"))
+                {
+                    animator.CrossFadeInFixedTime("Pistol Idle", 0.1f, 1);
+                    animator.SetLayerWeight(1, 1.0f);
+                }
+
+                
+            }
+            if (weapon.state.currentKey == WEAPONSTATE.RELOAD)
+            {
+
+            }
+
+        }
+
+    }
+    private void ShootAnimationChengeEnd()
+    {
+        animator.SetLayerWeight(1, 0.0f);
+
     }
 
     private void Shoot()
@@ -252,7 +315,7 @@ public class Client : MonoBehaviour
         stateMachine.AddState(AnimationKey.Idle,
             () =>
             {
-                animator.CrossFadeInFixedTime("Idle", 0.1f);
+                animator.CrossFadeInFixedTime("Idle", 0.1f,0);
                 //animator.CrossFadeInFixedTime("Reloading", 0.1f);
             });
 
@@ -260,35 +323,35 @@ public class Client : MonoBehaviour
         stateMachine.AddState(AnimationKey.Walk,
             () =>
             {
-                animator.CrossFadeInFixedTime("Walk", 0.1f);
+                animator.CrossFadeInFixedTime("Walk", 0.1f, 0);
 
             });
         //WalkForward
         stateMachine.AddState(AnimationKey.WalkForward,
             () =>
             {
-                animator.CrossFadeInFixedTime("WalkForward", 0.1f);
+                animator.CrossFadeInFixedTime("WalkForward", 0.1f, 0);
 
             });
         //WalkBack
         stateMachine.AddState(AnimationKey.WalkBack,
             () =>
             {
-                animator.CrossFadeInFixedTime("WalkBack", 0.1f);
+                animator.CrossFadeInFixedTime("WalkBack", 0.1f, 0);
 
             });
         //WalkLeft
         stateMachine.AddState(AnimationKey.WalkLeft,
             () =>
             {
-                animator.CrossFadeInFixedTime("WalkLeft", 0.1f);
+                animator.CrossFadeInFixedTime("WalkLeft", 0.1f, 0);
 
             });
         //WalkRight
         stateMachine.AddState(AnimationKey.WalkRight,
             () =>
             {
-                animator.CrossFadeInFixedTime("WalkRight", 0.1f);
+                animator.CrossFadeInFixedTime("WalkRight", 0.1f, 0);
 
             });
 
@@ -296,38 +359,38 @@ public class Client : MonoBehaviour
         stateMachine.AddState(AnimationKey.Run,
             () =>
             {
-                animator.CrossFadeInFixedTime("Run", 0.1f);
+                animator.CrossFadeInFixedTime("Run", 0.1f, 0);
             });
         //RunForward
         stateMachine.AddState(AnimationKey.RunForward,
             () =>
             {
-                animator.CrossFadeInFixedTime("RunForward", 0.1f);
+                animator.CrossFadeInFixedTime("RunForward", 0.1f, 0);
             });
         //RunBack
         stateMachine.AddState(AnimationKey.RunBack,
             () =>
             {
-                animator.CrossFadeInFixedTime("RunBack", 0.1f);
+                animator.CrossFadeInFixedTime("RunBack", 0.1f, 0);
             });
         //RunLeft
         stateMachine.AddState(AnimationKey.RunLeft,
             () =>
             {
-                animator.CrossFadeInFixedTime("RunLeft", 0.1f);
+                animator.CrossFadeInFixedTime("RunLeft", 0.1f, 0);
             });
         //RunRight
         stateMachine.AddState(AnimationKey.RunRight,
             () =>
             {
-                animator.CrossFadeInFixedTime("RunRight", 0.1f);
+                animator.CrossFadeInFixedTime("RunRight", 0.1f, 0);
             });
 
         //JumpUP
         stateMachine.AddState(AnimationKey.JumpUP,
             () =>
             {
-                animator.CrossFadeInFixedTime("JumpUP", 0.1f);
+                animator.CrossFadeInFixedTime("JumpUP", 0.1f, 0);
             }
             );
 
@@ -335,7 +398,7 @@ public class Client : MonoBehaviour
         stateMachine.AddState(AnimationKey.JumpStay,
             () =>
             {
-                animator.CrossFadeInFixedTime("JumpStay", 0.1f);
+                animator.CrossFadeInFixedTime("JumpStay", 0.1f, 0);
             }
             );
 
@@ -344,15 +407,19 @@ public class Client : MonoBehaviour
         stateMachine.AddState(AnimationKey.JumpDown,
             () =>
             {
-                animator.CrossFadeInFixedTime("JumpDown", 0.1f);
+                animator.CrossFadeInFixedTime("JumpDown", 0.7f, 0);
             }
             );
-        //JumpDown
+        //Dying
         stateMachine.AddState(AnimationKey.Dying,
             () =>
             {
-                animator.CrossFadeInFixedTime("Dying", 0.1f);
+                animator.CrossFadeInFixedTime("Dying", 0.1f, 0);
                 this.GetComponent<CapsuleCollider>().enabled = false;
+            },
+            () =>
+            {
+
             },
             _end: () =>
             {
@@ -362,7 +429,7 @@ public class Client : MonoBehaviour
         stateMachine.AddState(AnimationKey.Reloading,
             () =>
             {
-                animator.CrossFadeInFixedTime("Reloading", 0.1f);
+                animator.CrossFadeInFixedTime("Reloading", 0.1f, 0);
             },
             () =>
             {

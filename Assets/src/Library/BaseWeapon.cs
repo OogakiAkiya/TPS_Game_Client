@@ -16,6 +16,9 @@ public class BaseWeapon
     public float range { get; protected set; }              //射程
     public WEAPONTYPE type { get; protected set; }
     protected Action atackMethod;                           //攻撃時メソッド
+    protected Action atackAnimationInit;                           //攻撃時メソッド
+    protected Action atackAnimationEnd;                           //攻撃時メソッド
+
     protected Texture2D texture = null;                      //UIテクスチャ
     public GameObject model = null;                      //武器のプレハブ
 
@@ -46,10 +49,10 @@ public class BaseWeapon
         _image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
     }
 
-    public static BaseWeapon CreateInstance(WEAPONTYPE _type, Action _action = null)
+    public static BaseWeapon CreateInstance(WEAPONTYPE _type, Action _action = null, Action _animationInit = null, Action _animationEnd = null)
     {
-        if (_type == WEAPONTYPE.MACHINEGUN) return new MachineGun(_action);
-        if (_type == WEAPONTYPE.HANDGUN) return new HandGun(_action);
+        if (_type == WEAPONTYPE.MACHINEGUN) return new MachineGun(_action,_animationInit,_animationEnd);
+        if (_type == WEAPONTYPE.HANDGUN) return new HandGun(_action, _animationInit, _animationEnd);
 
         return null;
     }
@@ -58,7 +61,7 @@ public class BaseWeapon
 
 public class MachineGun : BaseWeapon
 {
-    public MachineGun(Action _atack)
+    public MachineGun(Action _atack, Action _animationInit = null, Action _animationEnd = null)
     {
         interval = 100;
         power = 10;
@@ -67,25 +70,25 @@ public class MachineGun : BaseWeapon
         remainingBullet = magazine;
         range = 10;
         atackMethod = _atack;
+        atackAnimationInit = _animationInit;
+        atackAnimationEnd = _animationEnd;
         texture = Resources.Load("Weapon_MachineGun") as Texture2D;
         model = Resources.Load("M4a1") as GameObject;
-
         type = WEAPONTYPE.BASE;
 
-        state.AddState(WEAPONSTATE.WAIT);
+        state.AddState(WEAPONSTATE.WAIT,()=>
+        {
+            atackAnimationEnd?.Invoke();
+        });
         state.AddState(WEAPONSTATE.ATACK,
             () =>
             {
                 timer.Restart();
-                atackMethod();
+                atackAnimationInit?.Invoke();
             },
             () =>
             {
-                if (timer.ElapsedMilliseconds > interval)
-                {
-                    state.ChangeState(WEAPONSTATE.WAIT);
-
-                }
+                atackMethod?.Invoke();
             },
             () =>
             {
@@ -95,6 +98,7 @@ public class MachineGun : BaseWeapon
         state.AddState(WEAPONSTATE.RELOAD,
             () =>
             {
+                atackAnimationInit?.Invoke();
             },
             () =>
             {
@@ -123,7 +127,7 @@ public class MachineGun : BaseWeapon
 
 public class HandGun : BaseWeapon
 {
-    public HandGun(Action _atack)
+    public HandGun(Action _atack, Action _animationInit = null, Action _animationEnd = null)
     {
         interval = 1000;
         power = 10;
@@ -132,24 +136,30 @@ public class HandGun : BaseWeapon
         remainingBullet = magazine;
         range = 5;
         atackMethod = _atack;
+        atackAnimationInit = _animationInit;
+        atackAnimationEnd = _animationEnd;
+
         texture = Resources.Load("Weapon_HandGun") as Texture2D;
         model = Resources.Load("M9") as GameObject;
 
         type = WEAPONTYPE.HANDGUN;
 
-        state.AddState(WEAPONSTATE.WAIT);
+        state.AddState(WEAPONSTATE.WAIT,()=> {
+            atackAnimationEnd?.Invoke();
+
+        },()=>
+        {
+            atackAnimationInit?.Invoke();
+        });
         state.AddState(WEAPONSTATE.ATACK,
             () =>
             {
                 timer.Restart();
-                atackMethod();
+                atackAnimationInit?.Invoke();
             },
             () =>
             {
-                if (timer.ElapsedMilliseconds > interval)
-                {
-                    state.ChangeState(WEAPONSTATE.WAIT);
-                }
+                atackMethod?.Invoke();
             },
             () =>
             {
@@ -159,6 +169,7 @@ public class HandGun : BaseWeapon
         state.AddState(WEAPONSTATE.RELOAD,
             () =>
             {
+                atackAnimationInit?.Invoke();
             },
             () =>
             {
