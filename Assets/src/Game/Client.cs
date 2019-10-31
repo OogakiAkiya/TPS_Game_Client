@@ -53,9 +53,11 @@ public class Client : MonoBehaviour
     public int deathAmount { get; private set; } = 0;          //死んだ回数
     public int killAmount { get; private set; } = 0;           //殺した回数
 
-    //test
+    //ボーン要素
     private Transform hip;
     public Vector3 hipRotation=Vector3.zero;
+    private GameObject modelVisual;
+
     private void Awake()
     {
         hip= this.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips);
@@ -63,7 +65,8 @@ public class Client : MonoBehaviour
         cam = transform.Find("Camera").gameObject.GetComponent<Camera>();
         canvas = GameObject.Find("GameCanvas").GetComponent<Canvas>();
         imageRect = GameObject.Find("GameCanvas").transform.Find("Pointer").GetComponent<RectTransform>();
-        
+        modelVisual = transform.Find("Geo").gameObject;
+
     }
 
     // Start is called before the first frame update
@@ -140,11 +143,19 @@ public class Client : MonoBehaviour
 
     private void SetStatus(byte[] _data)
     {
-        bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
+        int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
         this.transform.position = bodyData.position;
         this.transform.rotation = Quaternion.Euler(bodyData.rotetion);
         animationState = (AnimationKey)bodyData.animationKey;
         hp = bodyData.hp;
+        if (weapon != null)
+        {
+            //武器の変更
+            ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, index));
+            //武器ステータス設定
+            weapon.SetStatus(_data, index);
+        }
+
     }
 
     private void SetPlayerStatus(byte[] _data)
@@ -316,6 +327,8 @@ public class Client : MonoBehaviour
             () =>
             {
                 animator.CrossFadeInFixedTime("Idle", 0.1f,0);
+                if (modelVisual?.active==false)modelVisual?.SetActive(true);
+                
                 //animator.CrossFadeInFixedTime("Reloading", 0.1f);
             });
 
@@ -423,6 +436,7 @@ public class Client : MonoBehaviour
             },
             _end: () =>
             {
+                if (modelVisual) modelVisual.SetActive(false);
                 this.GetComponent<CapsuleCollider>().enabled = true;
             }
             );

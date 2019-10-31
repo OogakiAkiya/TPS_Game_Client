@@ -1971,9 +1971,10 @@ MonoBehaviour:
   userID: 
   hp: 100
   effect: {fileID: 0}
-  weaponAddPosition: {fileID: 0}
+  weaponAddPosition: {fileID: 8896926008591832598}
   weapon_UI: {fileID: 0}
   weapon_Image: {fileID: 0}
+  hipRotation: {x: 0, y: 0, z: 0}
 --- !u!136 &9058048337147519092
 CapsuleCollider:
   m_ObjectHideFlags: 0
