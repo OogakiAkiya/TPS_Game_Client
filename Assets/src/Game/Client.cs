@@ -229,7 +229,7 @@ public class Client : MonoBehaviour
             {
                 if (stateInfo.nameHash != Animator.StringToHash("Upper.Aiming"))
                 {
-                    animator.CrossFadeInFixedTime("Aiming", 0.1f, 1);
+                    animator.CrossFadeInFixedTime("Firing Rifle", 0.1f, 1);
                     animator.SetLayerWeight(1, 1.0f);
                 }
             }
@@ -257,6 +257,11 @@ public class Client : MonoBehaviour
             }
             if (weapon.state.currentKey == WEAPONSTATE.RELOAD)
             {
+                if ((stateInfo.nameHash != Animator.StringToHash("Upper.Reloading")))
+                {
+                    animator.CrossFadeInFixedTime("Pistol Reload", 0.1f, 1);
+                    animator.SetLayerWeight(1, 1.0f);
+                }
 
             }
 
