@@ -88,7 +88,11 @@ public class MachineGun : BaseWeapon
             },
             () =>
             {
-                atackMethod?.Invoke();
+                if (timer.ElapsedMilliseconds > interval)
+                {
+                    atackMethod?.Invoke();
+                    timer.Restart();
+                }
             },
             () =>
             {
@@ -159,7 +163,11 @@ public class HandGun : BaseWeapon
             },
             () =>
             {
-                atackMethod?.Invoke();
+                if (timer.ElapsedMilliseconds > interval)
+                {
+                    atackMethod?.Invoke();
+                    timer.Restart();
+                }
             },
             () =>
             {
