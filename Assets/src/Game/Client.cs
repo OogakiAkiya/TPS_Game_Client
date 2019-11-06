@@ -333,7 +333,6 @@ public class Client : MonoBehaviour
             {
                 animator.CrossFadeInFixedTime("Idle", 0.1f,0);
                 if (modelVisual?.active==false)modelVisual?.SetActive(true);
-                
                 //animator.CrossFadeInFixedTime("Reloading", 0.1f);
             });
 
@@ -384,31 +383,49 @@ public class Client : MonoBehaviour
             () =>
             {
                 animator.CrossFadeInFixedTime("RunForward", 0.1f, 0);
+                animator.speed = 1.5f;
+            },
+            _end:()=> {
+                animator.speed = 1.0f;
             });
         //RunBack
         stateMachine.AddState(AnimationKey.RunBack,
             () =>
             {
                 animator.CrossFadeInFixedTime("RunBack", 0.1f, 0);
+                animator.speed = 1.5f;
+
+            },
+            _end: () => {
+                animator.speed = 1.0f;
             });
         //RunLeft
         stateMachine.AddState(AnimationKey.RunLeft,
             () =>
             {
                 animator.CrossFadeInFixedTime("RunLeft", 0.1f, 0);
+                animator.speed = 1.5f;
+            },
+            _end: () => {
+                animator.speed = 1.0f;
             });
         //RunRight
         stateMachine.AddState(AnimationKey.RunRight,
             () =>
             {
                 animator.CrossFadeInFixedTime("RunRight", 0.1f, 0);
+                animator.speed = 1.5f;
+
+            },
+            _end: () => {
+                animator.speed = 1.0f;
             });
 
         //JumpUP
         stateMachine.AddState(AnimationKey.JumpUP,
             () =>
             {
-                animator.CrossFadeInFixedTime("JumpUP", 0.1f, 0);
+                animator.CrossFadeInFixedTime("JumpUP", 0.05f, 0);
             }
             );
 
@@ -416,7 +433,7 @@ public class Client : MonoBehaviour
         stateMachine.AddState(AnimationKey.JumpStay,
             () =>
             {
-                animator.CrossFadeInFixedTime("JumpStay", 0.1f, 0);
+                animator.CrossFadeInFixedTime("JumpStay", 0, 0);
             }
             );
 
