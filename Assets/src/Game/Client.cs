@@ -24,8 +24,10 @@ public class Client : MonoBehaviour
         JumpStay,
         JumpDown,
         Reloading,
+        Attack,
         Dying
     }
+
     private UserBodyData bodyData = new UserBodyData();
 
     public string userID;
