@@ -5,13 +5,15 @@ using UnityEngine;
 public class soldierClient : BaseClient
 {
     //当たり判定
-    public Camera cam;
-    public RectTransform imageRect;
-    public Canvas canvas;
+    private Camera cam;
+    private RectTransform imageRect;
+    private Canvas canvas;
 
     //ボーン要素
     private Transform hip;
     public Vector3 hipRotation = Vector3.zero;
+
+    //自身のモデル
     private GameObject modelVisual;
 
     public void Awake()
@@ -29,7 +31,6 @@ public class soldierClient : BaseClient
     public void Start()
     {
         base.Init();
-        AddStates();
         stateMachine.ChangeState(AnimationKey.Idle);
 
     }
@@ -85,7 +86,7 @@ public class soldierClient : BaseClient
             effect.SetActive(true);
         }
 
-        if (this.tag != "Player") return;
+        //if (this.tag != "Player") return;
         //レイの作成
         Ray ray = cam.ScreenPointToRay(GetUIScreenPos(imageRect));
         //レイの可視化
@@ -169,7 +170,7 @@ public class soldierClient : BaseClient
     //=================================================================
     //statesの情報設定
     //=================================================================
-    private void AddStates()
+    protected override void AddStates()
     {
         //Idle
         stateMachine.AddState(AnimationKey.Idle,

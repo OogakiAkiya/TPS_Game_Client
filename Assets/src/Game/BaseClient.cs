@@ -48,14 +48,15 @@ public class BaseClient : MonoBehaviour
     public int deathAmount { get; private set; } = 0;          //死んだ回数
     public int killAmount { get; private set; } = 0;           //殺した回数
                                                                //UI
-    [SerializeField] Text weapon_UI;
-    [SerializeField] Image weapon_Image;
+    [SerializeField]protected Text weapon_UI;
+    [SerializeField]protected Image weapon_Image;
 
 
     protected void Init()
     {
         animator = this.GetComponent<Animator>();
         damageEffectPref = (GameObject)Resources.Load("blood");
+        AddStates();
 
 
         //攻撃関係
@@ -95,7 +96,7 @@ public class BaseClient : MonoBehaviour
 
         //武器関係
         if (weapon != null) weapon.state.Update();
-        if (weapon_UI) weapon_UI.text = weapon.remainingBullet + "/" + weapon.magazine;
+        //if (weapon_UI) weapon_UI.text = weapon.remainingBullet + "/" + weapon.magazine;
 
 
         //アニメーション変更
@@ -221,6 +222,10 @@ public class BaseClient : MonoBehaviour
         return returnData;
     }
 
+    protected virtual void AddStates()
+    {
+
+    }
 
 
 }

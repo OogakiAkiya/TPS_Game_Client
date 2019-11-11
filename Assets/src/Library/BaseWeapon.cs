@@ -53,6 +53,7 @@ public class BaseWeapon
     {
         if (_type == WEAPONTYPE.MACHINEGUN) return new MachineGun(_action,_animationInit,_animationEnd);
         if (_type == WEAPONTYPE.HANDGUN) return new HandGun(_action, _animationInit, _animationEnd);
+        if (_type == WEAPONTYPE.CLAW) return new HandGun(_action);
 
         return null;
     }
@@ -205,4 +206,73 @@ public class HandGun : BaseWeapon
 }
 
 
+public class Claw : BaseWeapon
+{
+    public Claw(Action _atack)
+    {
+        interval = 1000;
+        power = 10;
+        reloadTime = 1000;      //1秒
+        magazine = 12;
+        remainingBullet = magazine;
+        range = 5;
+        atackMethod = _atack;
+
+        texture = Resources.Load("Weapon_HandGun") as Texture2D;
+        model = Resources.Load("M9") as GameObject;
+
+        type = WEAPONTYPE.HANDGUN;
+
+        state.AddState(WEAPONSTATE.WAIT, () => {
+
+        }, () =>
+        {
+        });
+        state.AddState(WEAPONSTATE.ATACK,
+            () =>
+            {
+                timer.Restart();
+            },
+            () =>
+            {
+                if (timer.ElapsedMilliseconds > interval)
+                {
+                    atackMethod?.Invoke();
+                    timer.Restart();
+                }
+            },
+            () =>
+            {
+                timer.Stop();
+            }
+            );
+        state.AddState(WEAPONSTATE.RELOAD,
+            () =>
+            {
+                atackAnimationInit?.Invoke();
+            },
+            () =>
+            {
+            },
+            () =>
+            {
+            }
+            );
+
+        state.ChangeState(WEAPONSTATE.WAIT);
+    }
+
+    public byte[] GetStatus()
+    {
+        return GetStatus(type);
+    }
+
+    public override void SetTexture(Image _image)
+    {
+        if (!texture) return;
+        _image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+        _image.GetComponent<Transform>().localScale = new Vector3(0.3f, 0.3f, 0.3f);
+    }
+
+}
 

@@ -29,7 +29,8 @@ public enum WEAPONTYPE : int
 {
     BASE,
     MACHINEGUN,
-    HANDGUN
+    HANDGUN,
+    CLAW
 }
 
 public enum WEAPONSTATE : int
