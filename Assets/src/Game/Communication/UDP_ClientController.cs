@@ -17,6 +17,7 @@ public class UDP_ClientController : MonoBehaviour
     [SerializeField] int recvPort = 12343;
     [SerializeField] int sendPort = 12344;
     [SerializeField] string serverIP = "127.0.0.1";
+    [SerializeField] GameObject gameCanvas;
     private ClientController clientController;
     private PlayerController player;
     private uint nowSequence = 0;
@@ -150,6 +151,7 @@ public class UDP_ClientController : MonoBehaviour
             }
 
             //user追加
+            if (!gameCanvas.activeSelf) return;
             if (addUserFlg)
             {
                 Vector3 pos = Convert.GetVector3(recvData, GameHeader.HEADER_SIZE + sizeof(uint)+sizeof(byte));
