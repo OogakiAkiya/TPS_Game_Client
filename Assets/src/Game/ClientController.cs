@@ -10,13 +10,13 @@ public class ClientController : MonoBehaviour
     [SerializeField] GameObject userList;
     [SerializeField] Text ranking;
     GameObject userPrefab;
-    public Client[] clientArray { get; private set; }
+    public BaseClient[] clientArray { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
         userPrefab = (GameObject)Resources.Load("user");
-        clientArray = userList.transform.GetComponentsInChildren<Client>();
+        clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
 
     }
 
@@ -45,14 +45,14 @@ public class ClientController : MonoBehaviour
 
     }
 
-    public Client AddUser(string _userID,Vector3 _pos)
+    public BaseClient AddUser(string _userID,Vector3 _pos)
     {
         var add = Instantiate(userPrefab,userList.transform) as GameObject;
         add.transform.position = _pos;
         add.name = _userID;
-        Client client = add.GetComponent<Client>();
+        BaseClient client = add.GetComponent<BaseClient>();
         client.userID=_userID;
-        clientArray = userList.transform.GetComponentsInChildren<Client>();
+        clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
         return client;
     }
 

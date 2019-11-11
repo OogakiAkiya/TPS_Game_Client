@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class soldierClient : Client
+public class soldierClient : BaseClient
 {
     //当たり判定
     public Camera cam;
@@ -96,7 +96,7 @@ public class soldierClient : Client
         {
             if (hit.collider.tag == "users")
             {
-                hit.collider.GetComponent<Client>().CreateDamageEffect();
+                hit.collider.GetComponent<BaseClient>().CreateDamageEffect();
             }
         }
     }

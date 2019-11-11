@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 
 
-public class Client : MonoBehaviour
+public class BaseClient : MonoBehaviour
 {
     public enum AnimationKey : int
     {
@@ -32,7 +32,7 @@ public class Client : MonoBehaviour
     protected UserBodyData bodyData = new UserBodyData();
 
     public string userID;
-    [SerializeField]protected int hp = 100;
+    [SerializeField] protected int hp = 100;
     List<byte[]> recvDataList = new List<byte[]>();
     protected AnimationKey animationState = AnimationKey.Idle;
     protected Animator animator;
@@ -40,8 +40,8 @@ public class Client : MonoBehaviour
     protected GameObject damageEffectPref;
 
     protected BaseWeapon weapon = null;
-    [SerializeField]protected GameObject effect = null;
-    [SerializeField]protected GameObject weaponAddPosition = null;
+    [SerializeField] protected GameObject effect = null;
+    [SerializeField] protected GameObject weaponAddPosition = null;
     protected GameObject weaponModel;
 
     //Score
@@ -115,7 +115,7 @@ public class Client : MonoBehaviour
         if (weapon != null)
         {
             //武器の変更
-            ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, index),Atack);
+            ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, index), Atack);
             //武器ステータス設定
             weapon.SetStatus(_data, index);
         }
@@ -146,13 +146,13 @@ public class Client : MonoBehaviour
 
     }
 
-    protected void ChangeWeapon(WEAPONTYPE _type,Action _atack,Action _init=null,Action _finish=null)
+    protected void ChangeWeapon(WEAPONTYPE _type, Action _atack, Action _init = null, Action _finish = null)
     {
         //武器が変更されているかチェック
         if (weapon.type == _type) return;
 
         //武器の作成
-        weapon = BaseWeapon.CreateInstance(_type,_atack,_init,_finish);
+        weapon = BaseWeapon.CreateInstance(_type, _atack, _init, _finish);
         if (weapon_Image) weapon.SetTexture(weapon_Image);
 
         //武器のモデル変更
@@ -188,8 +188,8 @@ public class Client : MonoBehaviour
     protected virtual void Atack()
     {
         //攻撃用エフェクトの表示
-        if (effect)effect.SetActive(true);
-        
+        if (effect) effect.SetActive(true);
+
         /*
         if (this.tag != "Player") return;
         //レイの作成

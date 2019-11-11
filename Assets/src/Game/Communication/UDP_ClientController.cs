@@ -139,7 +139,7 @@ public class UDP_ClientController : MonoBehaviour
             bool addUserFlg = true;
             for (int i=0;i< clientController.clientArray.Length; i++)
             {
-                Client client = clientController.clientArray[i];
+                BaseClient client = clientController.clientArray[i];
                 if (client.name.Equals(header.userName.Trim()))
                 {
                     byte[] addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
