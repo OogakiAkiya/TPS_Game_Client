@@ -96,7 +96,7 @@ public class BaseClient : MonoBehaviour
 
         //武器関係
         if (weapon != null) weapon.state.Update();
-        //if (weapon_UI) weapon_UI.text = weapon.remainingBullet + "/" + weapon.magazine;
+        if (weapon_UI) weapon_UI.text = weapon.remainingBullet + "/" + weapon.magazine;
 
 
         //アニメーション変更
