@@ -33,7 +33,8 @@ public class TCP_ClientController : MonoBehaviour
         socket.StartRecvThread();                     //非同期通信Recv
 
         //初期設定用の通信
-        TestSend((byte)GameHeader.ID.INIT);
+        if(PlayerPrefs.GetString(SavedData.UserType)== "Soldier")TestSend((byte)GameHeader.ID.INIT,(byte)GameHeader.UserTypeCode.SOLDIER);
+        if (PlayerPrefs.GetString(SavedData.UserType) == "Maynard") TestSend((byte)GameHeader.ID.INIT, (byte)GameHeader.UserTypeCode.MAYNARD);
 
 
 

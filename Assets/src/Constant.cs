@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public static  class SavedData{
     public static string ServerIP = "ServerIP";
     public static string UserID = "UserID";
+    public static string UserType = "UserType";
 
 }
 
