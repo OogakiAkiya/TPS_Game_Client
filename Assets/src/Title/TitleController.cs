@@ -34,7 +34,12 @@ public class TitleController : MonoBehaviour
         PlayerPrefs.SetString(SavedData.ServerIP, ServerIP.text);
         PlayerPrefs.SetString(SavedData.UserID, UserID.text);
 
-        if(LoginCheck()) SceneManager.LoadScene("Game");
+        if (LoginCheck())
+        {
+            if(PlayerPrefs.GetString(SavedData.UserType) == "Soldier") SceneManager.LoadScene("Game");
+            if(PlayerPrefs.GetString(SavedData.UserType) == "Maynard") SceneManager.LoadScene("Maynard");
+            
+        }
 
     }
 
