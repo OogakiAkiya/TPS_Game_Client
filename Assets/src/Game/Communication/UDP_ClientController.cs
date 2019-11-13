@@ -14,7 +14,6 @@ using UnityEngine;
 public class UDP_ClientController : MonoBehaviour
 {
 
-    [SerializeField] int recvPort = 12343;
     [SerializeField] int sendPort = 12344;
     [SerializeField] string serverIP = "127.0.0.1";
     [SerializeField] GameObject gameCanvas;
@@ -37,7 +36,7 @@ public class UDP_ClientController : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
         //ソケット初期化
-        socket.Init(recvPort, sendPort);
+        socket.Init(sendPort);
 
 
         state.AddState(GameHeader.ID.INIT, () =>

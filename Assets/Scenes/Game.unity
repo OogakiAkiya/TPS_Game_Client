@@ -1198,7 +1198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b243fbb2cb37a48dbbfb1e76ad74fe10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recvPort: 12343
+  recvPort: 49551
   sendPort: 12344
   serverIP: 18.179.13.28
   gameCanvas: {fileID: 136791186}
@@ -1209,11 +1209,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1276040710}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58e4d1bb2a89b402c94f39c1da48dc6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recvPort: 12343
 --- !u!1 &1440562372
 GameObject:
   m_ObjectHideFlags: 0
