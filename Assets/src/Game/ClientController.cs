@@ -34,9 +34,19 @@ public class ClientController : MonoBehaviour
 
         String rankingText="";
         int rank = 1;
-        foreach (var user in dic)
+        int beforeKillAmount = 0;
+        int oldRank = 1;
+        foreach (var user in sorted)
         {
-            rankingText += rank + "位:" + user.Key + ":" + user.Value + "\n";
+            if (beforeKillAmount == user.Value)
+            {
+                rankingText += oldRank + "位:" + user.Key + ":" + user.Value + "\n";
+                rank++;
+                continue;
+            }
+                rankingText += rank + "位:" + user.Key + ":" + user.Value + "\n";
+            beforeKillAmount = user.Value;
+            oldRank = rank;
             if (++rank > 5) break;
         }
         
