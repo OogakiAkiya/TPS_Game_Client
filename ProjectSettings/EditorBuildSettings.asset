@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 184fa0a6714634ac2bb8f53ac2c5a785
+  - enabled: 1
+    path: Assets/Scenes/Maynard.unity
+    guid: 0406fe11ceb81492e85e5441efb27817
   m_configObjects: {}

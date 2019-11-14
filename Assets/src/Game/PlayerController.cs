@@ -8,13 +8,18 @@ public class PlayerController : MonoBehaviour
     private Vector3 oldRotation;
     private Vector2 mouse=new Vector2(0,0);
     private bool shootFlg=false;
+    public GameHeader.UserTypeCode userType;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        if (PlayerPrefs.GetString(SavedData.UserType) == "Soldier") userType = GameHeader.UserTypeCode.SOLDIER;
+        if (PlayerPrefs.GetString(SavedData.UserType) == "Maynard") userType = GameHeader.UserTypeCode.MAYNARD;
+
         if (PlayerPrefs.HasKey(SavedData.UserID)) this.name = PlayerPrefs.GetString(SavedData.UserID);
         oldRotation = transform.localEulerAngles;
+        
     }
 
     // Update is called once per frame

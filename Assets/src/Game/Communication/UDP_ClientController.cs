@@ -94,7 +94,7 @@ public class UDP_ClientController : MonoBehaviour
     {
         List<byte> sendData = new List<byte>();
         GameHeader header = new GameHeader();
-        header.CreateNewData((GameHeader.ID)_id, player.name, (byte)GameHeader.GameCode.BASICDATA);
+        header.CreateNewData((GameHeader.ID)_id, player.userType,player.name, (byte)GameHeader.GameCode.BASICDATA);
         sendData.AddRange(header.GetHeader());
         sendData.AddRange(Convert.GetByteVector2(player.transform.localEulerAngles));
 
@@ -111,8 +111,8 @@ public class UDP_ClientController : MonoBehaviour
         {
 
             if (GameObject.Find(header.userName)) return;
-            var pos = Convert.GetVector3(recvData, header.GetHeaderLength()+ sizeof(uint));
-            var direction = Convert.GetVector3(recvData, sizeof(uint) + sizeof(float)*3 + header.GetHeaderLength());
+            var pos = Convert.GetVector3(recvData, GameHeader.HEADER_SIZE+ sizeof(uint));
+            var direction = Convert.GetVector3(recvData, sizeof(uint) + sizeof(float)*3 + GameHeader.HEADER_SIZE);
             clientController.AddGrenade(header.userName,pos,direction);
             return;
         }
