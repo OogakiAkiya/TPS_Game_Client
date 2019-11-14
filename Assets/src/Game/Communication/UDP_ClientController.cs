@@ -83,7 +83,12 @@ public class UDP_ClientController : MonoBehaviour
 
         //ヘッダー所得
         header.SetHeader(recvData,sizeof(uint));
-
+        if (header.type==0)
+        {
+            var temp = header.type;
+            temp = GameHeader.UserTypeCode.SOLDIER;
+            var n = temp;
+        }
         //データ種類ごとの処理
         state.ChangeState(header.id);
         state.Update();
@@ -157,7 +162,8 @@ public class UDP_ClientController : MonoBehaviour
                 byte[] addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
 
                 //ユーザーの追加
-                clientController.AddUser(header.userName.Trim(), pos).AddRecvData(addData);
+                if(header.type==GameHeader.UserTypeCode.SOLDIER)clientController.AddSoldierUser(header.userName.Trim(), pos).AddRecvData(addData);
+                if (header.type == GameHeader.UserTypeCode.MAYNARD) clientController.AddMaynardUser(header.userName.Trim(), pos).AddRecvData(addData);
 
             }
 

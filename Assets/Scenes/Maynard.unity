@@ -1986,6 +1986,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7741124227939780941, guid: 10ec3e662414c45c5b505fbe4c22b8d0, type: 3}
+    - {fileID: 2287879411628998949, guid: 10ec3e662414c45c5b505fbe4c22b8d0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 10ec3e662414c45c5b505fbe4c22b8d0, type: 3}
 --- !u!1001 &2933297105633891990
 PrefabInstance:
@@ -2197,3 +2198,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e23ca5f2f4b874fd1bdab32d467e3833, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  yMin: -60
+  yMax: 30
+  userType: 0

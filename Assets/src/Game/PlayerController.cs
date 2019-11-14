@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private float yMin = -60;
+    [SerializeField] private float yMax = 30;
+
     private Vector3 oldRotation;
     private Vector2 mouse=new Vector2(0,0);
     private bool shootFlg=false;
@@ -28,8 +31,8 @@ public class PlayerController : MonoBehaviour
         //視点移動
         float x = Input.GetAxis("Mouse X");
         float y = Input.GetAxis("Mouse Y");
-        if (mouse.y + y > 30) y = 0;
-        if (mouse.y + y < -60) y = 0;
+        if (mouse.y + y > yMax) y = 0;
+        if (mouse.y + y < yMin) y = 0;
 
         mouse += new Vector2(x, y);
         this.transform.rotation = Quaternion.Euler(new Vector3(-mouse.y, mouse.x,0));

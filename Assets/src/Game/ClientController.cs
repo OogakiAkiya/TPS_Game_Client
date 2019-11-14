@@ -9,13 +9,17 @@ public class ClientController : MonoBehaviour
 {
     [SerializeField] GameObject userList;
     [SerializeField] Text ranking;
-    GameObject userPrefab;
+    GameObject soldierPrefab;
+    GameObject maynardPrefab;
+
     public BaseClient[] clientArray { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
-        userPrefab = (GameObject)Resources.Load("user");
+        soldierPrefab = (GameObject)Resources.Load("Soldier");
+        maynardPrefab = (GameObject)Resources.Load("Maynard");
+
         clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
 
     }
@@ -55,9 +59,9 @@ public class ClientController : MonoBehaviour
 
     }
 
-    public BaseClient AddUser(string _userID,Vector3 _pos)
+    public BaseClient AddMaynardUser(string _userID,Vector3 _pos)
     {
-        var add = Instantiate(userPrefab,userList.transform) as GameObject;
+        var add = Instantiate(maynardPrefab,userList.transform) as GameObject;
         add.transform.position = _pos;
         add.name = _userID;
         BaseClient client = add.GetComponent<BaseClient>();
@@ -65,6 +69,19 @@ public class ClientController : MonoBehaviour
         clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
         return client;
     }
+
+    public BaseClient AddSoldierUser(string _userID, Vector3 _pos)
+    {
+        var add = Instantiate(soldierPrefab, userList.transform) as GameObject;
+        add.transform.position = _pos;
+        add.name = _userID;
+        BaseClient client = add.GetComponent<BaseClient>();
+        client.userID = _userID;
+        clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
+        return client;
+    }
+
+
 
     public void AddGrenade(string _name,Vector3 _pos,Vector3 _direction)
     {
