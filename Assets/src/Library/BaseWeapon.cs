@@ -53,7 +53,7 @@ public class BaseWeapon
     {
         if (_type == WEAPONTYPE.MACHINEGUN) return new MachineGun(_action,_animationInit,_animationEnd);
         if (_type == WEAPONTYPE.HANDGUN) return new HandGun(_action, _animationInit, _animationEnd);
-        if (_type == WEAPONTYPE.CLAW) return new HandGun(_action);
+        if (_type == WEAPONTYPE.CLAW) return new Claw(_action);
 
         return null;
     }
@@ -218,10 +218,10 @@ public class Claw : BaseWeapon
         range = 5;
         atackMethod = _atack;
 
-        texture = Resources.Load("Weapon_HandGun") as Texture2D;
+        texture = Resources.Load("Claw") as Texture2D;
         model = Resources.Load("M9") as GameObject;
 
-        type = WEAPONTYPE.HANDGUN;
+        type = WEAPONTYPE.CLAW;
 
         state.AddState(WEAPONSTATE.WAIT, () => {
 
@@ -271,7 +271,7 @@ public class Claw : BaseWeapon
     {
         if (!texture) return;
         _image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
-        _image.GetComponent<Transform>().localScale = new Vector3(0.3f, 0.3f, 0.3f);
+        _image.GetComponent<Transform>().localScale = new Vector3(0.25f, 0.25f, 0.25f);
     }
 
 }
