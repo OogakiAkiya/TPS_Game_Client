@@ -42,5 +42,12 @@ public enum WEAPONSTATE : int
 
 }
 
+public static class Tags
+{
+    public static readonly string PLAYER = "Player";
+    public static readonly string SOLDIER = "Soldier";
+    public static readonly string MONSTER = "Monster";
+}
+
 
 

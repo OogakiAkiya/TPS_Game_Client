@@ -6,6 +6,7 @@ public class MaynardClient : BaseClient
 {
     //自身のモデル
     private GameObject modelVisual;
+    [SerializeField] Vector3 attackRange = new Vector3(0.55f, 0.3f, 0.55f);
 
     // Start is called before the first frame update
     void Start()
@@ -29,13 +30,13 @@ public class MaynardClient : BaseClient
         this.transform.position = bodyData.position;
         animationState = (AnimationKey)bodyData.animationKey;
         hp = bodyData.hp;
-        if (weapon != null)
-        {
-            //武器の変更
-            ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, index), Atack);
-            //武器ステータス設定
-            weapon.SetStatus(_data, index);
-        }
+
+        if (weapon == null) return;
+        //武器の変更
+        ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, index), Atack);
+        //武器ステータス設定
+        weapon.SetStatus(_data, index);
+
     }
     protected override void SetCheckStatus(byte[] _data)
     {
@@ -43,29 +44,26 @@ public class MaynardClient : BaseClient
     }
     public override void CreateDamageEffect()
     {
-        if (damageEffectPref)
-        {
+        if (!damageEffectPref) return;
             GameObject add = Instantiate(damageEffectPref) as GameObject;
             add.transform.parent = this.transform;
             Vector3 pos = this.transform.position;
             pos += new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(0.8f, 1.5f), 0.0f);
             add.transform.position = pos;
-        }
     }
+
     protected override void Atack()
     {
-        if (effect)
+        if (effect) effect.SetActive(true);
+
+        Vector3 vector = this.transform.position + this.transform.forward * 0.3f + this.transform.up;
+        Collider[] colliders = Physics.OverlapBox(vector, attackRange, this.transform.localRotation);
+
+        for(int i = 0; i < colliders.Length; i++)
         {
-            effect.SetActive(true);
+            if (colliders[i].tag == Tags.SOLDIER) colliders[i].GetComponent<BaseClient>().CreateDamageEffect();
         }
 
-        //if (this.tag != "Player") return;
-        /*
-        if (hit.collider.tag == "users")
-        {
-            hit.collider.GetComponent<BaseClient>().CreateDamageEffect();
-        }
-        */
     }
 
     protected override void AddStates()

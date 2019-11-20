@@ -23,7 +23,7 @@ public class TCP_ClientController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        playerController = GameObject.FindGameObjectWithTag(Tags.PLAYER).GetComponent<PlayerController>();
 
 
         if (PlayerPrefs.HasKey(SavedData.ServerIP))ipOrHost= PlayerPrefs.GetString(SavedData.ServerIP);

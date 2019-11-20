@@ -1667,8 +1667,8 @@ GameObject:
   - component: {fileID: 5002371271585318435}
   - component: {fileID: 5002371271585318444}
   m_Layer: 0
-  m_Name: user
-  m_TagString: users
+  m_Name: Soldier
+  m_TagString: Soldier
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1741,9 +1741,6 @@ MonoBehaviour:
   weaponAddPosition: {fileID: 5002371270388655823}
   weapon_UI: {fileID: 0}
   weapon_Image: {fileID: 0}
-  cam: {fileID: 0}
-  imageRect: {fileID: 0}
-  canvas: {fileID: 0}
   hipRotation: {x: 0, y: 0, z: 0}
 --- !u!1 &5002371270388655889
 GameObject:

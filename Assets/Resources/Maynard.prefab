@@ -2100,7 +2100,7 @@ GameObject:
   - component: {fileID: 2287879411628998949}
   m_Layer: 0
   m_Name: Maynard
-  m_TagString: users
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2172,6 +2172,7 @@ MonoBehaviour:
   weaponAddPosition: {fileID: 0}
   weapon_UI: {fileID: 0}
   weapon_Image: {fileID: 0}
+  attackRange: {x: 0.55, y: 0.3, z: 0.55}
 --- !u!1 &9175178530735414183
 GameObject:
   m_ObjectHideFlags: 0

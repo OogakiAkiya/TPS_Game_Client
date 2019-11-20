@@ -50,7 +50,7 @@ public class soldierClient : BaseClient
 
     protected override void SetStatus(byte[] _data)
     {
-        if (this.tag!="Player") base.SetStatus(_data);
+        if (this.tag!=Tags.PLAYER) base.SetStatus(_data);
         int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
         this.transform.position = bodyData.position;
         animationState = (AnimationKey)bodyData.animationKey;
@@ -96,7 +96,7 @@ public class soldierClient : BaseClient
         RaycastHit hit = new RaycastHit();
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.collider.tag == "users")
+            if (hit.collider.tag == Tags.MONSTER)
             {
                 hit.collider.GetComponent<BaseClient>().CreateDamageEffect();
             }
