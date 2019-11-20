@@ -33,7 +33,7 @@ public class UDP_ClientController : MonoBehaviour
 
 
         clientController = this.GetComponent<ClientController>();
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        player = GameObject.FindGameObjectWithTag(Tags.PLAYER).GetComponent<PlayerController>();
 
         //ソケット初期化
         socket.Init(sendPort);
