@@ -1101,8 +1101,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e23ca5f2f4b874fd1bdab32d467e3833, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  yMin: -60
-  yMax: 30
+  yMin: -10
+  yMax: 20
   userType: 0
 --- !u!136 &1201285787
 CapsuleCollider:
@@ -1134,9 +1134,9 @@ MonoBehaviour:
   hp: 100
   effect: {fileID: 0}
   weaponAddPosition: {fileID: 0}
-  weapon_UI: {fileID: 0}
-  weapon_Image: {fileID: 0}
-  attackRange: {x: 0.55, y: 0.3, z: 0.55}
+  weapon_UI: {fileID: 1062889701}
+  weapon_Image: {fileID: 626669920}
+  attackRange: {x: 1.4, y: 1, z: 1.1}
 --- !u!1 &1230709951
 GameObject:
   m_ObjectHideFlags: 0
@@ -1207,13 +1207,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1241131584}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.61, y: 1.54, z: -1.06}
+  m_LocalRotation: {x: 0.095845714, y: 0, z: 0, w: 0.99539626}
+  m_LocalPosition: {x: 0.24, y: 1.8, z: -1.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1201285784}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 11, y: 0, z: 0}
 --- !u!81 &1241131586
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1950,6 +1950,18 @@ PrefabInstance:
     - target: {fileID: 400074, guid: 69f031487add4442284c3fa0968ac0f6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400074, guid: 69f031487add4442284c3fa0968ac0f6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400074, guid: 69f031487add4442284c3fa0968ac0f6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400074, guid: 69f031487add4442284c3fa0968ac0f6, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 69f031487add4442284c3fa0968ac0f6, type: 3}
       propertyPath: m_Controller

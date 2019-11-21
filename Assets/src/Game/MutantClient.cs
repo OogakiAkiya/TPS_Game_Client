@@ -56,7 +56,7 @@ public class MutantClient : BaseClient
     {
         if (effect) effect.SetActive(true);
 
-        Vector3 vector = this.transform.position + this.transform.forward * 0.3f + this.transform.up;
+        Vector3 vector = this.transform.position + this.transform.forward * 1f + this.transform.up;
         Collider[] colliders = Physics.OverlapBox(vector, attackRange, this.transform.localRotation);
 
         for (int i = 0; i < colliders.Length; i++)
