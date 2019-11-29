@@ -26,6 +26,7 @@ public class MaynardClient : BaseClient
 
     protected override void SetStatus(byte[] _data)
     {
+        if (this.tag != Tags.PLAYER) base.SetStatus(_data);
         int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
         this.transform.position = bodyData.position;
         animationState = (AnimationKey)bodyData.animationKey;
