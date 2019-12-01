@@ -163,7 +163,7 @@ public class UDP_ClientController : MonoBehaviour
 
                 //ユーザーの追加
                 if(header.type==GameHeader.UserTypeCode.SOLDIER)clientController.AddSoldierUser(header.userName.Trim(), pos).AddRecvData(addData);
-                if (header.type == GameHeader.UserTypeCode.MAYNARD) clientController.AddMaynardUser(header.userName.Trim(), pos).AddRecvData(addData);
+                if (header.type == GameHeader.UserTypeCode.MONSTER) clientController.AddMaynardUser(header.userName.Trim(), pos).AddRecvData(addData);
 
             }
 

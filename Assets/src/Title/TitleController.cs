@@ -38,12 +38,12 @@ public class TitleController : MonoBehaviour
         
         //ユーザータイプ判別
         string typeName = PlayerPrefs.GetString(SavedData.UserType);
-        if (typeName == "Maynard") userType = GameHeader.UserTypeCode.MAYNARD;
+        if (typeName == "Maynard") userType = GameHeader.UserTypeCode.MONSTER;
 
         if (LoginCheck())
         {
             if(userType==GameHeader.UserTypeCode.SOLDIER) SceneManager.LoadScene("Game");
-            if(userType==GameHeader.UserTypeCode.MAYNARD) SceneManager.LoadScene("Maynard");
+            if(userType==GameHeader.UserTypeCode.MONSTER) SceneManager.LoadScene("Maynard");
             
         }
 

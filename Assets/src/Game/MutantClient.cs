@@ -7,15 +7,14 @@ public class MutantClient : BaseClient
     //自身のモデル
     private GameObject modelVisual;
     [SerializeField] Vector3 attackRange = new Vector3(0.55f, 0.3f, 0.55f);
-
+    private string parentTag;
     // Start is called before the first frame update
     void Start()
     {
         base.Init();
         stateMachine.ChangeState(AnimationKey.Idle);
-
         modelVisual = transform.Find("Mutant:Hips").gameObject;
-
+        parentTag = this.transform.parent.tag;
     }
 
     // Update is called once per frame
@@ -26,7 +25,7 @@ public class MutantClient : BaseClient
 
     protected override void SetStatus(byte[] _data)
     {
-        if (this.tag != Tags.PLAYER) base.SetStatus(_data);
+        if(parentTag!=Tags.PLAYER) base.SetStatus(_data);
         int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
         this.transform.position = bodyData.position;
         animationState = (AnimationKey)bodyData.animationKey;
@@ -41,7 +40,7 @@ public class MutantClient : BaseClient
     }
     protected override void SetCheckStatus(byte[] _data)
     {
-        SetStatus(_data);
+        if (parentTag != Tags.PLAYER) base.SetStatus(_data);
     }
     public override void CreateDamageEffect()
     {

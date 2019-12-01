@@ -34,7 +34,7 @@ public class TCP_ClientController : MonoBehaviour
 
         //初期設定用の通信
         if(PlayerPrefs.GetString(SavedData.UserType)== "Soldier")TestSend((byte)GameHeader.ID.INIT,(byte)GameHeader.UserTypeCode.SOLDIER);
-        if (PlayerPrefs.GetString(SavedData.UserType) == "Maynard") TestSend((byte)GameHeader.ID.INIT, (byte)GameHeader.UserTypeCode.MAYNARD);
+        if (PlayerPrefs.GetString(SavedData.UserType) == "Maynard") TestSend((byte)GameHeader.ID.INIT, (byte)GameHeader.UserTypeCode.MONSTER);
 
 
 

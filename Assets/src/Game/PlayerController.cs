@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         if (PlayerPrefs.GetString(SavedData.UserType) == "Soldier") userType = GameHeader.UserTypeCode.SOLDIER;
-        if (PlayerPrefs.GetString(SavedData.UserType) == "Maynard") userType = GameHeader.UserTypeCode.MAYNARD;
+        if (PlayerPrefs.GetString(SavedData.UserType) == "Maynard") userType = GameHeader.UserTypeCode.MONSTER;
 
         if (PlayerPrefs.HasKey(SavedData.UserID)) this.name = PlayerPrefs.GetString(SavedData.UserID);
         oldRotation = transform.localEulerAngles;
