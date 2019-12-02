@@ -59,11 +59,12 @@ public class MaynardClient : BaseClient
         if (effect) effect.SetActive(true);
 
         Vector3 vector = this.transform.position + this.transform.forward * 0.3f + this.transform.up;
-        Collider[] colliders = Physics.OverlapBox(vector, attackRange, this.transform.localRotation);
+        Collider[] colliders = Physics.OverlapBox(vector, attackRange, this.transform.localRotation, 1 << 9);
 
         for(int i = 0; i < colliders.Length; i++)
         {
-            if (colliders[i].tag == Tags.SOLDIER) colliders[i].GetComponent<BaseClient>().CreateDamageEffect();
+            //Layer管理
+            colliders[i].GetComponent<BaseClient>().CreateDamageEffect();
         }
 
     }

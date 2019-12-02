@@ -101,7 +101,7 @@ public class UDP_ClientController : MonoBehaviour
         GameHeader header = new GameHeader();
         header.CreateNewData((GameHeader.ID)_id, player.userType,player.name, (byte)GameHeader.GameCode.BASICDATA);
         sendData.AddRange(header.GetHeader());
-        sendData.AddRange(Convert.GetByteVector2(player.transform.localEulerAngles));
+        sendData.AddRange(Convert.GetByteVector2(player.current.transform.localEulerAngles));
 
         socket.Send(sendData.ToArray(), serverIP, sendPort);
 
@@ -128,7 +128,7 @@ public class UDP_ClientController : MonoBehaviour
 
             foreach (var obj in clientController.clientArray)
             {
-                if (obj.name.Equals(header.userName.Trim()))
+                if (obj.userID.Equals(header.userName.Trim()))
                 {
                     byte[] addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
                     obj.AddRecvData(addData);
@@ -144,7 +144,7 @@ public class UDP_ClientController : MonoBehaviour
             for (int i=0;i< clientController.clientArray.Length; i++)
             {
                 BaseClient client = clientController.clientArray[i];
-                if (client.name.Equals(header.userName.Trim()))
+                if (client.userID.Equals(header.userName.Trim()))
                 {
                     byte[] addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
                     client.AddRecvData(addData);

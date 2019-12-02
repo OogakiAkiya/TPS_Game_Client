@@ -18,10 +18,10 @@ public class ClientController : MonoBehaviour
     void Start()
     {
         soldierPrefab = (GameObject)Resources.Load("Soldier");
-        maynardPrefab = (GameObject)Resources.Load("Maynard");
+        maynardPrefab = (GameObject)Resources.Load("Monster_U");
 
-        clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
-
+        //clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
+        UpdateUserArray();
     }
 
     // Update is called once per frame
@@ -32,7 +32,7 @@ public class ClientController : MonoBehaviour
         Dictionary<string, int> dic = new Dictionary<string, int>();
         foreach (var user in clientArray)
         {
-            dic.Add(user.name, user.killAmount);
+            dic.Add(user.userID, user.killAmount);
         }
         var sorted = dic.OrderByDescending((x) => x.Value);     //降順ソート
 
@@ -64,9 +64,10 @@ public class ClientController : MonoBehaviour
         var add = Instantiate(maynardPrefab,userList.transform) as GameObject;
         add.transform.position = _pos;
         add.name = _userID;
-        BaseClient client = add.GetComponent<BaseClient>();
+        BaseClient client = add.GetComponentInChildren<BaseClient>();
         client.userID=_userID;
-        clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
+        //clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
+        UpdateUserArray();
         return client;
     }
 
@@ -77,7 +78,9 @@ public class ClientController : MonoBehaviour
         add.name = _userID;
         BaseClient client = add.GetComponent<BaseClient>();
         client.userID = _userID;
-        clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
+        //clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
+        UpdateUserArray();
+
         return client;
     }
 
@@ -89,5 +92,22 @@ public class ClientController : MonoBehaviour
         bom.name = _name;
         bom.transform.position = _pos;
         bom.GetComponent<Grenade>().SetDirection(_direction);
+    }
+
+    public void UpdateUserArray()
+    {
+        List<BaseClient> list = new List<BaseClient>();
+        GameObject[] users = GameObject.FindGameObjectsWithTag("users");
+        for (int i = 0; i < users.Length; i++)
+        {
+            if (users[i].activeSelf)
+            {
+                BaseClient add= users[i].GetComponent<BaseClient>();
+                if (!add) continue;
+                list.Add(add);
+            }
+        }
+        clientArray = list.ToArray();
+
     }
 }

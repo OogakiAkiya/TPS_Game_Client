@@ -50,7 +50,7 @@ public class soldierClient : BaseClient
 
     protected override void SetStatus(byte[] _data)
     {
-        if (this.tag!=Tags.PLAYER) base.SetStatus(_data);
+        if (this.transform.parent.tag!=Tags.PLAYER) base.SetStatus(_data);
         int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
         this.transform.position = bodyData.position;
         animationState = (AnimationKey)bodyData.animationKey;
@@ -65,7 +65,7 @@ public class soldierClient : BaseClient
     }
     protected override void SetCheckStatus(byte[] _data)
     {
-        SetStatus(_data);
+        if (this.transform.parent.tag != Tags.PLAYER) SetStatus(_data);
     }
 
     public override void CreateDamageEffect()
@@ -94,12 +94,12 @@ public class soldierClient : BaseClient
         //Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow,10f);
 
         RaycastHit hit = new RaycastHit();
-        if (Physics.Raycast(ray, out hit))
-        {
-            if (hit.collider.tag == Tags.MONSTER)
-            {
-                hit.collider.GetComponent<BaseClient>().CreateDamageEffect();
-            }
+
+        //Layerで管理
+        if (Physics.Raycast(ray, out hit,weapon.range,1 << 10))
+        {   
+            hit.collider.GetComponent<BaseClient>().CreateDamageEffect();
+
         }
     }
 
