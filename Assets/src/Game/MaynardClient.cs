@@ -8,6 +8,7 @@ public class MaynardClient : BaseClient
     private GameObject modelVisual;
     [SerializeField] Vector3 attackRange = new Vector3(0.55f, 0.3f, 0.55f);
     private string parentTag;
+    private MonsterType type = MonsterType.MAYNARD;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,24 +26,52 @@ public class MaynardClient : BaseClient
         base.update();   
     }
 
-    protected override void SetStatus(byte[] _data)
+    protected override void SetStatus(byte[] _data,int _index=0)
     {
-        if (parentTag != Tags.PLAYER) base.SetStatus(_data);
-        int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
+        if (type != (MonsterType)_data[GameHeader.HEADER_SIZE])
+        {
+            ChangeModel((MonsterType)_data[GameHeader.HEADER_SIZE], _data);
+            return;
+        }
+
+        if (parentTag != Tags.PLAYER) base.SetStatus(_data,sizeof(byte));
+        int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE+sizeof(byte));
         this.transform.position = bodyData.position;
         animationState = (AnimationKey)bodyData.animationKey;
         hp = bodyData.hp;
-
         if (weapon == null) return;
         //武器の変更
         ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, index), Atack);
         //武器ステータス設定
         weapon.SetStatus(_data, index);
+    }
+
+    protected void ChangeModel(MonsterType _type, byte[] _data)
+    {
+        this.gameObject.SetActive(false);
+        int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE + sizeof(byte));
+        BaseClient obj = this.transform.parent.GetComponent<ClientParent>().ChangeModel(_type).GetComponent<BaseClient>();
+
+        //座標を直接代入するのはオブジェクトが変更されたとき違和感をなくす為
+        obj.transform.position = bodyData.position;
+        obj.transform.rotation = Quaternion.Euler(bodyData.rotetion);
+
+        
+        obj.Init(bodyData);                         //オブジェクトのボディーデータを引き継がせる
+        obj.AddRecvData(_data);                     //現在のレシーブデータを変更したモデルデータに渡す
+        obj.userID = this.userID;
+        if(parentTag == Tags.PLAYER) GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().current = obj;
+        GameObject.FindGameObjectWithTag("Server").GetComponent<ClientController>().UpdateUserArray();
+
 
     }
-    protected override void SetCheckStatus(byte[] _data)
+
+    protected override void SetCheckStatus(byte[] _data, int _index=0)
     {
-        if (parentTag != Tags.PLAYER) base.SetStatus(_data);
+        if (parentTag != Tags.PLAYER)
+        {
+            base.SetStatus(_data, sizeof(byte));
+        }
     }
     public override void CreateDamageEffect()
     {

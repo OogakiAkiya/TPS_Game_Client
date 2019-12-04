@@ -7,6 +7,7 @@ TagManager:
   - users
   - Soldier
   - Monster
+  - Server
   layers:
   - Default
   - TransparentFX

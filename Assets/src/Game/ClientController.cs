@@ -27,7 +27,6 @@ public class ClientController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         //ランキング表示
         Dictionary<string, int> dic = new Dictionary<string, int>();
         foreach (var user in clientArray)

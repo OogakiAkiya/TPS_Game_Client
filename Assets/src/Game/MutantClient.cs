@@ -23,10 +23,11 @@ public class MutantClient : BaseClient
         base.update();
     }
 
-    protected override void SetStatus(byte[] _data)
+    protected override void SetStatus(byte[] _data, int _index=0)
     {
-        if(parentTag!=Tags.PLAYER) base.SetStatus(_data);
-        int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
+        
+        if(parentTag!=Tags.PLAYER) base.SetStatus(_data,sizeof(byte));
+        int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE+sizeof(byte));
         this.transform.position = bodyData.position;
         animationState = (AnimationKey)bodyData.animationKey;
         hp = bodyData.hp;
@@ -36,11 +37,12 @@ public class MutantClient : BaseClient
         ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, index), Atack);
         //武器ステータス設定
         weapon.SetStatus(_data, index);
+        
 
     }
-    protected override void SetCheckStatus(byte[] _data)
+    protected override void SetCheckStatus(byte[] _data, int _index=0)
     {
-        if (parentTag != Tags.PLAYER) base.SetStatus(_data);
+        if (parentTag != Tags.PLAYER) base.SetStatus(_data,sizeof(byte));
     }
     public override void CreateDamageEffect()
     {

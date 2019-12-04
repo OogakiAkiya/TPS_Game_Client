@@ -48,7 +48,7 @@ public class soldierClient : BaseClient
 
     }
 
-    protected override void SetStatus(byte[] _data)
+    protected override void SetStatus(byte[] _data, int _index=0)
     {
         if (this.transform.parent.tag!=Tags.PLAYER) base.SetStatus(_data);
         int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
@@ -63,7 +63,7 @@ public class soldierClient : BaseClient
             weapon.SetStatus(_data, index);
         }
     }
-    protected override void SetCheckStatus(byte[] _data)
+    protected override void SetCheckStatus(byte[] _data, int _index=0)
     {
         if (this.transform.parent.tag != Tags.PLAYER) SetStatus(_data);
     }

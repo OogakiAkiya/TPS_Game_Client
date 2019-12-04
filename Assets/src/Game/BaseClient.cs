@@ -106,9 +106,9 @@ public class BaseClient : MonoBehaviour
 
     }
 
-    protected virtual void SetStatus(byte[] _data)
+    protected virtual void SetStatus(byte[] _data,int _index=0)
     {
-        int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
+        int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE+_index);
         this.transform.position = bodyData.position;
         this.transform.rotation = Quaternion.Euler(bodyData.rotetion);
         animationState = (AnimationKey)bodyData.animationKey;
@@ -123,9 +123,9 @@ public class BaseClient : MonoBehaviour
 
     }
 
-    protected virtual void SetCheckStatus(byte[] _data)
+    protected virtual void SetCheckStatus(byte[] _data,int _index=0)
     {
-        int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE);
+        int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE+_index);
         this.transform.position = bodyData.position;
         this.transform.rotation = Quaternion.Euler(bodyData.rotetion);
         animationState = (AnimationKey)bodyData.animationKey;
@@ -172,6 +172,11 @@ public class BaseClient : MonoBehaviour
 
         effect = weaponModel.transform.Find("Effect").gameObject;
         effect.SetActive(false);
+    }
+
+    public void Init(UserBodyData _data)
+    {
+        bodyData = _data;
     }
 
     public virtual void CreateDamageEffect()

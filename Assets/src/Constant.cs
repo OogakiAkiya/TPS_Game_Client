@@ -49,5 +49,8 @@ public static class Tags
     public static readonly string MONSTER = "Monster";
 }
 
-
-
+public enum MonsterType : byte
+{
+    MAYNARD = 0x0001,
+    MUTANT = 0x0002
+}
