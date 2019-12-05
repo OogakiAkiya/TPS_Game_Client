@@ -8,11 +8,13 @@ public class MutantClient : BaseClient
     private GameObject modelVisual;
     [SerializeField] Vector3 attackRange = new Vector3(0.55f, 0.3f, 0.55f);
     private string parentTag;
+    private MonsterType type = MonsterType.MUTANT;
+
     // Start is called before the first frame update
     void Start()
     {
         base.Init();
-        stateMachine.ChangeState(AnimationKey.Idle);
+        //stateMachine.ChangeState(AnimationKey.Idle);
         modelVisual = transform.Find("Mutant:Hips").gameObject;
         parentTag = this.transform.parent.tag;
     }
@@ -25,11 +27,17 @@ public class MutantClient : BaseClient
 
     protected override void SetStatus(byte[] _data, int _index=0)
     {
-        
-        if(parentTag!=Tags.PLAYER) base.SetStatus(_data,sizeof(byte));
+        if (type != (MonsterType)_data[GameHeader.HEADER_SIZE])
+        {
+            ChangeModel((MonsterType)_data[GameHeader.HEADER_SIZE], _data);
+            return;
+        }
+
+        if (parentTag!=Tags.PLAYER) base.SetStatus(_data,sizeof(byte));
         int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE+sizeof(byte));
         this.transform.position = bodyData.position;
         animationState = (AnimationKey)bodyData.animationKey;
+
         hp = bodyData.hp;
 
         if (weapon == null) return;
@@ -44,6 +52,30 @@ public class MutantClient : BaseClient
     {
         if (parentTag != Tags.PLAYER) base.SetStatus(_data,sizeof(byte));
     }
+
+
+    protected void ChangeModel(MonsterType _type, byte[] _data)
+    {
+        this.animationState = AnimationKey.Idle;
+        this.stateMachine.ChangeState(animationState);
+
+        this.gameObject.SetActive(false);
+        int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE + sizeof(byte));
+        BaseClient obj = this.transform.parent.GetComponent<ClientParent>().ChangeModel(_type).GetComponent<BaseClient>();
+
+        //座標を直接代入するのはオブジェクトが変更されたとき違和感をなくす為
+        obj.transform.position = bodyData.position;
+        obj.transform.rotation = Quaternion.Euler(bodyData.rotetion);
+
+
+        obj.Init(bodyData, animationState);                         //オブジェクトのボディーデータを引き継がせる
+        obj.AddRecvData(_data);                     //現在のレシーブデータを変更したモデルデータに渡す
+        obj.userID = this.userID;
+        if (parentTag == Tags.PLAYER) GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().current = obj;
+        GameObject.FindGameObjectWithTag("Server").GetComponent<ClientController>().UpdateUserArray();
+    }
+
+
     public override void CreateDamageEffect()
     {
         if (!damageEffectPref) return;

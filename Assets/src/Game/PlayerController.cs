@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {        
         //視点移動
         float x = Input.GetAxis("Mouse X");
         float y = Input.GetAxis("Mouse Y");
@@ -42,7 +42,6 @@ public class PlayerController : MonoBehaviour
 
         mouse += new Vector2(x, y);
         current.transform.rotation = Quaternion.Euler(new Vector3(-mouse.y, mouse.x,0));
-
     }
 
     //キー入力を返す

@@ -51,6 +51,8 @@ public class BaseClient : MonoBehaviour
     [SerializeField]protected Text weapon_UI;
     [SerializeField]protected Image weapon_Image;
 
+    public AnimationKey current;
+
 
     protected void Init()
     {
@@ -58,11 +60,6 @@ public class BaseClient : MonoBehaviour
         damageEffectPref = (GameObject)Resources.Load("blood");
         AddStates();
 
-
-        //攻撃関係
-        //if (effect!=null)effect.SetActive(false);
-
-        //weapon = new MachineGun(Shoot);
         weapon = new BaseWeapon();
         if (weapon_Image) weapon.SetTexture(weapon_Image);
 
@@ -70,6 +67,7 @@ public class BaseClient : MonoBehaviour
     }
     protected void update()
     {
+        current = stateMachine.currentKey;
         //受信データの代入
         while (recvDataList.Count > 0)
         {
@@ -100,6 +98,7 @@ public class BaseClient : MonoBehaviour
 
 
         //アニメーション変更
+        //モデルが変わったときにここが通らない
         if (stateMachine.currentKey != animationState) stateMachine.ChangeState(animationState);
 
         //hip.rotation = new Quaternion(hip.rotation.x + initRote.x, hip.rotation.y + initRote.y, hip.rotation.z + initRote.z, hip.rotation.w);
@@ -174,11 +173,19 @@ public class BaseClient : MonoBehaviour
         effect.SetActive(false);
     }
 
+    /*
     public void Init(UserBodyData _data)
     {
         bodyData = _data;
     }
+    */
 
+    public void Init(UserBodyData _data, AnimationKey _key)
+    {
+        bodyData = _data;
+        animationState = _key;
+    }
+    
     public virtual void CreateDamageEffect()
     {
         if (damageEffectPref)

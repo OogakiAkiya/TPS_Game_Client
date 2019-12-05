@@ -13,7 +13,7 @@ public class MaynardClient : BaseClient
     void Start()
     {
         base.Init();
-        stateMachine.ChangeState(AnimationKey.Idle);
+        //stateMachine.ChangeState(AnimationKey.Idle);
 
         modelVisual = transform.Find("Ch30").gameObject;
         parentTag = this.transform.parent.tag;
@@ -48,6 +48,8 @@ public class MaynardClient : BaseClient
 
     protected void ChangeModel(MonsterType _type, byte[] _data)
     {
+        this.animationState = AnimationKey.Idle;
+        this.stateMachine.ChangeState(animationState);
         this.gameObject.SetActive(false);
         int index = bodyData.Deserialize(_data, GameHeader.HEADER_SIZE + sizeof(byte));
         BaseClient obj = this.transform.parent.GetComponent<ClientParent>().ChangeModel(_type).GetComponent<BaseClient>();
@@ -57,13 +59,11 @@ public class MaynardClient : BaseClient
         obj.transform.rotation = Quaternion.Euler(bodyData.rotetion);
 
         
-        obj.Init(bodyData);                         //オブジェクトのボディーデータを引き継がせる
+        obj.Init(bodyData,animationState);                         //オブジェクトのボディーデータを引き継がせる
         obj.AddRecvData(_data);                     //現在のレシーブデータを変更したモデルデータに渡す
         obj.userID = this.userID;
         if(parentTag == Tags.PLAYER) GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().current = obj;
         GameObject.FindGameObjectWithTag("Server").GetComponent<ClientController>().UpdateUserArray();
-
-
     }
 
     protected override void SetCheckStatus(byte[] _data, int _index=0)
