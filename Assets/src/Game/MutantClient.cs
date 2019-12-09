@@ -1,15 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MutantClient : BaseClient
 {
     //自身のモデル
     private GameObject modelVisual;
     [SerializeField] Vector3 attackRange = new Vector3(0.55f, 0.3f, 0.55f);
+    [SerializeField] public Slider slider = null;
     private string parentTag;
     private MonsterType type = MonsterType.MUTANT;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +41,11 @@ public class MutantClient : BaseClient
 
         hp = bodyData.hp;
 
+        
+        //changeConter
+        if(slider)slider.value=Convert.IntConversion(_data, index);
+        index += 4;
+        
         if (weapon == null) return;
         //武器の変更
         ChangeWeapon((WEAPONTYPE)System.BitConverter.ToInt32(_data, index), Atack);

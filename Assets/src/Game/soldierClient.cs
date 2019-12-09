@@ -91,7 +91,7 @@ public class soldierClient : BaseClient
         //レイの作成
         Ray ray = cam.ScreenPointToRay(GetUIScreenPos(imageRect));
         //レイの可視化
-        //Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow,10f);
+        //Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow,100f);
 
         RaycastHit hit = new RaycastHit();
 
