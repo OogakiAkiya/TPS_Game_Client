@@ -66,6 +66,12 @@ public class TCP_ClientController : MonoBehaviour
             var recvData=socket.GetRecvData();
             GameHeader header = new GameHeader();
             header.SetHeader(recvData);
+            if (header.id == GameHeader.ID.INIT)
+            {
+                //サーバー側の経過時間取得
+                gameController.serverTime.Minutes=Convert.IntConversion(recvData, GameHeader.HEADER_SIZE);
+                gameController.serverTime.Seconds=Convert.IntConversion(recvData, GameHeader.HEADER_SIZE+sizeof(int));
+            }
             if (header.id == GameHeader.ID.DEBUG)
             {
                 int sum = BitConverter.ToInt32(recvData, GameHeader.HEADER_SIZE);
