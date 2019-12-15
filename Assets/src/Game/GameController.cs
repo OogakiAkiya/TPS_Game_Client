@@ -8,7 +8,6 @@ public class GameController : MonoBehaviour
     [SerializeField] Canvas beforeCanvas;
     [SerializeField] Text timerText;
     public bool stopFlg=false;
-    public System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
     public ServerTime serverTime = new ServerTime();
     // Start is called before the first frame update
     void Start()
@@ -29,17 +28,15 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (timerText)timerText.text = CreateNowTime(timer, serverTime);
-         
+        if (timerText) timerText.text = CreateNowTime(serverTime);
 
     }
 
-    private string CreateNowTime(System.Diagnostics.Stopwatch _stopwatch,ServerTime _serverTime)
+    private string CreateNowTime(ServerTime _serverTime)
     {
-        int time = _stopwatch.Elapsed.Minutes + _serverTime.Minutes;
-        string text = time == 0 ? "00" : time / 10 == 0 ? "0" + time : time.ToString();
-        time = _stopwatch.Elapsed.Seconds + _serverTime.Seconds;
-        text+= time == 0 ? "00" : time / 10 == 0 ? "0" + time : time.ToString();
+        string text = _serverTime.Minutes == 0 ? "00" : _serverTime.Minutes / 10 == 0 ? "0" + _serverTime.Minutes : _serverTime.Minutes.ToString();
+        text += ":";
+        text+= _serverTime.Seconds == 0 ? "00" : _serverTime.Seconds / 10 == 0 ? "0" + _serverTime.Seconds : _serverTime.Seconds.ToString();
         return text;
     }
 }

@@ -13,6 +13,7 @@ using UnityEngine;
 
 public class UDP_ClientController : MonoBehaviour
 {
+    [SerializeField] GameController gameController;
 
     [SerializeField] int sendPort = 12344;
     [SerializeField] string serverIP = "127.0.0.1";
@@ -45,6 +46,7 @@ public class UDP_ClientController : MonoBehaviour
             state.ChangeState(GameHeader.ID.GAME);
         });
         state.AddState(GameHeader.ID.GAME, _update: GameUpdate);
+        state.AddState(GameHeader.ID.ALERT, _update: AlertUpdate);
         state.ChangeState(GameHeader.ID.INIT);
 
     }
@@ -83,12 +85,7 @@ public class UDP_ClientController : MonoBehaviour
 
         //ヘッダー所得
         header.SetHeader(recvData,sizeof(uint));
-        if (header.type==0)
-        {
-            var temp = header.type;
-            temp = GameHeader.UserTypeCode.SOLDIER;
-            var n = temp;
-        }
+
         //データ種類ごとの処理
         state.ChangeState(header.id);
         state.Update();
@@ -108,6 +105,14 @@ public class UDP_ClientController : MonoBehaviour
     }
 
 
+    void AlertUpdate()
+    {
+        byte[] recData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
+        if (!gameController) return;
+        gameController.serverTime.Minutes=Convert.IntConversion(recData, GameHeader.HEADER_SIZE);
+        gameController.serverTime.Seconds = Convert.IntConversion(recData, sizeof(int)+ GameHeader.HEADER_SIZE);
+
+    }
 
     void GameUpdate()
     {

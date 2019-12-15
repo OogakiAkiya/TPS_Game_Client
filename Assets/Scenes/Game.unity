@@ -1222,6 +1222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b243fbb2cb37a48dbbfb1e76ad74fe10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameController: {fileID: 1230709952}
   sendPort: 12344
   serverIP: 18.179.13.28
   gameCanvas: {fileID: 136791186}

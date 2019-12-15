@@ -66,12 +66,7 @@ public class TCP_ClientController : MonoBehaviour
             var recvData=socket.GetRecvData();
             GameHeader header = new GameHeader();
             header.SetHeader(recvData);
-            if (header.id == GameHeader.ID.INIT)
-            {
-                //サーバー側の経過時間取得
-                gameController.serverTime.Minutes=Convert.IntConversion(recvData, GameHeader.HEADER_SIZE);
-                gameController.serverTime.Seconds=Convert.IntConversion(recvData, GameHeader.HEADER_SIZE+sizeof(int));
-            }
+
             if (header.id == GameHeader.ID.DEBUG)
             {
                 int sum = BitConverter.ToInt32(recvData, GameHeader.HEADER_SIZE);
@@ -82,6 +77,31 @@ public class TCP_ClientController : MonoBehaviour
                     debugText.text = $"人数:"+sum+"\nTCP応答時間:"+timer.ElapsedMilliseconds+"ミリ秒";
                 }
             }
+
+            if (header.id == GameHeader.ID.ALERT)
+            {
+                byte[] data = new byte[100];
+                FinishData finish = new FinishData();
+                int index=GameHeader.HEADER_SIZE;
+                while (true)
+                {
+                    if (index >= recvData.Length) break;
+                    if (recvData.Length < GameHeader.HEADER_SIZE + FinishData.FINISHUDATALENGHT) break;
+                    header.SetHeader(recvData, index);
+                    finish.SetData(recvData, index + GameHeader.HEADER_SIZE);
+                    FileController.GetInstance().Write("finish", header.userName +","+ finish.killAmount + "," + finish.deathAmount + "," + finish.timeMinute + "," + finish.timeSecond);
+                    index += GameHeader.HEADER_SIZE + FinishData.FINISHUDATALENGHT;
+
+                }
+
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;                        //エディタ(デバッグ)の時のみ動作を止める
+                #else
+                    Application.Quit();                                                     //コンパイル後に動作する
+                #endif
+                
+            }
+
         }
 
     }
@@ -115,4 +135,59 @@ public class TCP_ClientController : MonoBehaviour
 
 }
 
+class FinishData
+{
+    public static int FINISHUDATALENGHT = sizeof(int) * 4 + sizeof(bool);
+    public int killAmount = 0;
+    public int deathAmount = 0;
+    public int timeMinute = 0;
+    public int timeSecond = 0;
+    public bool survivalFlg = true;
 
+    public void SetData(int _kill, int _death, int _timeMinute, int _timeSecond, bool _survivalFlg)
+    {
+        killAmount = _kill;
+        deathAmount = _death;
+        timeMinute = _timeMinute;
+        timeSecond = _timeSecond;
+        survivalFlg = _survivalFlg;
+    }
+
+    public byte[] GetData()
+    {
+        byte[] data = new byte[FINISHUDATALENGHT];
+        int index = 0;
+
+        Buffer.BlockCopy(Convert.Conversion(killAmount), 0, data, index, sizeof(int));
+        index += sizeof(int);
+        Buffer.BlockCopy(Convert.Conversion(deathAmount), 0, data, index, sizeof(int));
+        index += sizeof(int);
+        Buffer.BlockCopy(Convert.Conversion(timeMinute), 0, data, index, sizeof(int));
+        index += sizeof(int);
+        Buffer.BlockCopy(Convert.Conversion(timeSecond), 0, data, index, sizeof(int));
+        index += sizeof(int);
+        Buffer.BlockCopy(Convert.Conversion(survivalFlg), 0, data, index, sizeof(bool));
+        index += sizeof(bool);
+
+        return data;
+    }
+
+    public void SetData(byte[] _data, int _index = 0)
+    {
+        int index = _index;
+
+        killAmount=Convert.IntConversion(_data, index);
+        index += sizeof(int);
+        deathAmount = Convert.IntConversion(_data, index);
+        index += sizeof(int);
+        timeMinute = Convert.IntConversion(_data, index);
+        index += sizeof(int);
+        timeSecond = Convert.IntConversion(_data, index);
+        index += sizeof(int);
+        survivalFlg = Convert.BoolConversion(_data, index);
+        index += sizeof(int);
+
+    }
+
+
+}

@@ -50,6 +50,10 @@ public static class Convert
         return vect;
     }
 
+    public static byte[] Conversion(bool _data)
+    {
+        return System.BitConverter.GetBytes(_data);
+    }
 
     public static byte[] Conversion(int _data)
     {
@@ -73,6 +77,10 @@ public static class Convert
     public static int IntConversion(byte[] _data, int _index)
     {
         return System.BitConverter.ToInt32(_data, _index);
+    }
+    public static bool BoolConversion(byte[] _data, int _index)
+    {
+        return System.BitConverter.ToBoolean(_data, _index);
     }
 
 }

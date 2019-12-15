@@ -41,7 +41,6 @@ public class StartCanvasController : MonoBehaviour
             if (nextCanvas) nextCanvas.gameObject.SetActive(true);
             gameController.stopFlg = false;
             this.gameObject.SetActive(false);
-            gameController.timer.Start();
         }
         return;
 
