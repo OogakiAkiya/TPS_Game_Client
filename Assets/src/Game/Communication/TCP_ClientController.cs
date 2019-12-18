@@ -81,24 +81,26 @@ public class TCP_ClientController : MonoBehaviour
             if (header.id == GameHeader.ID.ALERT)
             {
                 byte[] data = new byte[100];
-                FinishData finish = new FinishData();
                 int index=GameHeader.HEADER_SIZE;
+
+                List<RankingData> rankingList = new List<RankingData>();
                 while (true)
                 {
+                    FinishData finish = new FinishData();
+
                     if (index >= recvData.Length) break;
                     if (recvData.Length < GameHeader.HEADER_SIZE + FinishData.FINISHUDATALENGHT) break;
                     header.SetHeader(recvData, index);
                     finish.SetData(recvData, index + GameHeader.HEADER_SIZE);
-                    FileController.GetInstance().Write("finish", header.userName +","+ finish.killAmount + "," + finish.deathAmount + "," + finish.timeMinute + "," + finish.timeSecond);
+                    RankingData addData = new RankingData();
+                    addData.SetData(header.userName, finish);
+                    rankingList.Add(addData);
+                    FileController.GetInstance().Write("finish", header.userName +","+ finish.killAmount + "," + finish.deathAmount + "," + finish.timeMinute + "," + finish.timeSecond+","+finish.survivalFlg+","+finish.objectType);
                     index += GameHeader.HEADER_SIZE + FinishData.FINISHUDATALENGHT;
 
                 }
-
-#if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;                        //エディタ(デバッグ)の時のみ動作を止める
-                #else
-                    Application.Quit();                                                     //コンパイル後に動作する
-                #endif
+                RankingElements.rankingDatas = rankingList.ToArray();
+                gameController.SceneChange();
                 
             }
 
@@ -135,22 +137,24 @@ public class TCP_ClientController : MonoBehaviour
 
 }
 
-class FinishData
+public class FinishData
 {
-    public static int FINISHUDATALENGHT = sizeof(int) * 4 + sizeof(bool);
+    public static int FINISHUDATALENGHT = sizeof(int) * 4 + sizeof(bool) + sizeof(byte);
     public int killAmount = 0;
     public int deathAmount = 0;
     public int timeMinute = 0;
     public int timeSecond = 0;
     public bool survivalFlg = true;
+    public byte objectType = 0x0000;
 
-    public void SetData(int _kill, int _death, int _timeMinute, int _timeSecond, bool _survivalFlg)
+    public void SetData(int _kill, int _death, int _timeMinute, int _timeSecond, bool _survivalFlg, byte _objectType)
     {
         killAmount = _kill;
         deathAmount = _death;
         timeMinute = _timeMinute;
         timeSecond = _timeSecond;
         survivalFlg = _survivalFlg;
+        objectType = _objectType;
     }
 
     public byte[] GetData()
@@ -168,7 +172,8 @@ class FinishData
         index += sizeof(int);
         Buffer.BlockCopy(Convert.Conversion(survivalFlg), 0, data, index, sizeof(bool));
         index += sizeof(bool);
-
+        data[index] = objectType;
+        index += sizeof(byte);
         return data;
     }
 
@@ -185,8 +190,9 @@ class FinishData
         timeSecond = Convert.IntConversion(_data, index);
         index += sizeof(int);
         survivalFlg = Convert.BoolConversion(_data, index);
-        index += sizeof(int);
-
+        index += sizeof(bool);
+        objectType = _data[index];
+        index += sizeof(byte);
     }
 
 

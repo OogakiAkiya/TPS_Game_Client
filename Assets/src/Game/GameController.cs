@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -38,6 +39,18 @@ public class GameController : MonoBehaviour
         text += ":";
         text+= _serverTime.Seconds == 0 ? "00" : _serverTime.Seconds / 10 == 0 ? "0" + _serverTime.Seconds : _serverTime.Seconds.ToString();
         return text;
+    }
+
+    public void SceneChange()
+    {
+        SceneManager.LoadScene("Ranking");
+/*
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;                        //エディタ(デバッグ)の時のみ動作を止める
+#else
+        Application.Quit();                                                     //コンパイル後に動作する
+#endif
+*/
     }
 }
 
