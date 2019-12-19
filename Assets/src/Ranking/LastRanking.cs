@@ -12,23 +12,25 @@ public class LastRanking : MonoBehaviour
     {
         if (!soldier) return;
         if (!monster) return;
-
         soldier.text = "";
         monster.text = "";
         var rank = RankingElements.GetRankingData();
-        foreach(RankingData data in rank)
+        Debug.Log(rank.Length);
+
+        foreach (RankingData data in rank)
         {
             
             if (data.finish.objectType == (byte)GameHeader.UserTypeCode.SOLDIER)
             {
-                soldier.text += data.name+"kill:"+data.finish.killAmount+"  death:"+data.finish.deathAmount+"\n";
+                soldier.text += "1. "+data.name+"kill:"+data.finish.killAmount+"  death:"+data.finish.deathAmount+"  100p"+"\n";
             }
             if(data.finish.objectType==(byte)GameHeader.UserTypeCode.MONSTER)
             {
-                monster.text += data.name + "kill:" + data.finish.killAmount + "  death:" + data.finish.deathAmount+ "\n";
-
+                monster.text += "1. " + data.name + "kill:" + data.finish.killAmount + "  death:" + data.finish.deathAmount+"  100p" + "\n";
             }
+            
         }
+
     }
 
     // Update is called once per frame
