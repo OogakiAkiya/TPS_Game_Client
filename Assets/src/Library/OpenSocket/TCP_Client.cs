@@ -29,7 +29,6 @@ class TCP_Client
             Task task = tcp.ConnectAsync(_ipAddr, _port);
             if (!task.Wait(timeout))
             {
-                Debug.Log("false");
                 tcp.Close();
                 //throw new SocketException(10060);
                 return false;

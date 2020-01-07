@@ -15,7 +15,6 @@ public class LastRanking : MonoBehaviour
         soldier.text = "";
         monster.text = "";
         var rank = RankingElements.GetRankingData();
-        Debug.Log(rank.Length);
 
         foreach (RankingData data in rank)
         {
