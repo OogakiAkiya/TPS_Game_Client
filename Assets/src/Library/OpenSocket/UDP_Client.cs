@@ -67,31 +67,28 @@ class UDP_Client
 {
     
     public ClientState server { get; private set; } = new ClientState();
-    private ClientState sender = new ClientState();
 
     int port = 12343;
     int sendPort = 12344;
     uint sequence = 0;
 
-
-    public void Init(int _port)
+    public void Init(int _sendPort)
     {
-        port = _port;
-        server.socket = new UdpClient(port);
+        sendPort = _sendPort;
+        server.socket = new UdpClient();
         server.socket.BeginReceive(new AsyncCallback(ReceiveCallback), server);
-        sender.socket = new UdpClient();
+
     }
 
     public void Init(int _port, int _sendPort)
     {
         port = _port;
         sendPort = _sendPort;
-        System.Net.IPEndPoint localEP =new System.Net.IPEndPoint(IPAddress.Any, port);
-        server.socket = new UdpClient(port);
+        //System.Net.IPEndPoint localEP =new System.Net.IPEndPoint(IPAddress.Any, port);
+        server.socket = new UdpClient();
         //server.socket = new UdpClient(localEP);
         
         server.socket.BeginReceive(new AsyncCallback(ReceiveCallback), server);
-        sender.socket = new UdpClient();
     }
 
     //本来ならsendPortはportに変わる
@@ -101,7 +98,9 @@ class UDP_Client
         List<byte> sendData = new List<byte>();
         sendData.AddRange(BitConverter.GetBytes(sequence));
         sendData.AddRange(_data.Value);
-        sender.socket.SendAsync(sendData.ToArray(), sendData.ToArray().Length, _data.Key.Address.ToString(), sendPort);
+        //sender.socket.SendAsync(sendData.ToArray(), sendData.ToArray().Length, _data.Key.Address.ToString(), sendPort);
+        server.socket.SendAsync(sendData.ToArray(), sendData.ToArray().Length, _data.Key.Address.ToString(), sendPort);
+
         CountUPSequence();
 
     }
@@ -112,7 +111,8 @@ class UDP_Client
         List<byte> sendData = new List<byte>();
         sendData.AddRange(BitConverter.GetBytes(sequence));
         sendData.AddRange(_data);
-        sender.socket.SendAsync(sendData.ToArray(), sendData.ToArray().Length, _IP, _port);
+        //sender.socket.SendAsync(sendData.ToArray(), sendData.ToArray().Length, _IP, _port);
+        server.socket.SendAsync(sendData.ToArray(), sendData.ToArray().Length, _IP, _port);
         CountUPSequence();
 
     }

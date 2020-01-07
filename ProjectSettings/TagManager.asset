@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - users
+  - Soldier
+  - Monster
+  - Server
   layers:
   - Default
   - TransparentFX
@@ -15,8 +18,8 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - 
-  - 
+  - Soldier
+  - Monster
   - 
   - 
   - 

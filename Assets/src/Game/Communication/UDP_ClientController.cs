@@ -13,10 +13,11 @@ using UnityEngine;
 
 public class UDP_ClientController : MonoBehaviour
 {
+    [SerializeField] GameController gameController;
 
-    [SerializeField] int recvPort = 12343;
     [SerializeField] int sendPort = 12344;
     [SerializeField] string serverIP = "127.0.0.1";
+    [SerializeField] GameObject gameCanvas;
     private ClientController clientController;
     private PlayerController player;
     private uint nowSequence = 0;
@@ -33,10 +34,10 @@ public class UDP_ClientController : MonoBehaviour
 
 
         clientController = this.GetComponent<ClientController>();
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        player = GameObject.FindGameObjectWithTag(Tags.PLAYER).GetComponent<PlayerController>();
 
         //ソケット初期化
-        socket.Init(recvPort, sendPort);
+        socket.Init(sendPort);
 
 
         state.AddState(GameHeader.ID.INIT, () =>
@@ -45,6 +46,7 @@ public class UDP_ClientController : MonoBehaviour
             state.ChangeState(GameHeader.ID.GAME);
         });
         state.AddState(GameHeader.ID.GAME, _update: GameUpdate);
+        state.AddState(GameHeader.ID.ALERT, _update: AlertUpdate);
         state.ChangeState(GameHeader.ID.INIT);
 
     }
@@ -94,15 +96,23 @@ public class UDP_ClientController : MonoBehaviour
     {
         List<byte> sendData = new List<byte>();
         GameHeader header = new GameHeader();
-        header.CreateNewData((GameHeader.ID)_id, player.name, (byte)GameHeader.GameCode.BASICDATA);
+        header.CreateNewData((GameHeader.ID)_id, player.userType,player.name, (byte)GameHeader.GameCode.BASICDATA);
         sendData.AddRange(header.GetHeader());
-        sendData.AddRange(Convert.GetByteVector2(player.transform.localEulerAngles));
+        sendData.AddRange(Convert.GetByteVector2(player.current.transform.localEulerAngles));
 
         socket.Send(sendData.ToArray(), serverIP, sendPort);
 
     }
 
 
+    void AlertUpdate()
+    {
+        byte[] recData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
+        if (!gameController) return;
+        gameController.serverTime.Minutes=Convert.IntConversion(recData, GameHeader.HEADER_SIZE);
+        gameController.serverTime.Seconds = Convert.IntConversion(recData, sizeof(int)+ GameHeader.HEADER_SIZE);
+
+    }
 
     void GameUpdate()
     {
@@ -111,8 +121,8 @@ public class UDP_ClientController : MonoBehaviour
         {
 
             if (GameObject.Find(header.userName)) return;
-            var pos = Convert.GetVector3(recvData, header.GetHeaderLength()+ sizeof(uint));
-            var direction = Convert.GetVector3(recvData, sizeof(uint) + sizeof(float)*3 + header.GetHeaderLength());
+            var pos = Convert.GetVector3(recvData, GameHeader.HEADER_SIZE+ sizeof(uint));
+            var direction = Convert.GetVector3(recvData, sizeof(uint) + sizeof(float)*3 + GameHeader.HEADER_SIZE);
             clientController.AddGrenade(header.userName,pos,direction);
             return;
         }
@@ -123,7 +133,7 @@ public class UDP_ClientController : MonoBehaviour
 
             foreach (var obj in clientController.clientArray)
             {
-                if (obj.name.Equals(header.userName.Trim()))
+                if (obj.userID.Equals(header.userName.Trim()))
                 {
                     byte[] addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
                     obj.AddRecvData(addData);
@@ -138,8 +148,8 @@ public class UDP_ClientController : MonoBehaviour
             bool addUserFlg = true;
             for (int i=0;i< clientController.clientArray.Length; i++)
             {
-                Client client = clientController.clientArray[i];
-                if (client.name.Equals(header.userName.Trim()))
+                BaseClient client = clientController.clientArray[i];
+                if (client.userID.Equals(header.userName.Trim()))
                 {
                     byte[] addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
                     client.AddRecvData(addData);
@@ -150,13 +160,15 @@ public class UDP_ClientController : MonoBehaviour
             }
 
             //user追加
+            if (!gameCanvas.activeSelf) return;
             if (addUserFlg)
             {
                 Vector3 pos = Convert.GetVector3(recvData, GameHeader.HEADER_SIZE + sizeof(uint)+sizeof(byte));
                 byte[] addData = new List<byte>(recvData).GetRange(sizeof(uint), recvData.Length - sizeof(uint)).ToArray();
 
                 //ユーザーの追加
-                clientController.AddUser(header.userName.Trim(), pos).AddRecvData(addData);
+                if(header.type==GameHeader.UserTypeCode.SOLDIER)clientController.AddSoldierUser(header.userName.Trim(), pos).AddRecvData(addData);
+                if (header.type == GameHeader.UserTypeCode.MONSTER) clientController.AddMaynardUser(header.userName.Trim(), pos).AddRecvData(addData);
 
             }
 

@@ -8,6 +8,7 @@ using UnityEngine;
 
 class UPnPController : MonoBehaviour
 {
+    [SerializeField]public uint recvPort = 12343;
     private string selfIP = "192.168.179.2";
     private string hostIP = "192.168.179.1";
 
@@ -141,9 +142,9 @@ class UPnPController : MonoBehaviour
     " <s:Body>" +
     "  <u:AddPortMapping xmlns:u=\"" + urn + "\">" +
     "   <NewRemoteHost></NewRemoteHost>" +
-    "   <NewExternalPort>" + 12343 + "</NewExternalPort>" +
+    "   <NewExternalPort>" + recvPort + "</NewExternalPort>" +
     "   <NewProtocol>" + "UDP" + "</NewProtocol>" +
-    "   <NewInternalPort>" + 12343 + "</NewInternalPort>" +
+    "   <NewInternalPort>" + recvPort + "</NewInternalPort>" +
     "   <NewInternalClient>" + selfIP + "</NewInternalClient>" +
     "   <NewEnabled>1</NewEnabled>" +
     "   <NewPortMappingDescription>" + "GAME" + "</NewPortMappingDescription>" +
@@ -262,7 +263,7 @@ class UPnPController : MonoBehaviour
         " <s:Body>" +
         "  <u:DeletePortMapping xmlns:u=\"" + urn + "\">" +
         "   <NewRemoteHost></NewRemoteHost>" +
-        "   <NewExternalPort>" + 12343 + "</NewExternalPort>" +
+        "   <NewExternalPort>" + recvPort + "</NewExternalPort>" +
         "   <NewProtocol>" + "UDP" + "</NewProtocol>" +
         "  </u:DeletePortMapping>" +
         " </s:Body>" +

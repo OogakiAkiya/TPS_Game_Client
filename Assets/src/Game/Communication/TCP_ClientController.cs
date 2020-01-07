@@ -23,7 +23,7 @@ public class TCP_ClientController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        playerController = GameObject.FindGameObjectWithTag(Tags.PLAYER).GetComponent<PlayerController>();
 
 
         if (PlayerPrefs.HasKey(SavedData.ServerIP))ipOrHost= PlayerPrefs.GetString(SavedData.ServerIP);
@@ -33,7 +33,8 @@ public class TCP_ClientController : MonoBehaviour
         socket.StartRecvThread();                     //非同期通信Recv
 
         //初期設定用の通信
-        TestSend((byte)GameHeader.ID.INIT);
+        if(PlayerPrefs.GetString(SavedData.UserType)== "Soldier")TestSend((byte)GameHeader.ID.INIT,(byte)GameHeader.UserTypeCode.SOLDIER);
+        if (PlayerPrefs.GetString(SavedData.UserType) == "Maynard") TestSend((byte)GameHeader.ID.INIT, (byte)GameHeader.UserTypeCode.MONSTER);
 
 
 
@@ -63,9 +64,12 @@ public class TCP_ClientController : MonoBehaviour
         while (socket.RecvDataSize() > 0)
         {
             var recvData=socket.GetRecvData();
-            if ((GameHeader.ID)recvData[0] == GameHeader.ID.DEBUG)
+            GameHeader header = new GameHeader();
+            header.SetHeader(recvData);
+
+            if (header.id == GameHeader.ID.DEBUG)
             {
-                int sum = BitConverter.ToInt32(recvData, sizeof(byte) * 2 + GameHeader.USERID_LENGTH);
+                int sum = BitConverter.ToInt32(recvData, GameHeader.HEADER_SIZE);
                 timer.Stop();
                 timerFlg = false;
                 if (debugText)
@@ -73,6 +77,33 @@ public class TCP_ClientController : MonoBehaviour
                     debugText.text = $"人数:"+sum+"\nTCP応答時間:"+timer.ElapsedMilliseconds+"ミリ秒";
                 }
             }
+
+            if (header.id == GameHeader.ID.ALERT)
+            {
+                byte[] data = new byte[100];
+                int index=GameHeader.HEADER_SIZE;
+
+                List<RankingData> rankingList = new List<RankingData>();
+                while (true)
+                {
+                    FinishData finish = new FinishData();
+
+                    if (index >= recvData.Length) break;
+                    if (recvData.Length < GameHeader.HEADER_SIZE + FinishData.FINISHUDATALENGHT) break;
+                    header.SetHeader(recvData, index);
+                    finish.SetData(recvData, index + GameHeader.HEADER_SIZE);
+                    RankingData addData = new RankingData();
+                    addData.SetData(header.userName, finish);
+                    rankingList.Add(addData);
+                    FileController.GetInstance().Write("finish", header.userName +","+ finish.killAmount + "," + finish.deathAmount + "," + finish.timeMinute + "," + finish.timeSecond+","+finish.survivalFlg+","+finish.objectType);
+                    index += GameHeader.HEADER_SIZE + FinishData.FINISHUDATALENGHT;
+
+                }
+                RankingElements.rankingDatas = rankingList.ToArray();
+                gameController.SceneChange();
+                
+            }
+
         }
 
     }
@@ -88,7 +119,7 @@ public class TCP_ClientController : MonoBehaviour
     {
         List<byte> sendData = new List<byte>();
         GameHeader header = new GameHeader();
-        header.CreateNewData((GameHeader.ID)_id,playerController.name,_code);
+        header.CreateNewData((GameHeader.ID)_id,playerController.userType,playerController.name,_code);
         sendData.AddRange(header.GetHeader());
         var task=socket.Send(sendData.ToArray(), sendData.Count);
     }
@@ -98,7 +129,7 @@ public class TCP_ClientController : MonoBehaviour
     {
         List<byte> sendData = new List<byte>();
         GameHeader header = new GameHeader();
-        header.CreateNewData((GameHeader.ID)_id, playerController.name, _code);
+        header.CreateNewData((GameHeader.ID)_id, playerController.userType, playerController.name, _code);
         sendData.AddRange(header.GetHeader());
         sendData.AddRange(BitConverter.GetBytes((short)_keyCode));
         var task =socket.Send(sendData.ToArray(), sendData.Count);
@@ -106,4 +137,63 @@ public class TCP_ClientController : MonoBehaviour
 
 }
 
+public class FinishData
+{
+    public static int FINISHUDATALENGHT = sizeof(int) * 4 + sizeof(bool) + sizeof(byte);
+    public int killAmount = 0;
+    public int deathAmount = 0;
+    public int timeMinute = 0;
+    public int timeSecond = 0;
+    public bool survivalFlg = true;
+    public byte objectType = 0x0000;
 
+    public void SetData(int _kill, int _death, int _timeMinute, int _timeSecond, bool _survivalFlg, byte _objectType)
+    {
+        killAmount = _kill;
+        deathAmount = _death;
+        timeMinute = _timeMinute;
+        timeSecond = _timeSecond;
+        survivalFlg = _survivalFlg;
+        objectType = _objectType;
+    }
+
+    public byte[] GetData()
+    {
+        byte[] data = new byte[FINISHUDATALENGHT];
+        int index = 0;
+
+        Buffer.BlockCopy(Convert.Conversion(killAmount), 0, data, index, sizeof(int));
+        index += sizeof(int);
+        Buffer.BlockCopy(Convert.Conversion(deathAmount), 0, data, index, sizeof(int));
+        index += sizeof(int);
+        Buffer.BlockCopy(Convert.Conversion(timeMinute), 0, data, index, sizeof(int));
+        index += sizeof(int);
+        Buffer.BlockCopy(Convert.Conversion(timeSecond), 0, data, index, sizeof(int));
+        index += sizeof(int);
+        Buffer.BlockCopy(Convert.Conversion(survivalFlg), 0, data, index, sizeof(bool));
+        index += sizeof(bool);
+        data[index] = objectType;
+        index += sizeof(byte);
+        return data;
+    }
+
+    public void SetData(byte[] _data, int _index = 0)
+    {
+        int index = _index;
+
+        killAmount=Convert.IntConversion(_data, index);
+        index += sizeof(int);
+        deathAmount = Convert.IntConversion(_data, index);
+        index += sizeof(int);
+        timeMinute = Convert.IntConversion(_data, index);
+        index += sizeof(int);
+        timeSecond = Convert.IntConversion(_data, index);
+        index += sizeof(int);
+        survivalFlg = Convert.BoolConversion(_data, index);
+        index += sizeof(bool);
+        objectType = _data[index];
+        index += sizeof(byte);
+    }
+
+
+}

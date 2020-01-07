@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 184fa0a6714634ac2bb8f53ac2c5a785
+  - enabled: 1
+    path: Assets/Scenes/Maynard.unity
+    guid: 0406fe11ceb81492e85e5441efb27817
+  - enabled: 1
+    path: Assets/Scenes/Ranking.unity
+    guid: 040dfa91c2f704424bb3231ac6e77318
   m_configObjects: {}

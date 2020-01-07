@@ -5,30 +5,43 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private float yMin = -60;
+    [SerializeField] private float yMax = 30;
+
     private Vector3 oldRotation;
     private Vector2 mouse=new Vector2(0,0);
     private bool shootFlg=false;
-
+    public GameHeader.UserTypeCode userType;
+    public BaseClient current;
 
     // Start is called before the first frame update
     void Start()
     {
+        current = this.GetComponentInChildren<BaseClient>();
+        if (PlayerPrefs.GetString(SavedData.UserType) == "Soldier") userType = GameHeader.UserTypeCode.SOLDIER;
+        if (PlayerPrefs.GetString(SavedData.UserType) == "Maynard") userType = GameHeader.UserTypeCode.MONSTER;
+
         if (PlayerPrefs.HasKey(SavedData.UserID)) this.name = PlayerPrefs.GetString(SavedData.UserID);
-        oldRotation = transform.localEulerAngles;
+
+
+        //userIDセット[いつかなくなりそう]
+        if (current) current.userID = this.name;
+
+        oldRotation = current.transform.localEulerAngles;
+        
     }
 
     // Update is called once per frame
     void Update()
-    {
+    {        
         //視点移動
         float x = Input.GetAxis("Mouse X");
         float y = Input.GetAxis("Mouse Y");
-        if (mouse.y + y > 30) y = 0;
-        if (mouse.y + y < -60) y = 0;
+        if (mouse.y + y > yMax) y = 0;
+        if (mouse.y + y < yMin) y = 0;
 
         mouse += new Vector2(x, y);
-        this.transform.rotation = Quaternion.Euler(new Vector3(-mouse.y, mouse.x,0));
-
+        current.transform.rotation = Quaternion.Euler(new Vector3(-mouse.y, mouse.x,0));
     }
 
     //キー入力を返す
@@ -86,9 +99,9 @@ public class PlayerController : MonoBehaviour
         if (shootFlg) return true;
 
         //一度以上回転した場合送信する
-        if (Mathf.Abs(oldRotation.y - transform.localEulerAngles.y) > 1 || Mathf.Abs(oldRotation.x - transform.localEulerAngles.x) > 1)
+        if (Mathf.Abs(oldRotation.y - current.transform.localEulerAngles.y) > 1 || Mathf.Abs(oldRotation.x - current.transform.localEulerAngles.x) > 1)
         {
-            oldRotation = transform.localEulerAngles;
+            oldRotation = current.transform.localEulerAngles;
             return true;
         }
         return false;

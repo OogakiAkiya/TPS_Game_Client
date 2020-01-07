@@ -9,34 +9,47 @@ public class ClientController : MonoBehaviour
 {
     [SerializeField] GameObject userList;
     [SerializeField] Text ranking;
-    GameObject userPrefab;
-    public Client[] clientArray { get; private set; }
+    GameObject soldierPrefab;
+    GameObject maynardPrefab;
+
+    public BaseClient[] clientArray { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
-        userPrefab = (GameObject)Resources.Load("user");
-        clientArray = userList.transform.GetComponentsInChildren<Client>();
+        soldierPrefab = (GameObject)Resources.Load("Soldier");
+        maynardPrefab = (GameObject)Resources.Load("Monster_U");
 
+        //clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
+        UpdateUserArray();
     }
 
     // Update is called once per frame
     void Update()
     {
-
         //ランキング表示
         Dictionary<string, int> dic = new Dictionary<string, int>();
         foreach (var user in clientArray)
         {
-            dic.Add(user.name, user.killAmount);
+            dic.Add(user.userID, user.killAmount);
         }
         var sorted = dic.OrderByDescending((x) => x.Value);     //降順ソート
 
         String rankingText="";
         int rank = 1;
-        foreach (var user in dic)
+        int beforeKillAmount = 0;
+        int oldRank = 1;
+        foreach (var user in sorted)
         {
-            rankingText += rank + "位:" + user.Key + ":" + user.Value + "\n";
+            if (beforeKillAmount == user.Value)
+            {
+                rankingText += oldRank + "位:" + user.Key + ":" + user.Value + "\n";
+                rank++;
+                continue;
+            }
+                rankingText += rank + "位:" + user.Key + ":" + user.Value + "\n";
+            beforeKillAmount = user.Value;
+            oldRank = rank;
             if (++rank > 5) break;
         }
         
@@ -45,16 +58,32 @@ public class ClientController : MonoBehaviour
 
     }
 
-    public Client AddUser(string _userID,Vector3 _pos)
+    public BaseClient AddMaynardUser(string _userID,Vector3 _pos)
     {
-        var add = Instantiate(userPrefab,userList.transform) as GameObject;
+        var add = Instantiate(maynardPrefab,userList.transform) as GameObject;
         add.transform.position = _pos;
         add.name = _userID;
-        Client client = add.GetComponent<Client>();
+        BaseClient client = add.GetComponentInChildren<BaseClient>();
         client.userID=_userID;
-        clientArray = userList.transform.GetComponentsInChildren<Client>();
+        //clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
+        UpdateUserArray();
         return client;
     }
+
+    public BaseClient AddSoldierUser(string _userID, Vector3 _pos)
+    {
+        var add = Instantiate(soldierPrefab, userList.transform) as GameObject;
+        add.transform.position = _pos;
+        add.name = _userID;
+        BaseClient client = add.GetComponent<BaseClient>();
+        client.userID = _userID;
+        //clientArray = userList.transform.GetComponentsInChildren<BaseClient>();
+        UpdateUserArray();
+
+        return client;
+    }
+
+
 
     public void AddGrenade(string _name,Vector3 _pos,Vector3 _direction)
     {
@@ -62,5 +91,22 @@ public class ClientController : MonoBehaviour
         bom.name = _name;
         bom.transform.position = _pos;
         bom.GetComponent<Grenade>().SetDirection(_direction);
+    }
+
+    public void UpdateUserArray()
+    {
+        List<BaseClient> list = new List<BaseClient>();
+        GameObject[] users = GameObject.FindGameObjectsWithTag("users");
+        for (int i = 0; i < users.Length; i++)
+        {
+            if (users[i].activeSelf)
+            {
+                BaseClient add= users[i].GetComponent<BaseClient>();
+                if (!add) continue;
+                list.Add(add);
+            }
+        }
+        clientArray = list.ToArray();
+
     }
 }

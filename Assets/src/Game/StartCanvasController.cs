@@ -29,7 +29,6 @@ public class StartCanvasController : MonoBehaviour
                 flg = true;
                 text.text = "Game Start";
                 text.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-
             }
             return;
         }

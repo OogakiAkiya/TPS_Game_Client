@@ -13,6 +13,8 @@ public class TitleController : MonoBehaviour
     public InputField ServerIP;
     public InputField UserID;
     public Text message;
+    private GameHeader.UserTypeCode userType = GameHeader.UserTypeCode.SOLDIER;
+
     System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
 
 
@@ -33,8 +35,17 @@ public class TitleController : MonoBehaviour
         //データ保存
         PlayerPrefs.SetString(SavedData.ServerIP, ServerIP.text);
         PlayerPrefs.SetString(SavedData.UserID, UserID.text);
+        
+        //ユーザータイプ判別
+        string typeName = PlayerPrefs.GetString(SavedData.UserType);
+        if (typeName == "Maynard") userType = GameHeader.UserTypeCode.MONSTER;
 
-        if(LoginCheck()) SceneManager.LoadScene("Game");
+        if (LoginCheck())
+        {
+            if(userType==GameHeader.UserTypeCode.SOLDIER) SceneManager.LoadScene("Game");
+            if(userType==GameHeader.UserTypeCode.MONSTER) SceneManager.LoadScene("Maynard");
+            
+        }
 
     }
 
@@ -54,7 +65,7 @@ public class TitleController : MonoBehaviour
         //初期設定用の通信
         List<byte> sendData = new List<byte>();
         GameHeader header = new GameHeader();
-        header.CreateNewData(GameHeader.ID.TITLE, UserID.text, (byte)GameHeader.LoginCode.LOGINCHECK);
+        header.CreateNewData(GameHeader.ID.TITLE,userType,UserID.text, (byte)GameHeader.LoginCode.LOGINCHECK);
         sendData.AddRange(header.GetHeader());
         var task = socket.Send(sendData.ToArray(), sendData.Count);
 

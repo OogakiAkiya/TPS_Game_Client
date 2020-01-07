@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public static  class SavedData{
     public static string ServerIP = "ServerIP";
     public static string UserID = "UserID";
+    public static string UserType = "UserType";
 
 }
 
@@ -29,7 +30,8 @@ public enum WEAPONTYPE : int
 {
     BASE,
     MACHINEGUN,
-    HANDGUN
+    HANDGUN,
+    CLAW
 }
 
 public enum WEAPONSTATE : int
@@ -40,5 +42,15 @@ public enum WEAPONSTATE : int
 
 }
 
+public static class Tags
+{
+    public static readonly string PLAYER = "Player";
+    public static readonly string SOLDIER = "Soldier";
+    public static readonly string MONSTER = "Monster";
+}
 
-
+public enum MonsterType : byte
+{
+    MAYNARD = 0x0001,
+    MUTANT = 0x0002
+}
