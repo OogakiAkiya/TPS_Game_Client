@@ -80,7 +80,7 @@ public class TCP_ClientController : MonoBehaviour
 
             if (header.id == GameHeader.ID.ALERT)
             {
-                byte[] data = new byte[100];
+                //ゲーム終了時サーバーから送られてくるランキング用の処理
                 int index=GameHeader.HEADER_SIZE;
 
                 List<RankingData> rankingList = new List<RankingData>();
@@ -97,8 +97,8 @@ public class TCP_ClientController : MonoBehaviour
                     rankingList.Add(addData);
                     FileController.GetInstance().Write("finish", header.userName +","+ finish.killAmount + "," + finish.deathAmount + "," + finish.timeMinute + "," + finish.timeSecond+","+finish.survivalFlg+","+finish.objectType);
                     index += GameHeader.HEADER_SIZE + FinishData.FINISHUDATALENGHT;
-
                 }
+
                 RankingElements.rankingDatas = rankingList.ToArray();
                 gameController.SceneChange();
                 

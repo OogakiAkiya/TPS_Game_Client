@@ -728,7 +728,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000027558397, y: 0}
+  m_AnchoredPosition: {x: -0.000010957045, y: 0}
   m_SizeDelta: {x: -21.3, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &487610360
@@ -764,7 +764,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '1 dwa           kill:0  death:0  100p
+  m_Text: '1 dwa           kill:0  death:0  1000p
 
     1 dwa           kill:0  death:0  100p
 
@@ -1227,7 +1227,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00004243241, y: 0}
+  m_AnchoredPosition: {x: 0.000016247845, y: 0}
   m_SizeDelta: {x: -21.3, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1350340015
