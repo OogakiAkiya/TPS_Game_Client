@@ -6,7 +6,8 @@ public class LastRanking : MonoBehaviour
 {
     [SerializeField] Text soldier;
     [SerializeField] Text monster;
-
+    [SerializeField] Camera mainCamera;
+    [SerializeField] Vector3 camRotation= new Vector3(0, 0.1f, 0);
     // Start is called before the first frame update
     void Start()
     {
@@ -14,8 +15,8 @@ public class LastRanking : MonoBehaviour
         if (!monster) return;
         soldier.text = "";
         monster.text = "";
-        var rank = RankingElements.GetRankingData();
 
+        var rank = RankingElements.GetRankingData();
         foreach (RankingData data in rank)
         {
             FinishData finish = data.finish;
@@ -31,12 +32,16 @@ public class LastRanking : MonoBehaviour
             
         }
 
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (mainCamera)
+        {
+            mainCamera.transform.Rotate(camRotation);
+        }   
     }
 
     private int ScoreCount(FinishData _finish)
