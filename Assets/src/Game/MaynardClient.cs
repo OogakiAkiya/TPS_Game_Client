@@ -212,8 +212,7 @@ public class MaynardClient : BaseClient
         stateMachine.AddState(AnimationKey.ModelChange, () =>
         {
             Vector3 pos = this.transform.position;
-            pos += this.transform.forward * 0.2f;
-            pos.y += 1.2f;
+            pos.y += 0.8f;
             egg =Instantiate(eggPref,pos,this.transform.rotation)as GameObject;
             animator.CrossFadeInFixedTime("Agony", 0.1f, 0);
             egg.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
@@ -221,7 +220,7 @@ public class MaynardClient : BaseClient
         () =>
         {
             egg.transform.localScale = scale;
-            if (scale.x < 1.5f) scale += new Vector3(0.01f, 0.01f, 0.01f);
+            if (scale.x < 1.85f) scale += new Vector3(0.015f, 0.015f, 0.015f);
 
         },
         () =>
