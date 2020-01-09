@@ -13,6 +13,10 @@ public class MaynardClient : BaseClient
     private string parentTag;
     private MonsterType type = MonsterType.MAYNARD;
 
+    private GameObject eggPref;
+    private GameObject egg;
+    private Vector3 scale=new Vector3(0,0,0);
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +26,7 @@ public class MaynardClient : BaseClient
         modelVisual = transform.Find("Ch30").gameObject;
         parentTag = this.transform.parent.tag;
 
+        eggPref = (GameObject)Resources.Load("egg");
     }
 
     // Update is called once per frame
@@ -204,6 +209,26 @@ public class MaynardClient : BaseClient
             {
             }
             );
+        stateMachine.AddState(AnimationKey.ModelChange, () =>
+        {
+            Vector3 pos = this.transform.position;
+            pos += this.transform.forward * 0.2f;
+            pos.y += 1.2f;
+            egg =Instantiate(eggPref,pos,this.transform.rotation)as GameObject;
+            animator.CrossFadeInFixedTime("Agony", 0.1f, 0);
+            egg.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        },
+        () =>
+        {
+            egg.transform.localScale = scale;
+            if (scale.x < 1.5f) scale += new Vector3(0.01f, 0.01f, 0.01f);
+
+        },
+        () =>
+        {
+            Destroy(egg);
+        }
+        );
     }
 
 }

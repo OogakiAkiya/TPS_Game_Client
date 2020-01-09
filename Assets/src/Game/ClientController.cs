@@ -27,6 +27,7 @@ public class ClientController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!ranking) return;
         //ランキング表示
         Dictionary<string, int> dic = new Dictionary<string, int>();
         foreach (var user in clientArray)
@@ -54,7 +55,7 @@ public class ClientController : MonoBehaviour
         }
         
 
-        if (ranking) ranking.text = rankingText;
+        ranking.text = rankingText;
 
     }
 

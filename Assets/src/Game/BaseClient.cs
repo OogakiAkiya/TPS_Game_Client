@@ -26,6 +26,7 @@ public class BaseClient : MonoBehaviour
         JumpDown,
         Reloading,
         Attack,
+        ModelChange,
         Dying
     }
 
@@ -99,6 +100,7 @@ public class BaseClient : MonoBehaviour
 
         //アニメーション変更
         //モデルが変わったときにここが通らない
+        stateMachine.Update();
         if (stateMachine.currentKey != animationState) stateMachine.ChangeState(animationState);
 
         //hip.rotation = new Quaternion(hip.rotation.x + initRote.x, hip.rotation.y + initRote.y, hip.rotation.z + initRote.z, hip.rotation.w);
