@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
         sendKey |= InputTemple(KeyCode.Space, Key.SPACE);
         if (Input.GetKeyDown(KeyCode.LeftArrow))sendKey |= Key.LEFT_BUTTON;
         if (Input.GetKeyDown(KeyCode.RightArrow)) sendKey |= Key.RIGHT_BUTTON;
+        if (Input.GetKeyDown(KeyCode.E)) sendKey |= Key.RIGHT_CLICK;
         if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
         {
             sendKey |= Key.LEFT_CLICK;

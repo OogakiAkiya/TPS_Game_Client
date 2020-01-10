@@ -53,6 +53,7 @@ public class BaseWeapon
     {
         if (_type == WEAPONTYPE.MACHINEGUN) return new MachineGun(_action,_animationInit,_animationEnd);
         if (_type == WEAPONTYPE.HANDGUN) return new HandGun(_action, _animationInit, _animationEnd);
+        if (_type == WEAPONTYPE.UMP45) return new UMP45(_action,_animationInit,_animationEnd);
         if (_type == WEAPONTYPE.CLAW) return new Claw(_action);
 
         return null;
@@ -69,7 +70,7 @@ public class MachineGun : BaseWeapon
         reloadTime = 1000;      //1秒
         magazine = 60;
         remainingBullet = magazine;
-        range = 10;
+        range = 15;
         atackMethod = _atack;
         atackAnimationInit = _animationInit;
         atackAnimationEnd = _animationEnd;
@@ -129,6 +130,75 @@ public class MachineGun : BaseWeapon
 
 
 }
+
+public class UMP45 : BaseWeapon
+{
+    public UMP45(Action _atack, Action _animationInit = null, Action _animationEnd = null)
+    {
+        interval = 20;
+        power = 3;
+        reloadTime = 500;      //1秒
+        magazine = 120;
+        remainingBullet = magazine;
+        range = 15;
+        atackMethod = _atack;
+        atackAnimationInit = _animationInit;
+        atackAnimationEnd = _animationEnd;
+        texture = Resources.Load("Weapon_MachineGun") as Texture2D;
+        model = Resources.Load("M4a1") as GameObject;
+        type = WEAPONTYPE.UMP45;
+
+        state.AddState(WEAPONSTATE.WAIT, () =>
+        {
+            atackAnimationEnd?.Invoke();
+        });
+        state.AddState(WEAPONSTATE.ATACK,
+            () =>
+            {
+                timer.Restart();
+                atackAnimationInit?.Invoke();
+            },
+            () =>
+            {
+                if (timer.ElapsedMilliseconds > interval)
+                {
+                    atackMethod?.Invoke();
+                    timer.Restart();
+                }
+            },
+            () =>
+            {
+                timer.Stop();
+            }
+            );
+        state.AddState(WEAPONSTATE.RELOAD,
+            () =>
+            {
+                atackAnimationInit?.Invoke();
+            },
+            () =>
+            {
+            },
+            () =>
+            {
+            }
+            );
+
+        state.ChangeState(WEAPONSTATE.WAIT);
+    }
+
+    public byte[] GetStatus()
+    {
+        return GetStatus(type);
+    }
+    public override void SetTexture(Image _image)
+    {
+        if (!texture) return;
+        _image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+        _image.GetComponent<Transform>().localScale = new Vector3(0.5f, 0.5f, 0.5f);
+    }
+}
+
 
 public class HandGun : BaseWeapon
 {

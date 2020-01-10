@@ -87,28 +87,35 @@ public class TCP_ClientController : MonoBehaviour
 
             if (header.id == GameHeader.ID.ALERT)
             {
-                //ゲーム終了時サーバーから送られてくるランキング用の処理
-                int index=GameHeader.HEADER_SIZE;
-
-                List<RankingData> rankingList = new List<RankingData>();
-                while (true)
-                {
-                    FinishData finish = new FinishData();
-
-                    if (index >= recvData.Length) break;
-                    if (recvData.Length < GameHeader.HEADER_SIZE + FinishData.FINISHUDATALENGHT) break;
-                    header.SetHeader(recvData, index);
-                    finish.SetData(recvData, index + GameHeader.HEADER_SIZE);
-                    RankingData addData = new RankingData();
-                    addData.SetData(header.userName, finish);
-                    rankingList.Add(addData);
-                    FileController.GetInstance().Write("finish", header.userName +","+ finish.killAmount + "," + finish.deathAmount + "," + finish.timeMinute + "," + finish.timeSecond+","+finish.survivalFlg+","+finish.objectType);
-                    index += GameHeader.HEADER_SIZE + FinishData.FINISHUDATALENGHT;
+                if (header.gameCode == (byte)GameHeader.GameCode.GRENEDEDATA) {
+                    //item削除処理
                 }
 
-                RankingElements.rankingDatas = rankingList.ToArray();
-                gameController.SceneChange();
-                
+                if (header.gameCode == (byte)GameHeader.GameCode.CHECKDATA)
+                {
+                    //ゲーム終了時サーバーから送られてくるランキング用の処理
+                    int index = GameHeader.HEADER_SIZE;
+
+                    List<RankingData> rankingList = new List<RankingData>();
+                    while (true)
+                    {
+                        FinishData finish = new FinishData();
+
+                        if (index >= recvData.Length) break;
+                        if (recvData.Length < GameHeader.HEADER_SIZE + FinishData.FINISHUDATALENGHT) break;
+                        header.SetHeader(recvData, index);
+                        finish.SetData(recvData, index + GameHeader.HEADER_SIZE);
+                        RankingData addData = new RankingData();
+                        addData.SetData(header.userName, finish);
+                        rankingList.Add(addData);
+                        FileController.GetInstance().Write("finish", header.userName + "," + finish.killAmount + "," + finish.deathAmount + "," + finish.timeMinute + "," + finish.timeSecond + "," + finish.survivalFlg + "," + finish.objectType);
+                        index += GameHeader.HEADER_SIZE + FinishData.FINISHUDATALENGHT;
+                    }
+
+                    RankingElements.rankingDatas = rankingList.ToArray();
+                    gameController.SceneChange();
+
+                }
             }
 
         }
