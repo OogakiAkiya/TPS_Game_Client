@@ -7,12 +7,14 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float yMin = -60;
     [SerializeField] private float yMax = 30;
+    [SerializeField] private Image damageUIEffect;
 
     private Vector3 oldRotation;
     private Vector2 mouse=new Vector2(0,0);
     private bool shootFlg=false;
     public GameHeader.UserTypeCode userType;
     public BaseClient current;
+
 
     // Start is called before the first frame update
     void Start()
@@ -24,16 +26,20 @@ public class PlayerController : MonoBehaviour
         if (PlayerPrefs.HasKey(SavedData.UserID)) this.name = PlayerPrefs.GetString(SavedData.UserID);
 
 
-        //userIDセット[いつかなくなりそう]
+        //userIDセット
         if (current) current.userID = this.name;
 
         oldRotation = current.transform.localEulerAngles;
+
+        if (damageUIEffect)damageUIEffect.color = new Color(0, 0, 0, 0);
         
     }
 
     // Update is called once per frame
     void Update()
-    {        
+    {
+        if (damageUIEffect)damageUIEffect.color = new Color(0, 0, 0, (100 - current.hp)*0.01f);
+        
         //視点移動
         float x = Input.GetAxis("Mouse X");
         float y = Input.GetAxis("Mouse Y");

@@ -33,7 +33,7 @@ public class BaseClient : MonoBehaviour
     protected UserBodyData bodyData = new UserBodyData();
 
     public string userID;
-    [SerializeField] protected int hp = 100;
+    [SerializeField] public int hp { get;protected set; } = 100;
     List<byte[]> recvDataList = new List<byte[]>();
     protected AnimationKey animationState = AnimationKey.Idle;
     protected Animator animator;
@@ -240,6 +240,7 @@ public class BaseClient : MonoBehaviour
     {
 
     }
+
 
 
 }

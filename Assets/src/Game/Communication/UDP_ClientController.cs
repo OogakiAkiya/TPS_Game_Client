@@ -111,7 +111,8 @@ public class UDP_ClientController : MonoBehaviour
         if (!gameController) return;
         gameController.serverTime.Minutes=Convert.IntConversion(recData, GameHeader.HEADER_SIZE);
         gameController.serverTime.Seconds = Convert.IntConversion(recData, sizeof(int)+ GameHeader.HEADER_SIZE);
-
+        gameController.humanPower = Convert.IntConversion(recData, sizeof(int) * 2 + GameHeader.HEADER_SIZE);
+        gameController.monsterPower= Convert.IntConversion(recData, sizeof(int) * 3 + GameHeader.HEADER_SIZE);
     }
 
     void GameUpdate()

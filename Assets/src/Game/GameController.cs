@@ -8,8 +8,15 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] Canvas beforeCanvas;
     [SerializeField] Text timerText;
+    [SerializeField] Text humanPowerText;
+    [SerializeField] Text monsterPowerText;
+
+
     public bool stopFlg=false;
     public ServerTime serverTime = new ServerTime();
+    public int humanPower=0;
+    public int monsterPower = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,7 +37,8 @@ public class GameController : MonoBehaviour
     void Update()
     {
         if (timerText) timerText.text = CreateNowTime(serverTime);
-
+        if (humanPowerText) humanPowerText.text = humanPower.ToString();
+        if (monsterPowerText) monsterPowerText.text = monsterPower.ToString();
     }
 
     private string CreateNowTime(ServerTime _serverTime)
