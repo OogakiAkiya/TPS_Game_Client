@@ -43,9 +43,19 @@ public class GameController : MonoBehaviour
 
     private string CreateNowTime(ServerTime _serverTime)
     {
-        string text = _serverTime.Minutes == 0 ? "00" : _serverTime.Minutes / 10 == 0 ? "0" + _serverTime.Minutes : _serverTime.Minutes.ToString();
+        ServerTime time = new ServerTime(5,0);
+        int mi = time.Minutes - _serverTime.Minutes;
+        int se = time.Seconds - _serverTime.Seconds;
+        if (se < 0)
+        {
+            mi--;
+            se += 60;
+        }
+
+        string text = mi == 0 ? "00" : mi / 10 == 0 ? "0" + mi : mi.ToString();
         text += ":";
-        text+= _serverTime.Seconds == 0 ? "00" : _serverTime.Seconds / 10 == 0 ? "0" + _serverTime.Seconds : _serverTime.Seconds.ToString();
+        text += se == 0 ? "00" : se/ 10 == 0 ? "0" + se : se.ToString();
+
         return text;
     }
 
@@ -66,4 +76,10 @@ public class ServerTime
 {
     public int Minutes = 0;
     public int Seconds = 0;
+    public ServerTime() { }
+    public ServerTime(int _minutes,int _second)
+    {
+        Minutes = _minutes;
+        Seconds = _second;
+    }
 }

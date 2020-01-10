@@ -37,6 +37,13 @@ public class TCP_ClientController : MonoBehaviour
         if (PlayerPrefs.GetString(SavedData.UserType) == "Maynard") TestSend((byte)GameHeader.ID.INIT, (byte)GameHeader.UserTypeCode.MONSTER);
 
 
+#if UNITY_EDITOR
+        debugText.transform.gameObject.SetActive(true);
+#else
+        debugText.transform.gameObject.SetActive(false);
+
+#endif
+
 
     }
 
