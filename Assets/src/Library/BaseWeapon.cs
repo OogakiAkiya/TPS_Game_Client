@@ -145,7 +145,7 @@ public class UMP45 : BaseWeapon
         atackAnimationInit = _animationInit;
         atackAnimationEnd = _animationEnd;
         texture = Resources.Load("Weapon_MachineGun") as Texture2D;
-        model = Resources.Load("M4a1") as GameObject;
+        model = Resources.Load("UMP-45") as GameObject;
         type = WEAPONTYPE.UMP45;
 
         state.AddState(WEAPONSTATE.WAIT, () =>
