@@ -2280,7 +2280,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1618515579}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1618515581
 Camera:
   m_ObjectHideFlags: 0
@@ -3996,6 +3996,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2309285789837987725, guid: ca8e374672d8643908992a883c1e2867,
+        type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca8e374672d8643908992a883c1e2867, type: 3}

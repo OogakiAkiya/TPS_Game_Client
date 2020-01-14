@@ -53,10 +53,14 @@ public class BaseClient : MonoBehaviour
     [SerializeField]protected Image weapon_Image;
 
     public AnimationKey current;
-
+    protected AudioSource audioSource;
+    [SerializeField] protected AudioClip walkAudio;
+    [SerializeField] protected AudioClip jumpUPAudio;
+    [SerializeField] protected AudioClip jumpDownAudio;
 
     protected void Init()
     {
+        audioSource = this.GetComponent<AudioSource>();
         animator = this.GetComponent<Animator>();
         damageEffectPref = (GameObject)Resources.Load("blood");
         AddStates();

@@ -531,6 +531,11 @@ PrefabInstance:
       propertyPath: hipRotation.x
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5002371271585318444, guid: 39bfdc1b1ac5040bebca1964cc44b305,
+        type: 3}
+      propertyPath: walkAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: e244cbd742c2d428ba743a3c36388f4e, type: 3}
     - target: {fileID: 5002371271662830016, guid: 39bfdc1b1ac5040bebca1964cc44b305,
         type: 3}
       propertyPath: m_TargetDisplay
@@ -2040,7 +2045,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1618515579}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1618515581
 Camera:
   m_ObjectHideFlags: 0

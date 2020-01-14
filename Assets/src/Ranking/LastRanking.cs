@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 public class LastRanking : MonoBehaviour
 {
     [SerializeField] Text soldier;
     [SerializeField] Text monster;
     [SerializeField] Camera mainCamera;
     [SerializeField] Vector3 camRotation= new Vector3(0, 0.1f, 0);
+
+    private System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,7 +37,7 @@ public class LastRanking : MonoBehaviour
             
         }
 
-
+        timer.Start();
     }
 
     // Update is called once per frame
@@ -41,7 +46,12 @@ public class LastRanking : MonoBehaviour
         if (mainCamera)
         {
             mainCamera.transform.Rotate(camRotation);
-        }   
+        }
+
+        if (timer.Elapsed.Seconds > 2.5)
+        {
+            if (Input.anyKeyDown)SceneManager.LoadScene("Title");
+        }
     }
 
     private int ScoreCount(FinishData _finish)

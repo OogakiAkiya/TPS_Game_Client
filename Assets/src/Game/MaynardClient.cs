@@ -129,20 +129,39 @@ public class MaynardClient : BaseClient
             () =>
             {
                 animator.CrossFadeInFixedTime("Walk", 0.1f, 0);
-
+                audioSource.loop = true;
+                audioSource.pitch = 1.3f;
+                audioSource.PlayOneShot(walkAudio);
+            },
+            _end: () => {
+                audioSource.loop = false;
+                audioSource.Stop();
             });
         //WalkForward
         stateMachine.AddState(AnimationKey.WalkForward,
             () =>
             {
                 animator.CrossFadeInFixedTime("WalkForward", 0.1f, 0);
-
+                audioSource.loop = true;
+                audioSource.pitch = 1.3f;
+                audioSource.PlayOneShot(walkAudio);
+            },
+            _end: () => {
+                audioSource.loop = false;
+                audioSource.Stop();
             });
         //Run
         stateMachine.AddState(AnimationKey.Run,
             () =>
             {
                 animator.CrossFadeInFixedTime("Run", 0.1f, 0);
+                audioSource.loop = true;
+                audioSource.pitch = 1.9f;
+                audioSource.PlayOneShot(walkAudio);
+            },
+            _end: () => {
+                audioSource.loop = false;
+                audioSource.Stop();
             });
         //RunForward
         stateMachine.AddState(AnimationKey.RunForward,
@@ -150,15 +169,23 @@ public class MaynardClient : BaseClient
             {
                 animator.CrossFadeInFixedTime("RunForward", 0.1f, 0);
                 animator.speed = 1.5f;
+                audioSource.loop = true;
+                audioSource.pitch = 1.9f;
+                audioSource.PlayOneShot(walkAudio);
             },
             _end: () => {
                 animator.speed = 1.0f;
+                audioSource.loop = false;
+                audioSource.Stop();
             });
         //JumpUP
         stateMachine.AddState(AnimationKey.JumpUP,
             () =>
             {
                 animator.CrossFadeInFixedTime("JumpUP", 0.05f, 0);
+                audioSource.pitch = 1.0f;
+                audioSource.loop = false;
+                audioSource.Stop();
             }
             );
 
@@ -176,6 +203,13 @@ public class MaynardClient : BaseClient
             () =>
             {
                 animator.CrossFadeInFixedTime("JumpDown", 0.7f, 0);
+                audioSource.pitch = 1.0f;
+                audioSource.Stop();
+                audioSource.PlayOneShot(jumpDownAudio);
+            },
+            _end: () => {
+                animator.speed = 1.0f;
+                audioSource.loop = false;
             }
             );
         //Dying

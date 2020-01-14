@@ -24,8 +24,6 @@ public class soldierClient : BaseClient
         GameObject gameCanvas = GameObject.Find("GameCanvas");
         canvas = gameCanvas.GetComponent<Canvas>();
         imageRect = gameCanvas.transform.Find("Pointer").GetComponent<RectTransform>();
-        
-
     }
     // Start is called before the first frame update
     public void Start()
@@ -82,6 +80,9 @@ public class soldierClient : BaseClient
 
     protected override void Atack()
     {
+        if (audioSource)audioSource.PlayOneShot(weapon.fireSound);
+        
+        
         if (effect)
         {
             effect.SetActive(true);
@@ -106,6 +107,7 @@ public class soldierClient : BaseClient
     private void ShootAnimationChengeInit()
     {
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
         if (weapon.type == WEAPONTYPE.MACHINEGUN)
         {
             if (weapon.state.currentKey == WEAPONSTATE.ATACK)
@@ -120,6 +122,29 @@ public class soldierClient : BaseClient
             {
                 if ((stateInfo.nameHash != Animator.StringToHash("Upper.Reloading")))
                 {
+                    audioSource.PlayOneShot(weapon.reloadSound);
+                    animator.CrossFadeInFixedTime("Reloading", 0.1f, 1);
+                    animator.SetLayerWeight(1, 1.0f);
+                }
+            }
+
+        }
+
+        if (weapon.type == WEAPONTYPE.UMP45)
+        {
+            if (weapon.state.currentKey == WEAPONSTATE.ATACK)
+            {
+                if (stateInfo.nameHash != Animator.StringToHash("Upper.Aiming"))
+                {
+                    animator.CrossFadeInFixedTime("Firing Rifle", 0.1f, 1);
+                    animator.SetLayerWeight(1, 1.0f);
+                }
+            }
+            if (weapon.state.currentKey == WEAPONSTATE.RELOAD)
+            {
+                if ((stateInfo.nameHash != Animator.StringToHash("Upper.Reloading")))
+                {
+                    audioSource.PlayOneShot(weapon.reloadSound);
                     animator.CrossFadeInFixedTime("Reloading", 0.1f, 1);
                     animator.SetLayerWeight(1, 1.0f);
                 }
@@ -143,6 +168,7 @@ public class soldierClient : BaseClient
             {
                 if ((stateInfo.nameHash != Animator.StringToHash("Upper.Reloading")))
                 {
+                    audioSource.PlayOneShot(weapon.reloadSound);
                     animator.CrossFadeInFixedTime("Pistol Reload", 0.1f, 1);
                     animator.SetLayerWeight(1, 1.0f);
                 }
@@ -180,6 +206,8 @@ public class soldierClient : BaseClient
                 animator.CrossFadeInFixedTime("Idle", 0.1f, 0);
                 if (modelVisual?.active == false) modelVisual?.SetActive(true);
                 //animator.CrossFadeInFixedTime("Reloading", 0.1f);
+                //audioSource.loop = false;
+                //audioSource.Stop();
             });
 
         //Walk
@@ -187,52 +215,100 @@ public class soldierClient : BaseClient
             () =>
             {
                 animator.CrossFadeInFixedTime("Walk", 0.1f, 0);
-
-            });
+                audioSource.loop = true;
+                audioSource.PlayOneShot(walkAudio);
+            },
+            _end: () => {
+                audioSource.loop = false;
+                audioSource.Stop();
+            }
+            );
         //WalkForward
         stateMachine.AddState(AnimationKey.WalkForward,
             () =>
             {
                 animator.CrossFadeInFixedTime("WalkForward", 0.1f, 0);
-
-            });
+                audioSource.loop = true;
+                audioSource.pitch = 1.3f;
+                audioSource.PlayOneShot(walkAudio);
+            },
+            _end: () => {
+                audioSource.loop = false;
+                audioSource.Stop();
+            }
+            );
         //WalkBack
         stateMachine.AddState(AnimationKey.WalkBack,
             () =>
             {
                 animator.CrossFadeInFixedTime("WalkBack", 0.1f, 0);
+                audioSource.loop = true;
+                audioSource.pitch = 1.3f;
+                audioSource.PlayOneShot(walkAudio);
 
-            });
+            },
+            _end: () => {
+                audioSource.loop = false;
+                audioSource.Stop();
+            }
+            );
         //WalkLeft
         stateMachine.AddState(AnimationKey.WalkLeft,
             () =>
             {
                 animator.CrossFadeInFixedTime("WalkLeft", 0.1f, 0);
+                audioSource.loop = true;
+                audioSource.pitch = 1.3f;
+                audioSource.PlayOneShot(walkAudio);
 
-            });
+            },
+            _end: () => {
+                audioSource.loop = false;
+                audioSource.Stop();
+            }
+            );
         //WalkRight
         stateMachine.AddState(AnimationKey.WalkRight,
             () =>
             {
                 animator.CrossFadeInFixedTime("WalkRight", 0.1f, 0);
-
-            });
+                audioSource.loop = true;
+                audioSource.pitch = 1.3f;
+                audioSource.PlayOneShot(walkAudio);
+            },
+            _end: () => {
+                audioSource.loop = false;
+                audioSource.Stop();
+            }
+            );
 
         //Run
         stateMachine.AddState(AnimationKey.Run,
             () =>
             {
                 animator.CrossFadeInFixedTime("Run", 0.1f, 0);
-            });
+                audioSource.pitch = 1.8f;
+                audioSource.PlayOneShot(walkAudio);
+
+            },
+            _end: () => {
+                audioSource.loop = false;
+                audioSource.Stop();
+            }
+            );
         //RunForward
         stateMachine.AddState(AnimationKey.RunForward,
             () =>
             {
                 animator.CrossFadeInFixedTime("RunForward", 0.1f, 0);
                 animator.speed = 1.5f;
+                audioSource.pitch = 1.8f;
+                audioSource.PlayOneShot(walkAudio);
             },
             _end: () => {
                 animator.speed = 1.0f;
+                audioSource.loop = false;
+                audioSource.Stop();
             });
         //RunBack
         stateMachine.AddState(AnimationKey.RunBack,
@@ -240,10 +316,13 @@ public class soldierClient : BaseClient
             {
                 animator.CrossFadeInFixedTime("RunBack", 0.1f, 0);
                 animator.speed = 1.5f;
-
+                audioSource.pitch = 1.8f;
+                audioSource.PlayOneShot(walkAudio);
             },
             _end: () => {
                 animator.speed = 1.0f;
+                audioSource.loop = false;
+                audioSource.Stop();
             });
         //RunLeft
         stateMachine.AddState(AnimationKey.RunLeft,
@@ -251,9 +330,13 @@ public class soldierClient : BaseClient
             {
                 animator.CrossFadeInFixedTime("RunLeft", 0.1f, 0);
                 animator.speed = 1.5f;
+                audioSource.pitch = 1.8f;
+                audioSource.PlayOneShot(walkAudio);
             },
             _end: () => {
                 animator.speed = 1.0f;
+                audioSource.loop = false;
+                audioSource.Stop();
             });
         //RunRight
         stateMachine.AddState(AnimationKey.RunRight,
@@ -261,10 +344,13 @@ public class soldierClient : BaseClient
             {
                 animator.CrossFadeInFixedTime("RunRight", 0.1f, 0);
                 animator.speed = 1.5f;
-
+                audioSource.pitch = 1.8f;
+                audioSource.PlayOneShot(walkAudio);
             },
             _end: () => {
                 animator.speed = 1.0f;
+                audioSource.loop = false;
+                audioSource.Stop();
             });
 
         //JumpUP
@@ -272,6 +358,13 @@ public class soldierClient : BaseClient
             () =>
             {
                 animator.CrossFadeInFixedTime("JumpUP", 0.05f, 0);
+                audioSource.pitch = 1.0f;
+                audioSource.loop = false;
+                audioSource.Stop();
+
+            },
+            _end: () => {
+                animator.speed = 1.0f;
             }
             );
 
@@ -289,6 +382,13 @@ public class soldierClient : BaseClient
             () =>
             {
                 animator.CrossFadeInFixedTime("JumpDown", 0.7f, 0);
+                audioSource.pitch = 1.0f;
+                audioSource.Stop();
+                audioSource.PlayOneShot(jumpDownAudio);
+            },
+            _end: () => {
+                animator.speed = 1.0f;
+                audioSource.loop = false;
             }
             );
         //Dying

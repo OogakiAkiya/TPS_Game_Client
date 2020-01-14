@@ -24,6 +24,10 @@ public class BaseWeapon
 
     protected System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
 
+    //音
+    public AudioClip fireSound;                             //発砲音
+    public AudioClip reloadSound;                           //リロード
+    
 
     protected byte[] GetStatus(WEAPONTYPE _type)
     {
@@ -76,6 +80,8 @@ public class MachineGun : BaseWeapon
         atackAnimationEnd = _animationEnd;
         texture = Resources.Load("Weapon_MachineGun") as Texture2D;
         model = Resources.Load("M4a1") as GameObject;
+        fireSound = Resources.Load("fire") as AudioClip;
+        reloadSound = Resources.Load("reload") as AudioClip;
         type = WEAPONTYPE.BASE;
 
         state.AddState(WEAPONSTATE.WAIT,()=>
@@ -146,6 +152,8 @@ public class UMP45 : BaseWeapon
         atackAnimationEnd = _animationEnd;
         texture = Resources.Load("Weapon_UMP-45") as Texture2D;
         model = Resources.Load("UMP-45") as GameObject;
+        fireSound = Resources.Load("fire") as AudioClip;
+        reloadSound = Resources.Load("reload") as AudioClip;
         type = WEAPONTYPE.UMP45;
 
         state.AddState(WEAPONSTATE.WAIT, () =>
@@ -216,7 +224,8 @@ public class HandGun : BaseWeapon
 
         texture = Resources.Load("Weapon_HandGun") as Texture2D;
         model = Resources.Load("M9") as GameObject;
-
+        fireSound = Resources.Load("fire") as AudioClip;
+        reloadSound = Resources.Load("reload") as AudioClip;
         type = WEAPONTYPE.HANDGUN;
 
         state.AddState(WEAPONSTATE.WAIT,()=> {
