@@ -35,8 +35,6 @@ public class TCP_ClientController : MonoBehaviour
         //初期設定用の通信
         if(PlayerPrefs.GetString(SavedData.UserType)== "Soldier")TestSend((byte)GameHeader.ID.INIT,(byte)GameHeader.UserTypeCode.SOLDIER);
         if (PlayerPrefs.GetString(SavedData.UserType) == "Maynard") TestSend((byte)GameHeader.ID.INIT, (byte)GameHeader.UserTypeCode.MONSTER);
-
-
 #if UNITY_EDITOR
         debugText.transform.gameObject.SetActive(true);
 #else
@@ -89,6 +87,11 @@ public class TCP_ClientController : MonoBehaviour
             {
                 if (header.gameCode == (byte)GameHeader.GameCode.GRENEDEDATA) {
                     //item削除処理
+                    int itemNum = Convert.IntConversion(recvData, GameHeader.HEADER_SIZE);
+                    for(int i = 0; i <gameController.items.Length; i++)
+                    {
+                        if (gameController.items[i].itemNumber == itemNum) gameController.items[i].Delete();
+                    }
                 }
 
                 if (header.gameCode == (byte)GameHeader.GameCode.CHECKDATA)

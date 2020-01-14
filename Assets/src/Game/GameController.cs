@@ -10,17 +10,21 @@ public class GameController : MonoBehaviour
     [SerializeField] Text timerText;
     [SerializeField] Text humanPowerText;
     [SerializeField] Text monsterPowerText;
+    [SerializeField] GameObject itemsObject;
 
 
     public bool stopFlg=false;
     public ServerTime serverTime = new ServerTime();
     public int humanPower=0;
     public int monsterPower = 0;
+    public BaseItem[] items;
+
 
     // Start is called before the first frame update
     void Start()
     {
         if (beforeCanvas) stopFlg = true;
+        if(itemsObject)items = itemsObject.GetComponentsInChildren<BaseItem>();
         //プレイヤー用オブジェクト準備
         /*
         var objs = GameObject.FindGameObjectsWithTag("Player");

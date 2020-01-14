@@ -8,6 +8,7 @@ TagManager:
   - Soldier
   - Monster
   - Server
+  - Item
   layers:
   - Default
   - TransparentFX
