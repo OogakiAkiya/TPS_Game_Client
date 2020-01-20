@@ -25,6 +25,13 @@ public class GameController : MonoBehaviour
     {
         if (beforeCanvas) stopFlg = true;
         if(itemsObject)items = itemsObject.GetComponentsInChildren<BaseItem>();
+
+        //マウスポインター非表示
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Locked;
+
+
         //プレイヤー用オブジェクト準備
         /*
         var objs = GameObject.FindGameObjectsWithTag("Player");
@@ -35,6 +42,11 @@ public class GameController : MonoBehaviour
             if (PlayerPrefs.GetString(SavedData.UserType) == "Maynard" && obj.GetComponent<BaseClient>().GetType().Name == typeof(MaynardClient).Name) obj.SetActive(true);
         }
         */
+    }
+
+    private void OnDestroy()
+    {
+        Cursor.lockState = CursorLockMode.None;
     }
 
     // Update is called once per frame
