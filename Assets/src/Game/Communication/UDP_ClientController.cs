@@ -49,6 +49,7 @@ public class UDP_ClientController : MonoBehaviour
         state.AddState(GameHeader.ID.ALERT, _update: AlertUpdate);
         state.ChangeState(GameHeader.ID.INIT);
 
+        SendRotation((byte)GameHeader.ID.GAME);
     }
 
     // Update is called once per frame

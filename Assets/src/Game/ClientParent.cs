@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class ClientParent : MonoBehaviour
 {
-    public AudioSource audioSource;
+    [SerializeField]public AudioSource audioSource;
     
     private void Start()
     {
-        audioSource.GetComponent<AudioSource>();
         this.transform.position = Vector3.zero;
     }
 
