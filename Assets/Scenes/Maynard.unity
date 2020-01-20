@@ -2597,8 +2597,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e23ca5f2f4b874fd1bdab32d467e3833, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  yMin: -60
-  yMax: 30
+  yMin: -15
+  yMax: 15
   damageUIEffect: {fileID: 668588835}
   userType: 0
   current: {fileID: 0}
