@@ -69,8 +69,8 @@ public class MachineGun : BaseWeapon
 {
     public MachineGun(Action _atack, Action _animationInit = null, Action _animationEnd = null)
     {
-        interval = 100;
-        power = 10;
+        interval = 50;
+        power = 8;
         reloadTime = 1000;      //1秒
         magazine = 60;
         remainingBullet = magazine;
@@ -292,7 +292,7 @@ public class Claw : BaseWeapon
         interval = 1000;
         power = 10;
         reloadTime = 1000;      //1秒
-        magazine = 12;
+        magazine = 99;
         remainingBullet = magazine;
         range = 5;
         atackMethod = _atack;
