@@ -3997,6 +3997,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 7747838823090572763, guid: ca8e374672d8643908992a883c1e2867,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7747838824750036858, guid: ca8e374672d8643908992a883c1e2867,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2309285789837987725, guid: ca8e374672d8643908992a883c1e2867,
         type: 3}
       propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value

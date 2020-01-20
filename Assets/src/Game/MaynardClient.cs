@@ -15,7 +15,13 @@ public class MaynardClient : BaseClient
 
     private GameObject eggPref;
     private GameObject egg;
-    private Vector3 scale=new Vector3(0,0,0);
+    private Vector3 scale = new Vector3(0, 0, 0);
+
+    [SerializeField] AudioClip modelChangeAudio;
+    [SerializeField] AudioClip cryAudio;
+    [SerializeField] ClientParent parent;
+
+    private System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +38,15 @@ public class MaynardClient : BaseClient
     // Update is called once per frame
     void Update()
     {
-        base.update();   
+        base.update();
+        if (timer.Elapsed.Seconds > 5)
+        {
+            parent.audioSource.pitch = 1.0f;
+            parent.audioSource.loop = false;
+            parent.audioSource.PlayOneShot(cryAudio);
+            timer.Restart();
+        }
+
     }
 
     protected override void SetStatus(byte[] _data,int _index=0)
@@ -250,6 +264,10 @@ public class MaynardClient : BaseClient
             egg =Instantiate(eggPref,pos,this.transform.rotation)as GameObject;
             animator.CrossFadeInFixedTime("Agony", 0.1f, 0);
             egg.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+            audioSource.Stop();
+            audioSource.PlayOneShot(modelChangeAudio);
+            audioSource.pitch = 1.0f;
         },
         () =>
         {
@@ -259,6 +277,7 @@ public class MaynardClient : BaseClient
         },
         () =>
         {
+            audioSource.Stop();
             Destroy(egg);
         }
         );

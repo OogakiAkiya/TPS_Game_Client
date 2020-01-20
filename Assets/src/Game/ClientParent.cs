@@ -4,10 +4,19 @@ using UnityEngine;
 
 public class ClientParent : MonoBehaviour
 {
+    public AudioSource audioSource;
+    
     private void Start()
     {
+        audioSource.GetComponent<AudioSource>();
         this.transform.position = Vector3.zero;
     }
+
+    private void Update()
+    {
+        
+    }
+
     public GameObject ChangeModel(string _modelName)
     {
         Transform client=this.transform.Find(_modelName);

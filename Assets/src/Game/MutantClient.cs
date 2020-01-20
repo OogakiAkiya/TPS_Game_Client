@@ -11,6 +11,13 @@ public class MutantClient : BaseClient
     [SerializeField] public Slider slider = null;
     private string parentTag;
     private MonsterType type = MonsterType.MUTANT;
+    [SerializeField] AudioClip cryAudio;
+    [SerializeField] ClientParent parent;
+
+    private System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,13 +25,24 @@ public class MutantClient : BaseClient
         //stateMachine.ChangeState(AnimationKey.Idle);
         modelVisual = transform.Find("Mutant:Hips").gameObject;
         parentTag = this.transform.parent.tag;
-        audioSource.volume = 0.1f;
+        audioSource.volume = 1f;
+        timer.Start();
     }
 
     // Update is called once per frame
     void Update()
     {
         base.update();
+        if (timer.Elapsed.Seconds > 8)
+        {
+            parent.audioSource.pitch = 1.0f;
+            parent.audioSource.loop = false;
+            parent.audioSource.volume = 1f;
+
+            parent.audioSource.PlayOneShot(cryAudio);
+            timer.Restart();
+        }
+
     }
 
     protected override void SetStatus(byte[] _data, int _index=0)
