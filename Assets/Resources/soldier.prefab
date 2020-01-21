@@ -1745,7 +1745,7 @@ MonoBehaviour:
   walkAudio: {fileID: 8300000, guid: e244cbd742c2d428ba743a3c36388f4e, type: 3}
   jumpUPAudio: {fileID: 8300000, guid: 25d2c582099e04c4ba95bd75aa407983, type: 3}
   jumpDownAudio: {fileID: 8300000, guid: 25d2c582099e04c4ba95bd75aa407983, type: 3}
-  hipRotation: {x: 0, y: 0, z: 0}
+  hipRotation: {x: 2, y: 55, z: 0}
 --- !u!82 &6356889255595104583
 AudioSource:
   m_ObjectHideFlags: 0

@@ -19,6 +19,8 @@ public class GameController : MonoBehaviour
     public int monsterPower = 0;
     public BaseItem[] items;
 
+    private bool mauseLock = true;
+
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +32,7 @@ public class GameController : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.lockState = CursorLockMode.Locked;
+        mauseLock = true;
 
 
         //プレイヤー用オブジェクト準備
@@ -55,6 +58,23 @@ public class GameController : MonoBehaviour
         if (timerText) timerText.text = CreateNowTime(serverTime);
         if (humanPowerText) humanPowerText.text = humanPower.ToString();
         if (monsterPowerText) monsterPowerText.text = monsterPower.ToString();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            mauseLock = !mauseLock;
+
+            if (mauseLock)
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+        }
     }
 
     private string CreateNowTime(ServerTime _serverTime)
