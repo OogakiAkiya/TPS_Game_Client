@@ -1750,7 +1750,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Soldier
+  m_Text: Human
 --- !u!222 &1709897020
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6746,7 +6746,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Maynard
+  m_Text: Monster
 --- !u!222 &2055485557
 CanvasRenderer:
   m_ObjectHideFlags: 0

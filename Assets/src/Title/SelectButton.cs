@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class SelectButton : MonoBehaviour
 {
     public Color onColor=Color.blue;
@@ -17,7 +18,9 @@ public class SelectButton : MonoBehaviour
     public void OnClick()
     {
         image.color = onColor;
-        PlayerPrefs.SetString(SavedData.UserType, this.GetComponentInChildren<Text>().text);
+        string selectText = this.GetComponentInChildren<Text>().text;
+        if (selectText.Equals("Human")) PlayerPrefs.SetString(SavedData.UserType, "Soldier");
+        if (selectText.Equals("Monster")) PlayerPrefs.SetString(SavedData.UserType, "Maynard");
 
     }
     public void NotClick()
